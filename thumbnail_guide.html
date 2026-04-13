@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>サムネイル完全ガイド — Rearlet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=M+PLUS+1p:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  @keyframes speedLine {
+    0% { transform: translateX(-100%) scaleX(0); opacity: 0; }
+    30% { opacity: 1; }
+    100% { transform: translateX(200%) scaleX(1.5); opacity: 0; }
+  }
+  @keyframes glow { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes crossFlash {
+    0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+    50% { opacity: 0.8; transform: scale(1.2) rotate(5deg); }
+    100% { opacity: 0; transform: scale(1.5) rotate(0deg); }
+  }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 20px rgba(255,80,20,0.3); } 50% { box-shadow: 0 0 40px rgba(255,80,20,0.6); } }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  :root {
+    --smash-red: #E8312A;
+    --smash-blue: #2B7CFF;
+    --smash-yellow: #FFD700;
+    --smash-green: #00C853;
+    --smash-orange: #FF6B35;
+    --smash-purple: #9C27B0;
+    --bg-dark: #0A0A12;
+    --bg-card: #111122;
+    --bg-card2: #161630;
+    --border: #2A2A4E;
+    --text: #F0F0FF;
+    --text-sub: #9898B8;
+    --text-dim: #686888;
+    --radius: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Zen Kaku Gothic New', 'M PLUS 1p', 'Hiragino Kaku Gothic ProN', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+  .font-impact { font-family: 'Anton', 'Bebas Neue', Impact, sans-serif; }
+  .font-tech { font-family: 'Orbitron', 'Bebas Neue', monospace; }
+  .font-bold-jp { font-family: 'M PLUS 1p', 'Zen Kaku Gothic New', sans-serif; font-weight: 900; }
+
+  /* ============================== HERO ============================== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('smash_bg.png') center/cover no-repeat;
+    filter: brightness(0.3) saturate(1.4);
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(10,10,18,0.85) 0%, rgba(10,10,18,0.4) 50%, rgba(10,10,18,0.9) 100%),
+      radial-gradient(ellipse 600px 400px at 30% 50%, rgba(232,49,42,0.2), transparent),
+      radial-gradient(ellipse 500px 400px at 70% 50%, rgba(43,124,255,0.15), transparent);
+  }
+
+  .speed-lines {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .speed-line {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: speedLine 3s ease-in-out infinite;
+  }
+
+  .hero-cross {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .hero-cross::before, .hero-cross::after {
+    content: '';
+    position: absolute;
+    background: linear-gradient(180deg, rgba(255,215,0,0.15), transparent);
+  }
+  .hero-cross::before {
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 4px; height: 100%;
+  }
+  .hero-cross::after {
+    top: 50%; left: 0; transform: translateY(-50%);
+    width: 100%; height: 4px;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    animation: slideUp 1s ease-out;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--smash-red), var(--smash-orange));
+    color: #fff;
+    font-family: 'Bebas Neue', 'Anton', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    padding: 10px 28px;
+    border-radius: 99px;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .hero h1 {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: clamp(40px, 8vw, 80px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 30px rgba(232,49,42,0.4), 0 0 60px rgba(43,124,255,0.2);
+    letter-spacing: 2px;
+  }
+  .hero h1 .accent-red { color: var(--smash-red); }
+  .hero h1 .accent-blue { color: var(--smash-blue); }
+  .hero h1 .accent-yellow { color: var(--smash-yellow); }
+  .hero .lead {
+    font-size: 18px;
+    color: var(--text-sub);
+    max-width: 580px;
+    margin: 0 auto 40px;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .hero-stat {
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 16px 24px;
+    min-width: 120px;
+    animation: float 4s ease-in-out infinite;
+  }
+  .hero-stat:nth-child(2) { animation-delay: 0.5s; }
+  .hero-stat:nth-child(3) { animation-delay: 1s; }
+  .hero-stat:nth-child(4) { animation-delay: 1.5s; }
+  .hero-stat .num {
+    font-family: 'Orbitron', 'Bebas Neue', monospace;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--smash-yellow);
+    text-shadow: 0 0 20px rgba(255,215,0,0.4);
+  }
+  .hero-stat .label { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+  /* ============================== LAYOUT ============================== */
+  .container { max-width: 940px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 80px 0; position: relative; }
+  section + section { border-top: 1px solid var(--border); }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .section-num-box {
+    font-family: 'Orbitron', 'Bebas Neue', monospace;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--smash-red);
+    text-shadow: 0 0 20px rgba(232,49,42,0.3);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .section-tag {
+    font-family: 'Bebas Neue', 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 4px 14px;
+    border-radius: 6px;
+  }
+  .section-title {
+    font-family: 'M PLUS 1p', 'Zen Kaku Gothic New', sans-serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .section-lead { font-size: 16px; color: var(--text-sub); margin-bottom: 44px; max-width: 700px; }
+
+  /* ============================== SMASH DIVIDER ============================== */
+  .smash-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 48px 0;
+  }
+  .smash-divider::before, .smash-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+  .smash-divider .cross {
+    font-size: 24px;
+    color: var(--smash-yellow);
+    text-shadow: 0 0 15px rgba(255,215,0,0.5);
+  }
+
+  /* ============================== CARDS ============================== */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .card:hover { border-color: rgba(232,49,42,0.4); transform: translateY(-2px); }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--smash-red), var(--smash-blue));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover::before { opacity: 1; }
+  .card h3 {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+  }
+  .card p, .card li { color: var(--text-sub); font-size: 15px; }
+  .card ul { list-style: none; padding: 0; }
+  .card > ul > li { padding: 6px 0 6px 20px; position: relative; }
+  .card > ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 2px;
+    background: var(--smash-red);
+    border-radius: 1px;
+  }
+
+  .icon-box {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ============================== IMPACT CARD ============================== */
+  .impact-card {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-card2));
+    border: 2px solid;
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .impact-card.red { border-color: var(--smash-red); }
+  .impact-card.blue { border-color: var(--smash-blue); }
+  .impact-card.yellow { border-color: var(--smash-yellow); }
+  .impact-card.green { border-color: var(--smash-green); }
+  .impact-card .big-num {
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 8px;
+    font-family: 'Orbitron', monospace;
+  }
+  .impact-card.red .big-num { color: var(--smash-red); text-shadow: 0 0 30px rgba(232,49,42,0.4); }
+  .impact-card.blue .big-num { color: var(--smash-blue); text-shadow: 0 0 30px rgba(43,124,255,0.4); }
+  .impact-card.yellow .big-num { color: var(--smash-yellow); text-shadow: 0 0 30px rgba(255,215,0,0.4); }
+  .impact-card.green .big-num { color: var(--smash-green); text-shadow: 0 0 30px rgba(0,200,83,0.4); }
+  .impact-card h4 { font-family: 'M PLUS 1p', sans-serif; font-size: 16px; font-weight: 900; margin-bottom: 6px; }
+  .impact-card p { font-size: 14px; color: var(--text-sub); }
+
+  /* ============================== GRIDS ============================== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 768px) { .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 500px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+  /* ============================== CALLOUT ============================== */
+  .callout {
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin: 24px 0;
+    font-size: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+  .callout::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+  }
+  .callout.red { background: rgba(232,49,42,0.08); }
+  .callout.red::before { background: var(--smash-red); }
+  .callout.red strong { color: var(--smash-red); }
+  .callout.blue { background: rgba(43,124,255,0.08); }
+  .callout.blue::before { background: var(--smash-blue); }
+  .callout.blue strong { color: var(--smash-blue); }
+  .callout.yellow { background: rgba(255,215,0,0.06); }
+  .callout.yellow::before { background: var(--smash-yellow); }
+  .callout.yellow strong { color: var(--smash-yellow); }
+  .callout.green { background: rgba(0,200,83,0.06); }
+  .callout.green::before { background: var(--smash-green); }
+  .callout.green strong { color: var(--smash-green); }
+
+  /* ============================== COMPARE ============================== */
+  .vs-container {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+    align-items: stretch;
+    margin: 24px 0;
+  }
+  @media (max-width: 600px) { .vs-container { grid-template-columns: 1fr; } }
+  .vs-card { border-radius: var(--radius); padding: 24px; }
+  .vs-card.bad {
+    background: linear-gradient(135deg, rgba(232,49,42,0.08), rgba(232,49,42,0.02));
+    border: 1px solid rgba(232,49,42,0.2);
+  }
+  .vs-card.good {
+    background: linear-gradient(135deg, rgba(43,124,255,0.08), rgba(43,124,255,0.02));
+    border: 1px solid rgba(43,124,255,0.2);
+  }
+  .vs-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .vs-card.bad h4 { color: var(--smash-red); }
+  .vs-card.good h4 { color: var(--smash-blue); }
+  .vs-card li { font-size: 14px; color: var(--text-sub); padding: 3px 0; }
+  .vs-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Anton', 'Bebas Neue', Impact, sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--smash-yellow);
+    text-shadow: 0 0 20px rgba(255,215,0,0.5);
+  }
+  @media (max-width: 600px) { .vs-badge { padding: 12px 0; } }
+
+  /* ============================== THUMBNAILS ============================== */
+  .thumb-section { margin: 32px 0; }
+  .thumb-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .thumb-item {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 2px solid var(--border);
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .thumb-item:hover { transform: scale(1.03); }
+  .thumb-item.win { border-color: var(--smash-blue); }
+  .thumb-item.win:hover { border-color: var(--smash-blue); box-shadow: 0 0 20px rgba(43,124,255,0.3); }
+  .thumb-item.lose { border-color: var(--smash-red); }
+  .thumb-item.lose:hover { border-color: var(--smash-red); box-shadow: 0 0 20px rgba(232,49,42,0.3); }
+  .thumb-item img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+  .thumb-item .cap {
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--text-sub);
+    background: var(--bg-card);
+    line-height: 1.5;
+  }
+  .thumb-item .cap strong { color: var(--text); }
+
+  /* ============================== TEMPLATE PREVIEW ============================== */
+  .tmpl {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+  .tmpl:hover { border-color: var(--smash-yellow); }
+  .tmpl-head {
+    padding: 14px 24px;
+    font-family: 'M PLUS 1p', sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(90deg, var(--bg-card2), var(--bg-card));
+  }
+  .tmpl-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 24px;
+    align-items: center;
+  }
+  @media (max-width: 600px) { .tmpl-body { grid-template-columns: 1fr; } }
+  .tmpl-vis {
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    aspect-ratio: 16/9;
+    position: relative;
+    overflow: hidden;
+  }
+  .tmpl-vis .t-bg { position: absolute; inset: 0; }
+  .tmpl-vis .t-text {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'M PLUS 1p', sans-serif;
+    font-weight: 900;
+    font-size: clamp(22px, 4vw, 36px);
+    color: #fff;
+    text-shadow:
+      0 0 10px rgba(0,0,0,0.9),
+      0 2px 4px rgba(0,0,0,0.8),
+      0 0 40px rgba(255,107,53,0.3);
+    line-height: 1.15;
+    z-index: 2;
+    -webkit-text-stroke: 1px rgba(0,0,0,0.5);
+    letter-spacing: 2px;
+  }
+  .tmpl-vis .t-char {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    height: 110%;
+    z-index: 2;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,0.9));
+    object-fit: contain;
+  }
+  .tmpl-vis   .t-badge {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    z-index: 3;
+  }
+  .tmpl-info h4 { font-size: 16px; margin-bottom: 6px; }
+  .tmpl-info p { font-size: 14px; color: var(--text-sub); }
+  .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+  .tag {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    border: 1px solid;
+  }
+  .tag.r { background: rgba(232,49,42,0.1); color: var(--smash-red); border-color: rgba(232,49,42,0.3); }
+  .tag.b { background: rgba(43,124,255,0.1); color: var(--smash-blue); border-color: rgba(43,124,255,0.3); }
+  .tag.y { background: rgba(255,215,0,0.1); color: var(--smash-yellow); border-color: rgba(255,215,0,0.3); }
+  .tag.g { background: rgba(0,200,83,0.1); color: var(--smash-green); border-color: rgba(0,200,83,0.3); }
+
+  /* ============================== SAFE ZONE ============================== */
+  .safe-zone-demo {
+    background: #08080F;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    aspect-ratio: 16/9;
+    position: relative;
+    overflow: hidden;
+    margin: 24px auto;
+    max-width: 640px;
+  }
+  .sz-safe {
+    position: absolute;
+    top: 12%;
+    left: 12%;
+    right: 12%;
+    bottom: 12%;
+    border: 2px dashed var(--smash-blue);
+    border-radius: 8px;
+  }
+  .sz-label {
+    position: absolute;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .sz-label.safe { top: 14%; left: 14%; color: var(--smash-blue); background: rgba(43,124,255,0.15); }
+  .sz-label.danger { right: 8px; bottom: 24px; color: var(--smash-red); background: rgba(232,49,42,0.2); border: 1px solid var(--smash-red); }
+  .sz-timestamp { position: absolute; right: 10px; bottom: 10px; background: rgba(0,0,0,0.85); color: #fff; font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+  .sz-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, var(--smash-red), var(--smash-red) 30%, rgba(255,255,255,0.1) 30%); }
+  .sz-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 18px; font-weight: 900; color: rgba(255,255,255,0.08); white-space: nowrap; }
+
+  /* ============================== SPEC TABLE ============================== */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .spec-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Bebas Neue', 'Zen Kaku Gothic New', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px solid var(--border);
+  }
+  .spec-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(42,42,78,0.5);
+    color: var(--text-sub);
+  }
+  .spec-table td:first-child { color: var(--text); font-weight: 600; }
+  .spec-table .hl { color: var(--smash-yellow); font-weight: 700; font-family: 'Orbitron', 'Zen Kaku Gothic New', sans-serif; }
+  .spec-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ============================== PALETTE ============================== */
+  .palette { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0; }
+  .swatch-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    transition: border-color 0.2s;
+  }
+  .swatch-card:hover { border-color: rgba(255,255,255,0.2); }
+  .swatch { width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; }
+  .swatch-card .name { font-size: 14px; font-weight: 600; }
+  .swatch-card .desc { font-size: 12px; color: var(--text-sub); }
+
+  /* ============================== FLOW STEPS ============================== */
+  .flow-steps { margin: 24px 0; }
+  .flow-step { display: flex; gap: 18px; margin-bottom: 24px; }
+  .flow-num {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--smash-red), var(--smash-orange));
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 20px;
+    font-weight: 900;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(232,49,42,0.3);
+  }
+  .flow-body h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .flow-body p { font-size: 14px; color: var(--text-sub); }
+
+  /* ============================== TOOL CARD ============================== */
+  .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 20px; }
+  .tool-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .tool-card:hover { border-color: var(--smash-blue); transform: translateY(-2px); }
+  .tool-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .tool-card .url { font-size: 12px; color: var(--smash-blue); margin-bottom: 8px; }
+  .tool-card p { font-size: 14px; color: var(--text-sub); }
+
+  /* ============================== CHECKLIST ============================== */
+  .checklist {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-card2));
+    border: 2px solid var(--smash-yellow);
+    border-radius: var(--radius);
+    padding: 36px;
+    box-shadow: 0 0 40px rgba(255,215,0,0.08);
+  }
+  .checklist h3 {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(255,215,0,0.2);
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,215,0,0.1);
+    font-size: 15px;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--smash-yellow);
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .check-item .detail { font-size: 13px; color: var(--text-dim); margin-top: 3px; }
+
+  /* ============================== FOOTER ============================== */
+  footer {
+    text-align: center;
+    padding: 60px 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  footer::before {
+    content: '✦';
+    display: block;
+    font-size: 24px;
+    color: var(--smash-yellow);
+    margin-bottom: 16px;
+    text-shadow: 0 0 20px rgba(255,215,0,0.4);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!--                           HERO                               -->
+<!-- ============================================================ -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="speed-lines">
+    <div class="speed-line" style="top:15%;width:200px;animation-delay:0s;"></div>
+    <div class="speed-line" style="top:35%;width:300px;animation-delay:0.8s;"></div>
+    <div class="speed-line" style="top:55%;width:150px;animation-delay:1.6s;"></div>
+    <div class="speed-line" style="top:75%;width:250px;animation-delay:2.4s;"></div>
+    <div class="speed-line" style="top:25%;width:180px;animation-delay:0.4s;"></div>
+    <div class="speed-line" style="top:65%;width:220px;animation-delay:1.2s;"></div>
+    <div class="speed-line" style="top:85%;width:160px;animation-delay:2s;"></div>
+  </div>
+  <div class="hero-cross"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🎮 Rearlet Thumbnail Masterclass</div>
+    <h1>
+      <span class="accent-red">サムネ</span>で<br>
+      <span class="accent-blue">再生数</span>を<br>
+      <span class="accent-yellow">ぶっ壊す</span>
+    </h1>
+    <p class="lead">心理学 × 技術仕様 × 実戦テクニック。クリックされるサムネイルの全てをここに。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">8.5%</div>
+        <div class="label">ゲーム平均CTR</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">1秒</div>
+        <div class="label">判断時間</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">60%+</div>
+        <div class="label">モバイル視聴</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">3~10x</div>
+        <div class="label">変更で伸びる倍率</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- ============================================================ -->
+<!--                    01: WHY IT MATTERS                        -->
+<!-- ============================================================ -->
+<section>
+  <div class="section-header">
+    <div class="section-num-box">01</div>
+    <span class="section-tag">Algorithm</span>
+  </div>
+  <div class="section-title">なぜサムネが<span style="color:var(--smash-red);">全て</span>なのか</div>
+  <div class="section-lead">YouTubeのアルゴリズムは「CTR × 視聴維持率」で動画を評価する。サムネイルはCTRを決める唯一の武器。</div>
+
+  <div class="card">
+    <h3>アルゴリズムの3ステップ</h3>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-body">
+          <h4>テスト配信（最初の200〜500インプレッション）</h4>
+          <p>新動画をアップすると、YouTubeはまず少数の視聴者にサムネを表示する。ここでのCTRが全てを決める。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body">
+          <h4>CTRが高い → 表示範囲を爆拡大</h4>
+          <p>「この動画は需要がある」と判断 → おすすめ・関連動画・検索結果に表示される回数が増える。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-body">
+          <h4>CTRが低い → 表示を停止</h4>
+          <p>「誰も見たがっていない」と判断 → インプレッション自体が出なくなる。見られない→伸びない→さらに見られないの悪循環。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout red">
+    <strong>致命ライン：</strong> CTRが2〜3%を下回ると、YouTubeはおすすめ表示をほぼ止める。視聴者が動画を「見ない」んじゃなくて「見る機会すらない」状態。
+  </div>
+  <div class="callout green">
+    <strong>逆に言えば：</strong> サムネイルを変えるだけで同じ動画の再生数が3〜10倍になった事例が多数ある。過去の動画もサムネ差し替えでインプレッション再獲得できる。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--                    02: PSYCHOLOGY                            -->
+<!-- ============================================================ -->
+<section>
+  <div class="section-header">
+    <div class="section-num-box">02</div>
+    <span class="section-tag">Psychology</span>
+  </div>
+  <div class="section-title">クリックの裏にある<span style="color:var(--smash-blue);">心理学</span></div>
+  <div class="section-lead">MrBeast（世界最大のYouTuber）の制作マニュアルから導き出された4つの心理原則。</div>
+
+  <div class="grid-2">
+    <div class="impact-card red">
+      <h4>好奇心ギャップ</h4>
+      <p>「答え」を見せずに「問い」だけ提示する。<br>「念願のTOP8」→「どうやって？」と気になる。<br>全部見せたら見る理由がなくなる。</p>
+    </div>
+    <div class="impact-card blue">
+      <h4>感情のトリガー</h4>
+      <p>脳は「感情」に最も強く反応する。<br>驚き・怒り・歓喜・絶望 ──<br>感情が動く瞬間を見せるとクリックが発生。</p>
+    </div>
+    <div class="impact-card yellow">
+      <h4>変化と比較</h4>
+      <p>Before/After、数字の変化、VS構図。<br>脳は「差分」を見ると自動で注意を向ける。<br>「0% → 撃墜」「弱 vs 最強」など。</p>
+    </div>
+    <div class="impact-card green">
+      <h4>1サムネ = 1メッセージ</h4>
+      <p>詰め込むほどCTRは下がる。<br>1枚で伝えるのは1つだけ。<br>「TOP8取った」── それだけでいい。</p>
+    </div>
+  </div>
+
+  <div class="callout yellow">
+    <strong>MrBeastの鉄則：</strong>「サムネとタイトルで同じことを言うな」── サムネ = 感情（画像+短テキスト）、タイトル = 情報（キーワード+説明）。この2つが補完し合って好奇心ギャップを作る。
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--                    03: THREE ELEMENTS                        -->
+<!-- ============================================================ -->
+<section>
+  <div class="section-header">
+    <div class="section-num-box">03</div>
+    <span class="section-tag">Elements</span>
+  </div>
+  <div class="section-title">入れるのは<span style="color:var(--smash-yellow);">3つ</span>だけ</div>
+  <div class="section-lead">3要素を超えると情報が散って1秒で何も伝わらなくなる。</div>
+
+  <div class="grid-3">
+    <div class="impact-card red">
+      <div class="big-num">💬</div>
+      <h4>テキスト 2〜5語</h4>
+      <p>感情が動く短いフレーズ。<br>大会名は「タイトル」に回す。<br>サムネには感情だけ。</p>
+    </div>
+    <div class="impact-card blue" style="position:relative;overflow:hidden;">
+      <img src="img/bowser_render.png" alt="クッパ" style="height:100px;filter:drop-shadow(0 0 20px rgba(43,124,255,0.4));margin-bottom:8px;">
+      <h4>キャラ素材</h4>
+      <p>切り抜いたクッパ素材。<br>スクショそのままは絶対NG。<br>これがブランドになる。</p>
+    </div>
+    <div class="impact-card yellow">
+      <div class="big-num">🎨</div>
+      <h4>背景</h4>
+      <p>ぼかし or 単色グラデ。<br>テキストとキャラの邪魔をしない。<br>暗めが基本。</p>
+    </div>
+  </div>
+
+  <div class="smash-divider"><span class="cross">✦</span></div>
+
+  <!-- テキスト詳細 -->
+  <div class="card">
+    <h3><span class="icon-box" style="background:rgba(232,49,42,0.15);">💬</span> テキストの技術</h3>
+
+    <div class="vs-container">
+      <div class="vs-card bad">
+        <h4>こう書きがち</h4>
+        <ul style="list-style:none;padding:0;">
+          <li>桜梅桃李第肆幕TOP8ハイライト</li>
+          <li>VIPマッチクッパ連勝チャレンジ</li>
+          <li>チノスマ#12リベンジマッチ</li>
+        </ul>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-card good">
+        <h4>こう変える</h4>
+        <ul style="list-style:none;padding:0;">
+          <li>念願のTOP8</li>
+          <li>全員ぶっ飛ばす</li>
+          <li>会場沸いた</li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="spec-table">
+      <tr><th>項目</th><th>推奨値</th></tr>
+      <tr><td>フォントサイズ</td><td class="hl">150〜200px（1280×720ベース）</td></tr>
+      <tr><td>フォント種類</td><td>太ゴシック（Impact / Noto Sans Black / M+ Heavy）</td></tr>
+      <tr><td>文字色</td><td>白（#FFF）+ 黒縁取り 4〜8px</td></tr>
+      <tr><td>文字数</td><td class="hl">日本語 5〜15文字 / 英語 3〜5語</td></tr>
+    </table>
+
+    <div class="callout red">
+      <strong>縁取りが命：</strong>4〜8pxの黒い縁取りで、どんな背景でもテキストが読める。縁取りなしの白文字は明るい背景で消える。
+    </div>
+  </div>
+
+  <!-- キャラ素材詳細 -->
+  <div class="card">
+    <h3><span class="icon-box" style="background:rgba(43,124,255,0.15);"><img src="img/bowser_render.png" alt="" style="width:28px;height:28px;object-fit:contain;"></span> キャラ素材の技術</h3>
+    <ul>
+      <li>公式レンダリングやスマブラ立ち絵（元から背景透過済み）を使う</li>
+      <li>表情・ポーズで「この動画の感情」を表現する</li>
+      <li>サムネの30〜40%を占める大きさで配置</li>
+      <li>VS構図の場合は左右に2キャラ、中央にテキスト</li>
+    </ul>
+    <div class="callout blue">
+      <strong>ブランド効果：</strong>毎回クッパ素材を入れ続けることで「あ、クッパの人だ」と指が止まる。成功チャンネルは全員やっている。
+    </div>
+  </div>
+
+  <!-- 背景詳細 -->
+  <div class="card">
+    <h3><span class="icon-box" style="background:rgba(255,215,0,0.15);color:var(--smash-yellow);">▦</span> 背景の使い分け</h3>
+    <table class="spec-table">
+      <tr><th>動画タイプ</th><th>背景</th><th>加工</th></tr>
+      <tr><td>大会ハイライト</td><td>試合のキメ場面</td><td>ぼかし + 暗め + 赤発光</td></tr>
+      <tr><td>配信切り抜き</td><td>紫〜黒グラデ</td><td>放射状グラデ</td></tr>
+      <tr><td>VIP / ランクマ</td><td>ステージ背景</td><td>ぼかし強 + 中央光源</td></tr>
+      <tr><td>企画 / ネタ</td><td>黄色 or オレンジ単色</td><td>高彩度 + ストライプ</td></tr>
+    </table>
+    <div class="callout red">
+      <strong>最大のNG：</strong>ゲーム画面スクショをそのまま背景にすること。情報量多すぎて1秒で何も伝わらない。必ず「ぼかす」「暗くする」「単色に差し替える」。
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--                    04: SAFE ZONE                             -->
+<!-- ============================================================ -->
+<section>
+  <div class="section-header">
+    <div class="section-num-box">04</div>
+    <span class="section-tag">Safe Zone</span>
+  </div>
+  <div class="section-title"><span style="color:var(--smash-red);">配置禁止</span>エリア</div>
+  <div class="section-lead">YouTubeのUI要素でテキストが隠れる場所を把握しておく。</div>
+
+  <div class="safe-zone-demo">
+    <div class="sz-center">1280 × 720 px</div>
+    <div class="sz-safe"></div>
+    <div class="sz-label safe">✅ セーフゾーン（中央60〜70%）</div>
+    <div class="sz-label danger">⚠️ ここにテキスト置くな！</div>
+    <div class="sz-timestamp">11:32</div>
+    <div class="sz-progress"></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card" style="border-left:3px solid var(--smash-red);">
+      <h3 style="color:var(--smash-red);">禁止エリア</h3>
+      <ul>
+        <li><strong>右下:</strong> 再生時間バッジが常に表示</li>
+        <li><strong>下端:</strong> プログレスバーが重なる</li>
+        <li><strong>四辺の端15〜20%:</strong> デバイスで切れる</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--smash-blue);">
+      <h3 style="color:var(--smash-blue);">安全な配置</h3>
+      <ul>
+        <li>テキスト → 中央〜左上</li>
+        <li>キャラ → 左 or 右（右下は避ける）</li>
+        <li>全体の60〜70%に収める</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--                    05: SPECS                                 -->
+<!-- ============================================================ -->
+<section>
+  <div class="section-header">
+    <div class="section-num-box">05</div>
+    <span class="section-tag">Technical</span>
+  </div>
+  <div class="section-title">技術<span style="color:var(--smash-blue);">仕様</span></div>
+
+  <table class="spec-table">
+    <tr><th>項目</th><th>仕様</th><th>備考</th></tr>
+    <tr><td>解像度</td><td class="hl">1280 × 720 px</td><td>16:9（必須）</td></tr>
+    <tr><td>ファイル</td><td>JPG / PNG</td><td>PNGの方が文字シャープ</td></tr>
+    <tr><td>サイズ</td><td class="hl">2MB以下</td><td>50MB拡大が順次展開中</td></tr>
+    <tr><td>文字サイズ</td><td class="hl">150〜200px</td><td>1280×720ベース</td></tr>
+    <tr><td>縮小テスト</td><td class="hl">168 × 94 px</td><td>モバイル表示サイズ</td></tr>
+    <tr><td>コントラスト比</td><td class="hl">4.5:1以上（理想7:1）</td><td>文字と背景</td></tr>
+  </table>
+</section>
+
+<!-- ============================================================ -->
+<!--                    06: BRAND COLOR                           -->
+<!-- ============================================================ -->
+<section>
+  <div class="section-header">
+    <div class="section-num-box">06</div>
+    <span class="section-tag">Branding</span>
+  </div>
+  <div class="section-title">Rearletの<span style="color:var(--smash-orange);">ブランドカラー</span></div>
+  <div class="section-lead">毎回同じ色・フォント・レイアウトで「この人の動画だ」と一瞬で認識させる。</div>
+
+  <div class="palette">
+    <div class="swatch-card">
+      <div class="swatch" style="background:linear-gradient(135deg,#FF6B35,#E8312A);"></div>
+      <div><div class="name">メイン：赤〜オレンジ</div><div class="desc">クッパの炎・パワー</div></div>
+    </div>
+    <div class="swatch-card">
+      <div class="swatch" style="background:linear-gradient(135deg,#1a1a30,#0a0a14);"></div>
+      <div><div class="name">サブ：黒〜紫</div><div class="desc">ガチ感・重厚感</div></div>
+    </div>
+    <div class="swatch-card">
+      <div class="swatch" style="background:#fff;border:1px solid #444;"></div>
+      <div><div class="name">テキスト：白+黒縁</div><div class="desc">どの背景でも読める</div></div>
+    </div>
+    <div class="swatch-card">
+      <div class="swatch" style="background:linear-gradient(135deg,#FFD700,#F59E0B);"></div>
+      <div><div class="name">アクセント：ゴールド</div><div class="desc">優勝・実績・特別な場面</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>補色テクニック（CTRブースト配色）</h3>
+    <p style="margin-bottom:14px;">色相環で対面にある色の組み合わせは、脳が最も強く反応する。</p>
+    <div class="grid-3">
+      <div style="text-align:center;padding:16px;">
+        <div style="width:60px;height:60px;margin:0 auto 8px;border-radius:50%;background:linear-gradient(135deg,#FF6B35 50%,#2B7CFF 50%);"></div>
+        <div style="font-size:14px;font-weight:700;">オレンジ × 青</div>
+        <div style="font-size:12px;color:var(--text-dim);">活力 × 信頼</div>
+      </div>
+      <div style="text-align:center;padding:16px;">
+        <div style="width:60px;height:60px;margin:0 auto 8px;border-radius:50%;background:linear-gradient(135deg,#E8312A 50%,#22D3EE 50%);"></div>
+        <div style="font-size:14px;font-weight:700;">赤 × シアン</div>
+        <div style="font-size:12px;color:var(--text-dim);">緊張 × 冷静</div>
+      </div>
+      <div style="text-align:center;padding:16px;">
+        <div style="width:60px;height:60px;margin:0 auto 8px;border-radius:50%;background:linear-gradient(135deg,#FFD700 50%,#9C27B0 50%);"></div>
+        <div style="font-size:14px;font-weight:700;">黄色 × 紫</div>
+        <div style="font-size:12px;color:var(--text-dim);">エンタメ × 格式</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--                    07: TEMPLATES                             -->
+<!-- ============================================================ -->
+<section>
+  <div class="section-header">
+    <div class="section-num-box">07</div>
+    <span class="section-tag">Templates</span>
+  </div>
+  <div class="section-title">テンプレ<span style="color:var(--smash-green);">3パターン</span></div>
+  <div class="section-lead">1回作れば毎回5〜10分で量産できる。</div>
+
+  <div class="tmpl">
+    <div class="tmpl-head">🏆 パターンA：大会ハイライト</div>
+    <div class="tmpl-body">
+      <div class="tmpl-vis">
+        <div class="t-bg" style="background:linear-gradient(135deg,#2a0505,#1a0a00,#0a0a12);opacity:0.8;"></div>
+        <div class="t-text">念願の<br>TOP8</div>
+        <img class="t-char" src="img/bowser_render.png" alt="クッパ">
+        <div class="t-badge">11:32</div>
+      </div>
+      <div class="tmpl-info">
+        <h4>「結果 × 感情」で引く</h4>
+        <p>テキスト：感情2〜3語（白太字・縁取り）<br>キャラ：クッパ素材（右・30〜40%）<br>背景：試合画面ぼかし+暗め+赤発光</p>
+        <div class="tag-row">
+          <span class="tag r">大会</span>
+          <span class="tag r">実績</span>
+          <span class="tag y">ガチ感</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tmpl">
+    <div class="tmpl-head">🔥 パターンB：配信ハイライト / 切り抜き</div>
+    <div class="tmpl-body">
+      <div class="tmpl-vis">
+        <div class="t-bg" style="background:linear-gradient(135deg,#0a001a,#1a0030,#0a0a12);opacity:0.8;"></div>
+        <div class="t-text">これが<br>クッパや</div>
+        <img class="t-char" src="img/bowser_fire.png" alt="クッパ">
+        <div class="t-badge">8:24</div>
+      </div>
+      <div class="tmpl-info">
+        <h4>「煽り × アクション」で引く</h4>
+        <p>テキスト：煽り or 感嘆フレーズ<br>キャラ：アクション中のクッパ<br>背景：紫〜黒グラデーション</p>
+        <div class="tag-row">
+          <span class="tag b">エンタメ</span>
+          <span class="tag b">名場面</span>
+          <span class="tag y">切り抜き</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tmpl">
+    <div class="tmpl-head">⚡ パターンC：VS / 企画系</div>
+    <div class="tmpl-body">
+      <div class="tmpl-vis">
+        <div class="t-bg" style="background:linear-gradient(135deg,#2a2000,#1a1500,#0a0a0a);opacity:0.8;"></div>
+        <div class="t-text">ヤバいの<br>見つけた</div>
+        <img class="t-char" src="img/bowser_render.png" alt="クッパ">
+        <div class="t-badge">15:07</div>
+      </div>
+      <div class="tmpl-info">
+        <h4>「好奇心 × 対決」で引く</h4>
+        <p>テキスト：好奇心フレーズ<br>キャラ：クッパ+対戦相手（左右配置）<br>背景：黄色〜オレンジ系</p>
+        <div class="tag-row">
+          <span class="tag g">好奇心</span>
+          <span class="tag g">VS構図</span>
+          <span class="tag y">派手</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!--                    08: REAL COMPARE                          -->
+<!-- ============================================================ -->
+<section>
+  <div class="section-header">
+    <div class="section-num-box">08</div>
+    <span class="section-tag">Compare</span>
+  </div>
+  <div class="section-title">実際の<span style="color:var(--smash-yellow);">サムネ比較</span></div>
+
+  <div class="thumb-section">
+    <h4 style="color:var(--smash-blue);font-size:16px;margin-bottom:14px;">✅ 成功チャンネル（検索上位・クッパ系）</h4>
+    <div class="thumb-row">
+      <div class="thumb-item win">
+        <img src="img/thumb_konga.jpg" alt="こんが ch">
+        <div class="cap"><strong>こんが ch</strong> — コンボ解説<br>キャラ素材+太字テキスト+シンプル背景</div>
+      </div>
+      <div class="thumb-item win">
+        <img src="img/thumb_mumei.jpg" alt="スマブラ塾">
+        <div class="cap"><strong>スマブラ塾</strong> — 初級編<br>キャラ素材+大きなテキスト+統一デザイン</div>
+      </div>
+      <div class="thumb-item win">
+        <img src="img/thumb_vgbc.jpg" alt="VGBootCamp">
+        <div class="cap"><strong>VGBootCamp</strong> — 大会配信<br>VS構図+大会ロゴ+プレイヤー名</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="thumb-section">
+    <h4 style="color:var(--smash-red);font-size:16px;margin-bottom:14px;">❌ Rearlet（現状）</h4>
+    <div class="thumb-row">
+      <div class="thumb-item lose">
+        <img src="img/thumb_rearlet_1.jpg" alt="桜梅桃李ハイライト">
+        <div class="cap">桜梅桃李ハイライト — <strong>203回</strong></div>
+      </div>
+      <div class="thumb-item lose">
+        <img src="img/thumb_rearlet_2.jpg" alt="Rearlet動画2">
+        <div class="cap">横動画 — <strong>再生数伸びず</strong></div>
+      </div>
+      <div class="thumb-item lose">
+        <img src="img/thumb_rearlet_3.jpg" alt="Rearlet動画3">
+        <div class="cap">配信アーカイブ — <strong>再生数伸びず</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>差が生まれる5つの理由</h3>
+    <table class="spec-table">
+      <tr><th>要素</th><th style="color:var(--smash-blue);">成功チャンネル</th><th style="color:var(--smash-red);">Rearlet</th></tr>
+      <tr><td>キャラ</td><td>切り抜き素材を大きく</td><td class="hl">ゲーム画面スクショ</td></tr>
+      <tr><td>テキスト</td><td>2〜5語・太字・縁取り</td><td class="hl">なし or 小さい</td></tr>
+      <tr><td>背景</td><td>シンプル（単色/ぼかし）</td><td class="hl">情報量そのまま</td></tr>
+      <tr><td>統一感</td><td>毎回同じレイアウト</td><td class="hl">毎回バラバラ</td></tr>
+      <tr><td>サムネ×タイトル</td><td>補完関係</td><td class="hl">関係なし</td></tr>
+    </table>
+  </div>
+</section>
+
+
+</main>
+
+<footer>
+  <p style="font-size:14px;color:var(--text-sub);">Rearlet Channel — サムネイル完全ガイド</p>
+  <p style="margin-top:6px;">出典: YouTube Creator Academy / MrBeast制作マニュアル / ThumbMagic / WordStream CTR調査 / StockSun / kamui tracker</p>
+  <p style="margin-top:4px;">© 2026 — Built for Rearlet 🐢🔥</p>
+</footer>
+
+</body>
+</html>
