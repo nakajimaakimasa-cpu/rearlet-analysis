@@ -15,6 +15,24 @@
   @keyframes pulse { 0%,100% { box-shadow: 0 0 20px rgba(255,80,20,0.3); } 50% { box-shadow: 0 0 40px rgba(255,80,20,0.6); } }
   @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
   @keyframes glow { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+  @keyframes speedLine {
+    0% { transform: translateX(-100%) scaleX(0); opacity: 0; }
+    30% { opacity: 1; }
+    100% { transform: translateX(200%) scaleX(1.5); opacity: 0; }
+  }
+  @keyframes fireFlicker {
+    0%,100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
+  }
+  @keyframes vortexSpin {
+    0% { transform: translate(-50%,-50%) rotate(0deg); }
+    100% { transform: translate(-50%,-50%) rotate(360deg); }
+  }
+  @keyframes impactFlash {
+    0% { opacity: 0; transform: scale(0.8); }
+    50% { opacity: 0.3; transform: scale(1.2); }
+    100% { opacity: 0; transform: scale(1.5); }
+  }
 
   :root {
     --red: #E8312A;
@@ -39,6 +57,9 @@
   body {
     font-family: 'Zen Kaku Gothic New', 'M PLUS 1p', sans-serif;
     background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 800px 800px at 90% 30%, rgba(156,39,176,0.04), transparent),
+      radial-gradient(ellipse 600px 600px at 10% 70%, rgba(232,49,42,0.03), transparent);
     color: var(--text);
     line-height: 1.8;
     overflow-x: hidden;
@@ -57,20 +78,57 @@
   .hero-bg {
     position: absolute;
     inset: 0;
-    background: url('smash_bg.png') center/cover no-repeat;
-    filter: brightness(0.2) saturate(1.2);
+    background: url('img/bowser_ss2.jpg') center/cover no-repeat;
+    filter: brightness(0.15) saturate(1.6) contrast(1.2);
   }
   .hero-overlay {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(135deg, rgba(10,10,18,0.9) 0%, rgba(10,10,18,0.4) 50%, rgba(10,10,18,0.95) 100%),
-      radial-gradient(ellipse 600px 400px at 30% 50%, rgba(255,215,0,0.15), transparent),
-      radial-gradient(ellipse 500px 400px at 70% 50%, rgba(0,200,83,0.1), transparent);
+      linear-gradient(135deg, rgba(10,10,18,0.92) 0%, rgba(60,10,10,0.5) 40%, rgba(10,10,18,0.95) 100%),
+      radial-gradient(ellipse 800px 500px at 70% 60%, rgba(232,49,42,0.2), transparent),
+      radial-gradient(ellipse 500px 400px at 30% 40%, rgba(156,39,176,0.15), transparent);
+  }
+  /* スピードライン */
+  .hero-speed-lines {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .hero-speed-lines span {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,107,53,0.5), transparent);
+    animation: speedLine 2.5s ease-in-out infinite;
+  }
+  /* 炎グラデーション */
+  .hero-fire {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(0deg, rgba(232,49,42,0.15), rgba(255,107,53,0.08), transparent);
+    pointer-events: none;
+    animation: fireFlicker 3s ease-in-out infinite;
+    z-index: 1;
+  }
+  /* クッパシルエット */
+  .hero-bowser {
+    position: absolute;
+    right: -60px;
+    bottom: -40px;
+    height: 85%;
+    opacity: 0.12;
+    filter: drop-shadow(0 0 80px rgba(232,49,42,0.4));
+    pointer-events: none;
+    z-index: 1;
   }
   .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     max-width: 800px;
     animation: slideUp 1s ease-out;
   }
@@ -269,6 +327,7 @@
     margin-bottom: 24px;
     position: relative;
     overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
   }
   .phase::before {
     content: '';
@@ -278,12 +337,16 @@
   }
   .phase.p1::before { background: linear-gradient(90deg, var(--red), var(--orange)); }
   .phase.p1 { border-color: rgba(232,49,42,0.3); }
+  .phase.p1:hover { border-color: rgba(232,49,42,0.6); box-shadow: 0 0 40px rgba(232,49,42,0.1); }
   .phase.p2::before { background: linear-gradient(90deg, var(--orange), var(--yellow)); }
   .phase.p2 { border-color: rgba(255,215,0,0.3); }
+  .phase.p2:hover { border-color: rgba(255,215,0,0.6); box-shadow: 0 0 40px rgba(255,215,0,0.1); }
   .phase.p3::before { background: linear-gradient(90deg, var(--yellow), var(--green)); }
   .phase.p3 { border-color: rgba(0,200,83,0.3); }
+  .phase.p3:hover { border-color: rgba(0,200,83,0.6); box-shadow: 0 0 40px rgba(0,200,83,0.1); }
   .phase.p4::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
   .phase.p4 { border-color: rgba(34,211,238,0.3); }
+  .phase.p4:hover { border-color: rgba(34,211,238,0.6); box-shadow: 0 0 40px rgba(34,211,238,0.1); }
 
   .phase-header {
     display: flex;
@@ -479,6 +542,45 @@
     text-shadow: 0 0 15px rgba(255,215,0,0.5);
   }
 
+  /* セクション背景画像 */
+  .section-bg-img {
+    position: relative;
+    overflow: hidden;
+  }
+  .section-bg-img::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -100px;
+    width: 400px;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center right;
+    opacity: 0.04;
+    pointer-events: none;
+    filter: blur(1px);
+  }
+
+  /* フェーズの背景画像バリエーション */
+  .phase-img-wrap {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+  .phase-img-wrap img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.6) saturate(1.3);
+    transition: filter 0.3s;
+  }
+  .phase:hover .phase-img-wrap img {
+    filter: brightness(0.8) saturate(1.5);
+  }
+
   footer {
     text-align: center;
     padding: 60px 24px;
@@ -502,6 +604,16 @@
 <header class="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
+  <div class="hero-fire"></div>
+  <img class="hero-bowser" src="img/bowser_smash_art.png" alt="">
+  <div class="hero-speed-lines">
+    <span style="top:12%;width:250px;animation-delay:0s;"></span>
+    <span style="top:28%;width:180px;animation-delay:0.6s;"></span>
+    <span style="top:44%;width:300px;animation-delay:1.2s;"></span>
+    <span style="top:60%;width:200px;animation-delay:0.3s;"></span>
+    <span style="top:76%;width:260px;animation-delay:0.9s;"></span>
+    <span style="top:88%;width:150px;animation-delay:1.8s;"></span>
+  </div>
   <div class="hero-content">
     <div class="hero-badge">Rearlet Revenue Roadmap</div>
     <h1>
@@ -537,6 +649,10 @@
   </div>
   <div class="section-title">まず<span style="color:var(--red);">現実</span>を知る</div>
   <div class="section-lead">夢物語ではなく、データに基づいた現実的な話をする。</div>
+
+  <div style="border-radius:var(--radius);overflow:hidden;margin-bottom:24px;border:1px solid var(--border);">
+    <img src="img/bowser_ss4.jpg" alt="" style="width:100%;height:200px;object-fit:cover;display:block;filter:brightness(0.5) saturate(1.4);">
+  </div>
 
   <div class="card">
     <h3>スマブラプロの収益現実</h3>
@@ -575,6 +691,10 @@
   </div>
   <div class="section-title">月<span style="color:var(--yellow);">30万</span>の内訳</div>
   <div class="section-lead">1つの収益源に頼らない。5つのチャネルを組み合わせて月30万を構成する。</div>
+
+  <div style="border-radius:var(--radius);overflow:hidden;margin-bottom:24px;border:1px solid var(--border);">
+    <img src="img/bowser_ss3.jpg" alt="" style="width:100%;height:200px;object-fit:cover;display:block;filter:brightness(0.4) saturate(1.5) hue-rotate(10deg);">
+  </div>
 
   <div class="grid-5">
     <div class="rev-card y">
@@ -675,6 +795,7 @@
       <span class="phase-period">Month 1-3</span>
     </div>
     <div class="phase-title">土台を作る</div>
+    <div class="phase-img-wrap"><img src="img/bowser_victory.jpg" alt="Phase 1"></div>
     <div class="phase-goal">目標: 登録者 <strong>1,000人</strong> → YouTube収益化条件クリア</div>
 
     <ul class="task-list">
@@ -702,6 +823,7 @@
       <span class="phase-period">Month 4-8</span>
     </div>
     <div class="phase-title">収益化スタート</div>
+    <div class="phase-img-wrap"><img src="img/bowser_ss3.jpg" alt="Phase 2"></div>
     <div class="phase-goal">目標: 登録者 <strong>5,000人</strong> / 月間 <strong>10万再生</strong> / グッズ販売開始</div>
 
     <ul class="task-list">
@@ -729,6 +851,7 @@
       <span class="phase-period">Month 9-14</span>
     </div>
     <div class="phase-title">スケールさせる</div>
+    <div class="phase-img-wrap"><img src="img/bowser_ss4.jpg" alt="Phase 3"></div>
     <div class="phase-goal">目標: 登録者 <strong>15,000人</strong> / 月間 <strong>30万再生</strong> / スポンサー獲得</div>
 
     <ul class="task-list">
@@ -756,6 +879,7 @@
       <span class="phase-period">Month 15-18</span>
     </div>
     <div class="phase-title">月30万を安定させる</div>
+    <div class="phase-img-wrap"><img src="img/bowser_ss2.jpg" alt="Phase 4"></div>
     <div class="phase-goal">目標: 登録者 <strong>30,000人</strong> / 月間 <strong>40万再生</strong> / 収益の自動化</div>
 
     <ul class="task-list">
