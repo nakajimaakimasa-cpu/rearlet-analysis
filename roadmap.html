@@ -35,20 +35,20 @@
   }
 
   :root {
-    --red: #E8312A;
-    --blue: #2B7CFF;
-    --yellow: #FFD700;
-    --green: #00C853;
-    --orange: #FF6B35;
-    --purple: #9C27B0;
-    --cyan: #22D3EE;
-    --bg: #0A0A12;
-    --card: #111122;
-    --card2: #161630;
-    --border: #2A2A4E;
-    --text: #F0F0FF;
-    --sub: #9898B8;
-    --dim: #686888;
+    --red: #D32F2F;
+    --blue: #1565C0;
+    --yellow: #F9A825;
+    --green: #2E7D32;
+    --orange: #E65100;
+    --purple: #7B1FA2;
+    --cyan: #00838F;
+    --bg: #FAFAFA;
+    --card: #FFFFFF;
+    --card2: #F5F5F5;
+    --border: #E0E0E0;
+    --text: #1A1A2E;
+    --sub: #555566;
+    --dim: #888899;
     --radius: 16px;
   }
 
@@ -57,9 +57,6 @@
   body {
     font-family: 'Zen Kaku Gothic New', 'M PLUS 1p', sans-serif;
     background: var(--bg);
-    background-image:
-      radial-gradient(ellipse 800px 800px at 90% 30%, rgba(156,39,176,0.04), transparent),
-      radial-gradient(ellipse 600px 600px at 10% 70%, rgba(232,49,42,0.03), transparent);
     color: var(--text);
     line-height: 1.8;
     overflow-x: hidden;
@@ -79,15 +76,13 @@
     position: absolute;
     inset: 0;
     background: url('img/bowser_ss2.jpg') center/cover no-repeat;
-    filter: brightness(0.15) saturate(1.6) contrast(1.2);
+    filter: brightness(0.25) saturate(1.4) contrast(1.1);
   }
   .hero-overlay {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(135deg, rgba(10,10,18,0.92) 0%, rgba(60,10,10,0.5) 40%, rgba(10,10,18,0.95) 100%),
-      radial-gradient(ellipse 800px 500px at 70% 60%, rgba(232,49,42,0.2), transparent),
-      radial-gradient(ellipse 500px 400px at 30% 40%, rgba(156,39,176,0.15), transparent);
+      linear-gradient(135deg, rgba(26,26,46,0.88) 0%, rgba(211,47,47,0.3) 50%, rgba(26,26,46,0.92) 100%);
   }
   /* スピードライン */
   .hero-speed-lines {
@@ -100,7 +95,7 @@
   .hero-speed-lines span {
     position: absolute;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,107,53,0.5), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
     animation: speedLine 2.5s ease-in-out infinite;
   }
   /* 炎グラデーション */
@@ -110,7 +105,7 @@
     left: 0;
     right: 0;
     height: 40%;
-    background: linear-gradient(0deg, rgba(232,49,42,0.15), rgba(255,107,53,0.08), transparent);
+    background: linear-gradient(0deg, rgba(211,47,47,0.2), rgba(230,81,0,0.1), transparent);
     pointer-events: none;
     animation: fireFlicker 3s ease-in-out infinite;
     z-index: 1;
@@ -154,8 +149,10 @@
     margin-bottom: 20px;
     letter-spacing: 2px;
   }
-  .hero h1 .gold { color: var(--yellow); text-shadow: 0 0 30px rgba(255,215,0,0.4); }
-  .hero h1 .green { color: var(--green); }
+  .hero h1 .gold { color: #FFD700; text-shadow: 0 0 30px rgba(255,215,0,0.4); }
+  .hero h1 .green { color: #69F0AE; }
+  .hero h1 { color: #fff; }
+  .hero .lead { color: rgba(255,255,255,0.7); }
   .hero .lead { font-size: 17px; color: var(--sub); max-width: 600px; margin: 0 auto 40px; }
 
   .hero-stats {
@@ -166,13 +163,14 @@
   }
   .hero-stat {
     text-align: center;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.1);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 14px;
     padding: 16px 24px;
     min-width: 130px;
     animation: float 4s ease-in-out infinite;
+    color: #fff;
   }
   .hero-stat:nth-child(2) { animation-delay: 0.5s; }
   .hero-stat:nth-child(3) { animation-delay: 1s; }
@@ -180,9 +178,9 @@
     font-family: 'Orbitron', monospace;
     font-size: 26px;
     font-weight: 900;
-    color: var(--yellow);
+    color: #FFD700;
   }
-  .hero-stat .label { font-size: 11px; color: var(--dim); margin-top: 2px; }
+  .hero-stat .label { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
 
   .container { max-width: 940px; margin: 0 auto; padding: 0 24px; }
   section { padding: 80px 0; position: relative; }
@@ -227,7 +225,8 @@
     overflow: hidden;
     transition: border-color 0.3s, transform 0.2s;
   }
-  .card:hover { border-color: rgba(255,215,0,0.3); transform: translateY(-2px); }
+  .card { box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .card:hover { border-color: var(--red); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
   .card h3 {
     font-family: 'M PLUS 1p', sans-serif;
     font-size: 18px;
@@ -245,7 +244,7 @@
     top: 14px;
     width: 8px;
     height: 2px;
-    background: var(--yellow);
+    background: var(--red);
     border-radius: 1px;
   }
 
@@ -263,16 +262,16 @@
     left: 0; top: 0; bottom: 0;
     width: 4px;
   }
-  .callout.red { background: rgba(232,49,42,0.08); }
+  .callout.red { background: #FFF5F5; }
   .callout.red::before { background: var(--red); }
   .callout.red strong { color: var(--red); }
-  .callout.yellow { background: rgba(255,215,0,0.06); }
+  .callout.yellow { background: #FFFDE7; }
   .callout.yellow::before { background: var(--yellow); }
-  .callout.yellow strong { color: var(--yellow); }
-  .callout.green { background: rgba(0,200,83,0.06); }
+  .callout.yellow strong { color: #E65100; }
+  .callout.green { background: #F1F8E9; }
   .callout.green::before { background: var(--green); }
   .callout.green strong { color: var(--green); }
-  .callout.blue { background: rgba(43,124,255,0.08); }
+  .callout.blue { background: #E8F0FE; }
   .callout.blue::before { background: var(--blue); }
   .callout.blue strong { color: var(--blue); }
 
@@ -285,13 +284,14 @@
 
   /* 収益カード */
   .rev-card {
-    background: linear-gradient(135deg, var(--card), var(--card2));
+    background: #fff;
     border: 2px solid;
     border-radius: var(--radius);
     padding: 28px;
     text-align: center;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
   .rev-card .amount {
     font-family: 'Orbitron', monospace;
@@ -308,19 +308,19 @@
   }
   .rev-card p { font-size: 13px; color: var(--sub); }
   .rev-card.y { border-color: var(--yellow); }
-  .rev-card.y .amount { color: var(--yellow); text-shadow: 0 0 20px rgba(255,215,0,0.3); }
+  .rev-card.y .amount { color: var(--yellow); }
   .rev-card.b { border-color: var(--blue); }
-  .rev-card.b .amount { color: var(--blue); text-shadow: 0 0 20px rgba(43,124,255,0.3); }
+  .rev-card.b .amount { color: var(--blue); }
   .rev-card.g { border-color: var(--green); }
-  .rev-card.g .amount { color: var(--green); text-shadow: 0 0 20px rgba(0,200,83,0.3); }
+  .rev-card.g .amount { color: var(--green); }
   .rev-card.r { border-color: var(--red); }
-  .rev-card.r .amount { color: var(--red); text-shadow: 0 0 20px rgba(232,49,42,0.3); }
+  .rev-card.r .amount { color: var(--red); }
   .rev-card.o { border-color: var(--orange); }
-  .rev-card.o .amount { color: var(--orange); text-shadow: 0 0 20px rgba(255,107,53,0.3); }
+  .rev-card.o .amount { color: var(--orange); }
 
   /* フェーズ */
   .phase {
-    background: var(--card);
+    background: #fff;
     border: 2px solid var(--border);
     border-radius: var(--radius);
     padding: 36px;
@@ -328,6 +328,7 @@
     position: relative;
     overflow: hidden;
     transition: border-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
   .phase::before {
     content: '';
@@ -337,16 +338,16 @@
   }
   .phase.p1::before { background: linear-gradient(90deg, var(--red), var(--orange)); }
   .phase.p1 { border-color: rgba(232,49,42,0.3); }
-  .phase.p1:hover { border-color: rgba(232,49,42,0.6); box-shadow: 0 0 40px rgba(232,49,42,0.1); }
+  .phase.p1:hover { border-color: var(--red); box-shadow: 0 4px 24px rgba(211,47,47,0.12); }
   .phase.p2::before { background: linear-gradient(90deg, var(--orange), var(--yellow)); }
-  .phase.p2 { border-color: rgba(255,215,0,0.3); }
-  .phase.p2:hover { border-color: rgba(255,215,0,0.6); box-shadow: 0 0 40px rgba(255,215,0,0.1); }
+  .phase.p2 { border-color: #E0E0E0; }
+  .phase.p2:hover { border-color: var(--yellow); box-shadow: 0 4px 24px rgba(249,168,37,0.12); }
   .phase.p3::before { background: linear-gradient(90deg, var(--yellow), var(--green)); }
-  .phase.p3 { border-color: rgba(0,200,83,0.3); }
-  .phase.p3:hover { border-color: rgba(0,200,83,0.6); box-shadow: 0 0 40px rgba(0,200,83,0.1); }
+  .phase.p3 { border-color: #E0E0E0; }
+  .phase.p3:hover { border-color: var(--green); box-shadow: 0 4px 24px rgba(46,125,50,0.12); }
   .phase.p4::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
-  .phase.p4 { border-color: rgba(34,211,238,0.3); }
-  .phase.p4:hover { border-color: rgba(34,211,238,0.6); box-shadow: 0 0 40px rgba(34,211,238,0.1); }
+  .phase.p4 { border-color: #E0E0E0; }
+  .phase.p4:hover { border-color: var(--cyan); box-shadow: 0 4px 24px rgba(0,131,143,0.12); }
 
   .phase-header {
     display: flex;
@@ -394,7 +395,7 @@
     align-items: flex-start;
     gap: 12px;
     padding: 10px 0;
-    border-bottom: 1px solid rgba(42,42,78,0.5);
+    border-bottom: 1px solid #EEEEEE;
     font-size: 14px;
     color: var(--sub);
   }
@@ -449,12 +450,12 @@
   }
   .spec-table td {
     padding: 12px 14px;
-    border-bottom: 1px solid rgba(42,42,78,0.5);
+    border-bottom: 1px solid #EEEEEE;
     color: var(--sub);
   }
   .spec-table td:first-child { color: var(--text); font-weight: 600; }
-  .spec-table .hl { color: var(--yellow); font-weight: 700; font-family: 'Orbitron', 'Zen Kaku Gothic New', sans-serif; }
-  .spec-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .spec-table .hl { color: var(--red); font-weight: 700; font-family: 'Orbitron', 'Zen Kaku Gothic New', sans-serif; }
+  .spec-table tr:hover td { background: #F5F5F5; }
 
   /* プログレスバー */
   .progress-bar {
@@ -466,7 +467,7 @@
   }
   .progress-track {
     height: 12px;
-    background: rgba(255,255,255,0.05);
+    background: #EEEEEE;
     border-radius: 6px;
     position: relative;
     overflow: hidden;
@@ -483,7 +484,7 @@
     font-size: 12px;
     color: var(--dim);
   }
-  .progress-labels .current { color: var(--yellow); font-weight: 700; }
+  .progress-labels .current { color: var(--orange); font-weight: 700; }
 
   /* タイムライン */
   .timeline { position: relative; padding-left: 40px; margin: 24px 0; }
@@ -509,10 +510,10 @@
     border-radius: 50%;
     border: 2px solid;
   }
-  .tl-item:nth-child(1) .tl-dot { border-color: var(--red); background: rgba(232,49,42,0.3); }
-  .tl-item:nth-child(2) .tl-dot { border-color: var(--orange); background: rgba(255,107,53,0.3); }
-  .tl-item:nth-child(3) .tl-dot { border-color: var(--yellow); background: rgba(255,215,0,0.3); }
-  .tl-item:nth-child(4) .tl-dot { border-color: var(--green); background: rgba(0,200,83,0.3); }
+  .tl-item:nth-child(1) .tl-dot { border-color: var(--red); background: #FFCDD2; }
+  .tl-item:nth-child(2) .tl-dot { border-color: var(--orange); background: #FFE0B2; }
+  .tl-item:nth-child(3) .tl-dot { border-color: var(--yellow); background: #FFF9C4; }
+  .tl-item:nth-child(4) .tl-dot { border-color: var(--green); background: #C8E6C9; }
   .tl-month {
     font-family: 'Orbitron', monospace;
     font-size: 12px;
@@ -574,11 +575,11 @@
     height: 180px;
     object-fit: cover;
     display: block;
-    filter: brightness(0.6) saturate(1.3);
+    filter: brightness(0.75) saturate(1.2);
     transition: filter 0.3s;
   }
   .phase:hover .phase-img-wrap img {
-    filter: brightness(0.8) saturate(1.5);
+    filter: brightness(0.9) saturate(1.3);
   }
 
   footer {
@@ -592,9 +593,8 @@
     content: '✦';
     display: block;
     font-size: 24px;
-    color: var(--yellow);
+    color: var(--red);
     margin-bottom: 16px;
-    text-shadow: 0 0 20px rgba(255,215,0,0.4);
   }
 </style>
 </head>
@@ -651,7 +651,7 @@
   <div class="section-lead">夢物語ではなく、データに基づいた現実的な話をする。</div>
 
   <div style="border-radius:var(--radius);overflow:hidden;margin-bottom:24px;border:1px solid var(--border);">
-    <img src="img/bowser_ss4.jpg" alt="" style="width:100%;height:200px;object-fit:cover;display:block;filter:brightness(0.5) saturate(1.4);">
+    <img src="img/bowser_ss4.jpg" alt="" style="width:100%;height:200px;object-fit:cover;display:block;filter:brightness(0.7) saturate(1.2);">
   </div>
 
   <div class="card">
@@ -693,7 +693,7 @@
   <div class="section-lead">1つの収益源に頼らない。5つのチャネルを組み合わせて月30万を構成する。</div>
 
   <div style="border-radius:var(--radius);overflow:hidden;margin-bottom:24px;border:1px solid var(--border);">
-    <img src="img/bowser_ss3.jpg" alt="" style="width:100%;height:200px;object-fit:cover;display:block;filter:brightness(0.4) saturate(1.5) hue-rotate(10deg);">
+    <img src="img/bowser_ss3.jpg" alt="" style="width:100%;height:200px;object-fit:cover;display:block;filter:brightness(0.7) saturate(1.2);">
   </div>
 
   <div class="grid-5">
