@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>スマブラで月30万ロードマップ — Rearlet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=M+PLUS+1p:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 20px rgba(255,80,20,0.3); } 50% { box-shadow: 0 0 40px rgba(255,80,20,0.6); } }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @keyframes glow { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+  :root {
+    --red: #E8312A;
+    --blue: #2B7CFF;
+    --yellow: #FFD700;
+    --green: #00C853;
+    --orange: #FF6B35;
+    --purple: #9C27B0;
+    --cyan: #22D3EE;
+    --bg: #0A0A12;
+    --card: #111122;
+    --card2: #161630;
+    --border: #2A2A4E;
+    --text: #F0F0FF;
+    --sub: #9898B8;
+    --dim: #686888;
+    --radius: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Zen Kaku Gothic New', 'M PLUS 1p', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('smash_bg.png') center/cover no-repeat;
+    filter: brightness(0.2) saturate(1.2);
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(10,10,18,0.9) 0%, rgba(10,10,18,0.4) 50%, rgba(10,10,18,0.95) 100%),
+      radial-gradient(ellipse 600px 400px at 30% 50%, rgba(255,215,0,0.15), transparent),
+      radial-gradient(ellipse 500px 400px at 70% 50%, rgba(0,200,83,0.1), transparent);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    animation: slideUp 1s ease-out;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--yellow), var(--orange));
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    padding: 10px 28px;
+    border-radius: 99px;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .hero h1 {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: clamp(36px, 7vw, 72px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+  .hero h1 .gold { color: var(--yellow); text-shadow: 0 0 30px rgba(255,215,0,0.4); }
+  .hero h1 .green { color: var(--green); }
+  .hero .lead { font-size: 17px; color: var(--sub); max-width: 600px; margin: 0 auto 40px; }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .hero-stat {
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 16px 24px;
+    min-width: 130px;
+    animation: float 4s ease-in-out infinite;
+  }
+  .hero-stat:nth-child(2) { animation-delay: 0.5s; }
+  .hero-stat:nth-child(3) { animation-delay: 1s; }
+  .hero-stat .num {
+    font-family: 'Orbitron', monospace;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--yellow);
+  }
+  .hero-stat .label { font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+  .container { max-width: 940px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 80px 0; position: relative; }
+  section + section { border-top: 1px solid var(--border); }
+
+  .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .section-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .section-tag {
+    font-family: 'Bebas Neue', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: var(--dim);
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 4px 14px;
+    border-radius: 6px;
+  }
+  .section-title {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: clamp(26px, 5vw, 42px);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .section-lead { font-size: 15px; color: var(--sub); margin-bottom: 44px; max-width: 700px; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .card:hover { border-color: rgba(255,215,0,0.3); transform: translateY(-2px); }
+  .card h3 {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .card p, .card li { color: var(--sub); font-size: 15px; }
+  .card ul { list-style: none; padding: 0; }
+  .card > ul > li { padding: 6px 0 6px 20px; position: relative; }
+  .card > ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 2px;
+    background: var(--yellow);
+    border-radius: 1px;
+  }
+
+  .callout {
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin: 24px 0;
+    font-size: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+  .callout::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .callout.red { background: rgba(232,49,42,0.08); }
+  .callout.red::before { background: var(--red); }
+  .callout.red strong { color: var(--red); }
+  .callout.yellow { background: rgba(255,215,0,0.06); }
+  .callout.yellow::before { background: var(--yellow); }
+  .callout.yellow strong { color: var(--yellow); }
+  .callout.green { background: rgba(0,200,83,0.06); }
+  .callout.green::before { background: var(--green); }
+  .callout.green strong { color: var(--green); }
+  .callout.blue { background: rgba(43,124,255,0.08); }
+  .callout.blue::before { background: var(--blue); }
+  .callout.blue strong { color: var(--blue); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  @media (max-width: 768px) { .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 500px) { .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; } }
+
+  /* 収益カード */
+  .rev-card {
+    background: linear-gradient(135deg, var(--card), var(--card2));
+    border: 2px solid;
+    border-radius: var(--radius);
+    padding: 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .rev-card .amount {
+    font-family: 'Orbitron', monospace;
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .rev-card h4 {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .rev-card p { font-size: 13px; color: var(--sub); }
+  .rev-card.y { border-color: var(--yellow); }
+  .rev-card.y .amount { color: var(--yellow); text-shadow: 0 0 20px rgba(255,215,0,0.3); }
+  .rev-card.b { border-color: var(--blue); }
+  .rev-card.b .amount { color: var(--blue); text-shadow: 0 0 20px rgba(43,124,255,0.3); }
+  .rev-card.g { border-color: var(--green); }
+  .rev-card.g .amount { color: var(--green); text-shadow: 0 0 20px rgba(0,200,83,0.3); }
+  .rev-card.r { border-color: var(--red); }
+  .rev-card.r .amount { color: var(--red); text-shadow: 0 0 20px rgba(232,49,42,0.3); }
+  .rev-card.o { border-color: var(--orange); }
+  .rev-card.o .amount { color: var(--orange); text-shadow: 0 0 20px rgba(255,107,53,0.3); }
+
+  /* フェーズ */
+  .phase {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phase::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .phase.p1::before { background: linear-gradient(90deg, var(--red), var(--orange)); }
+  .phase.p1 { border-color: rgba(232,49,42,0.3); }
+  .phase.p2::before { background: linear-gradient(90deg, var(--orange), var(--yellow)); }
+  .phase.p2 { border-color: rgba(255,215,0,0.3); }
+  .phase.p3::before { background: linear-gradient(90deg, var(--yellow), var(--green)); }
+  .phase.p3 { border-color: rgba(0,200,83,0.3); }
+  .phase.p4::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+  .phase.p4 { border-color: rgba(34,211,238,0.3); }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .phase-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 900;
+    padding: 6px 14px;
+    border-radius: 8px;
+    color: #000;
+    flex-shrink: 0;
+  }
+  .p1 .phase-num { background: var(--red); color: #fff; }
+  .p2 .phase-num { background: var(--yellow); }
+  .p3 .phase-num { background: var(--green); }
+  .p4 .phase-num { background: var(--cyan); }
+  .phase-period {
+    font-family: 'Bebas Neue', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--dim);
+  }
+  .phase-title {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .phase-goal {
+    font-size: 14px;
+    color: var(--sub);
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-goal strong { color: var(--yellow); }
+
+  .task-list { list-style: none; padding: 0; }
+  .task-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(42,42,78,0.5);
+    font-size: 14px;
+    color: var(--sub);
+  }
+  .task-list li:last-child { border-bottom: none; }
+  .task-check {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .task-list li strong { color: var(--text); }
+
+  .phase-revenue {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .phase-revenue .target {
+    font-family: 'Orbitron', monospace;
+    font-size: 24px;
+    font-weight: 900;
+  }
+  .phase-revenue .breakdown {
+    font-size: 13px;
+    color: var(--dim);
+  }
+
+  /* テーブル */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .spec-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px solid var(--border);
+  }
+  .spec-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(42,42,78,0.5);
+    color: var(--sub);
+  }
+  .spec-table td:first-child { color: var(--text); font-weight: 600; }
+  .spec-table .hl { color: var(--yellow); font-weight: 700; font-family: 'Orbitron', 'Zen Kaku Gothic New', sans-serif; }
+  .spec-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* プログレスバー */
+  .progress-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 24px 0;
+  }
+  .progress-track {
+    height: 12px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 6px;
+    position: relative;
+  }
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--dim);
+  }
+  .progress-labels .current { color: var(--yellow); font-weight: 700; }
+
+  /* タイムライン */
+  .timeline { position: relative; padding-left: 40px; margin: 24px 0; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--red), var(--orange), var(--yellow), var(--green));
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .tl-dot {
+    position: absolute;
+    left: -33px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid;
+  }
+  .tl-item:nth-child(1) .tl-dot { border-color: var(--red); background: rgba(232,49,42,0.3); }
+  .tl-item:nth-child(2) .tl-dot { border-color: var(--orange); background: rgba(255,107,53,0.3); }
+  .tl-item:nth-child(3) .tl-dot { border-color: var(--yellow); background: rgba(255,215,0,0.3); }
+  .tl-item:nth-child(4) .tl-dot { border-color: var(--green); background: rgba(0,200,83,0.3); }
+  .tl-month {
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--dim);
+    margin-bottom: 4px;
+  }
+  .tl-title { font-family: 'M PLUS 1p', sans-serif; font-size: 16px; font-weight: 900; margin-bottom: 4px; }
+  .tl-desc { font-size: 13px; color: var(--sub); }
+
+  /* 仕切り */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 48px 0;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+  .divider .mark {
+    font-size: 24px;
+    color: var(--yellow);
+    text-shadow: 0 0 15px rgba(255,215,0,0.5);
+  }
+
+  footer {
+    text-align: center;
+    padding: 60px 24px;
+    border-top: 1px solid var(--border);
+    color: var(--dim);
+    font-size: 12px;
+  }
+  footer::before {
+    content: '✦';
+    display: block;
+    font-size: 24px;
+    color: var(--yellow);
+    margin-bottom: 16px;
+    text-shadow: 0 0 20px rgba(255,215,0,0.4);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Rearlet Revenue Roadmap</div>
+    <h1>
+      スマブラで<br>
+      月<span class="gold">30万</span>を<br>
+      <span class="green">現実にする</span>
+    </h1>
+    <p class="lead">コンサルはやらない。コンテンツとグッズで「クッパの人」として稼ぐ完全ロードマップ。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">¥300K</div>
+        <div class="label">月間目標</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">12-18M</div>
+        <div class="label">到達期間（月）</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">5</div>
+        <div class="label">収益チャネル</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- ============ 01: 前提 ============ -->
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--red);">01</div>
+    <span class="section-tag">Reality Check</span>
+  </div>
+  <div class="section-title">まず<span style="color:var(--red);">現実</span>を知る</div>
+  <div class="section-lead">夢物語ではなく、データに基づいた現実的な話をする。</div>
+
+  <div class="card">
+    <h3>スマブラプロの収益現実</h3>
+    <table class="spec-table">
+      <tr><th>データ</th><th>数値</th><th>出典</th></tr>
+      <tr><td>MKLeo（世界1位）の賞金総額</td><td>約$300,000（約10年間）</td><td>Reddit / SmashWiki</td></tr>
+      <tr><td>MKLeoの年間平均</td><td class="hl">約$33,000 = 月27万円</td><td>Reddit調査</td></tr>
+      <tr><td>あばだんご（日本トップ）</td><td>2024年に一般企業へ就職</td><td>note / KAI-YOU</td></tr>
+      <tr><td>国内大会の賞金</td><td>なし〜数万円（コミュニティ大会）</td><td>ぶれどん / note</td></tr>
+    </table>
+
+    <div class="callout red">
+      <strong>つまり：</strong>世界1位でも賞金だけなら月27万。大会賞金だけで月30万は世界トップでも無理。だからこそ「コンテンツ × グッズ × ファン経済」で複数の収益源を作る必要がある。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>なぜコンサル（教える系）はダメなのか</h3>
+    <ul>
+      <li>スマブラコミュニティでは「教える系で金を取る」行為が強く批判される文化がある</li>
+      <li>海外のCoaching市場は存在するが、日本では炎上リスクが非常に高い</li>
+      <li>プロ選手ですらコーチングを有料で行う際は慎重な姿勢を取っている</li>
+      <li>コミュニティの信頼を失うと、大会参加やコラボの機会も消える</li>
+    </ul>
+    <div class="callout green">
+      <strong>正解は：</strong>「教える」のではなく「見せる」。エンタメ × 実力で視聴者を集め、その視聴者に向けてグッズ・メンバーシップ・スポンサーで収益化する。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02: 収益構成 ============ -->
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--yellow);">02</div>
+    <span class="section-tag">Revenue Mix</span>
+  </div>
+  <div class="section-title">月<span style="color:var(--yellow);">30万</span>の内訳</div>
+  <div class="section-lead">1つの収益源に頼らない。5つのチャネルを組み合わせて月30万を構成する。</div>
+
+  <div class="grid-5">
+    <div class="rev-card y">
+      <div class="amount">¥80K</div>
+      <h4>YouTube<br>広告収入</h4>
+      <p>AdSense</p>
+    </div>
+    <div class="rev-card b">
+      <div class="amount">¥60K</div>
+      <h4>メンバー<br>シップ</h4>
+      <p>月額490円×</p>
+    </div>
+    <div class="rev-card g">
+      <div class="amount">¥50K</div>
+      <h4>グッズ<br>販売</h4>
+      <p>SUZURI等</p>
+    </div>
+    <div class="rev-card o">
+      <div class="amount">¥60K</div>
+      <h4>スポンサー<br>企業案件</h4>
+      <p>デバイス等</p>
+    </div>
+    <div class="rev-card r">
+      <div class="amount">¥50K</div>
+      <h4>投げ銭<br>スパチャ</h4>
+      <p>配信収益</p>
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-family:'M PLUS 1p';font-weight:900;">合計</span>
+      <span style="font-family:'Orbitron';font-size:28px;font-weight:900;color:var(--yellow);">¥300,000 / 月</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--cyan));"></div>
+    </div>
+    <div class="progress-labels">
+      <span>AdSense ¥80K</span>
+      <span>メンバー ¥60K</span>
+      <span>グッズ ¥50K</span>
+      <span>案件 ¥60K</span>
+      <span>スパチャ ¥50K</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>各チャネルの根拠</h3>
+    <table class="spec-table">
+      <tr><th>チャネル</th><th>目標額</th><th>必要条件</th><th>根拠</th></tr>
+      <tr>
+        <td>YouTube広告</td>
+        <td class="hl">¥80,000</td>
+        <td>月間40万再生（RPM ¥200）</td>
+        <td>ゲーム系RPM $1.0〜$2.5 / 日本は平均よりやや高め（We Streamer 2026）</td>
+      </tr>
+      <tr>
+        <td>メンバーシップ</td>
+        <td class="hl">¥60,000</td>
+        <td>メンバー175人 × 月490円（手取70%）</td>
+        <td>YouTube分配率70%（eスポーツ意識調査 / CUC）</td>
+      </tr>
+      <tr>
+        <td>グッズ販売</td>
+        <td class="hl">¥50,000</td>
+        <td>月50点 × 利益1,000円</td>
+        <td>SUZURI/pixivFACTORY 利益率（nextage-tech 比較記事）</td>
+      </tr>
+      <tr>
+        <td>スポンサー/案件</td>
+        <td class="hl">¥60,000</td>
+        <td>月1〜2件 × ¥30,000〜</td>
+        <td>登録者5,000〜の小規模案件相場（Gaming Creator Stats 2026）</td>
+      </tr>
+      <tr>
+        <td>投げ銭/スパチャ</td>
+        <td class="hl">¥50,000</td>
+        <td>週2配信 × 各¥6,000</td>
+        <td>格ゲー配信者の実績値（PartneredYT / Reddit）</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 03: 4フェーズ ============ -->
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--green);">03</div>
+    <span class="section-tag">Roadmap</span>
+  </div>
+  <div class="section-title"><span style="color:var(--green);">4フェーズ</span>ロードマップ</div>
+  <div class="section-lead">いきなり月30万は無理。段階的に積み上げる。</div>
+
+  <!-- Phase 1 -->
+  <div class="phase p1">
+    <div class="phase-header">
+      <span class="phase-num">PHASE 1</span>
+      <span class="phase-period">Month 1-3</span>
+    </div>
+    <div class="phase-title">土台を作る</div>
+    <div class="phase-goal">目標: 登録者 <strong>1,000人</strong> → YouTube収益化条件クリア</div>
+
+    <ul class="task-list">
+      <li><span class="task-check"></span><strong>チャンネルのブランド統一</strong> — アイコン・バナー・サムネを「クッパ」で統一。見た瞬間に誰かわかる状態を作る</li>
+      <li><span class="task-check"></span><strong>週3本の動画投稿</strong> — ショート2本 + 横動画1本。ショートは大会の名場面クリップ（15〜30秒）</li>
+      <li><span class="task-check"></span><strong>サムネイルを本気で作る</strong> — サムネガイドの3パターンを使い回し。毎回5分で作れる状態にする</li>
+      <li><span class="task-check"></span><strong>SEOの基盤整備</strong> — タイトルに「クッパ」「スマブラ」必須。説明文にキーワードとタイムスタンプを入れる</li>
+      <li><span class="task-check"></span><strong>Xでの発信</strong> — 大会結果・クリップ・対戦募集を毎日発信。ショートのURLを必ず貼る</li>
+      <li><span class="task-check"></span><strong>配信を週2回</strong> — VIPマッチ or ランクマで「クッパの人」として認知を広げる</li>
+    </ul>
+
+    <div class="phase-revenue">
+      <div>
+        <span style="font-size:12px;color:var(--dim);">Phase 1 月間収益</span><br>
+        <span class="target" style="color:var(--red);">¥0 - ¥5,000</span>
+      </div>
+      <div class="breakdown">まだ収益化前。投資フェーズ。</div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase p2">
+    <div class="phase-header">
+      <span class="phase-num">PHASE 2</span>
+      <span class="phase-period">Month 4-8</span>
+    </div>
+    <div class="phase-title">収益化スタート</div>
+    <div class="phase-goal">目標: 登録者 <strong>5,000人</strong> / 月間 <strong>10万再生</strong> / グッズ販売開始</div>
+
+    <ul class="task-list">
+      <li><span class="task-check"></span><strong>YouTube パートナー申請・承認</strong> — 登録者1,000+再生4,000時間でAdSense開始</li>
+      <li><span class="task-check"></span><strong>メンバーシップ開設</strong> — 月490円で限定バッジ・限定配信を提供。メンバー限定のクッパ攻略配信など</li>
+      <li><span class="task-check"></span><strong>SUZURIでグッズ販売開始</strong> — クッパモチーフのTシャツ・パーカー・ステッカー。在庫リスクゼロ</li>
+      <li><span class="task-check"></span><strong>動画の質を上げる</strong> — 編集に力を入れる。テロップ・効果音・BGMでエンタメ感を強化</li>
+      <li><span class="task-check"></span><strong>大会での実績を作る</strong> — 地方大会・オンライン大会で上位入賞を狙う。結果は必ず動画化</li>
+      <li><span class="task-check"></span><strong>コラボ配信を月1回</strong> — 他のスマブラ配信者やプロと対戦配信。お互いの視聴者を交換</li>
+    </ul>
+
+    <div class="phase-revenue">
+      <div>
+        <span style="font-size:12px;color:var(--dim);">Phase 2 月間収益</span><br>
+        <span class="target" style="color:var(--orange);">¥30,000 - ¥80,000</span>
+      </div>
+      <div class="breakdown">AdSense ¥20K + メンバー ¥5K + グッズ ¥5K</div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase p3">
+    <div class="phase-header">
+      <span class="phase-num">PHASE 3</span>
+      <span class="phase-period">Month 9-14</span>
+    </div>
+    <div class="phase-title">スケールさせる</div>
+    <div class="phase-goal">目標: 登録者 <strong>15,000人</strong> / 月間 <strong>30万再生</strong> / スポンサー獲得</div>
+
+    <ul class="task-list">
+      <li><span class="task-check"></span><strong>企業案件の営業</strong> — ゲーミングデバイス・コントローラー会社に企画書を送る。登録者5,000〜で小規模案件は来る</li>
+      <li><span class="task-check"></span><strong>グッズラインの拡充</strong> — クッパ以外にもスマブラ名場面の切り抜きグッズ。大会記念グッズを限定販売</li>
+      <li><span class="task-check"></span><strong>BOOTH / pixivFACTORYも併用</strong> — SUZURIより利益率が高い。デジタル素材（壁紙・スタンプ）も販売</li>
+      <li><span class="task-check"></span><strong>海外視聴者の取り込み</strong> — 英語字幕を付ける。海外視聴者はCPMが高く、同じ再生数でも収益が上がる</li>
+      <li><span class="task-check"></span><strong>メンバー限定コンテンツ強化</strong> — メンバー限定のランクマ参加権、限定クッパ壁紙、メンバー大会を開催</li>
+      <li><span class="task-check"></span><strong>大会主催</strong> — 自分の名前を冠したオンライン大会を開催。スポンサーを付けて認知と権威を獲得</li>
+    </ul>
+
+    <div class="phase-revenue">
+      <div>
+        <span style="font-size:12px;color:var(--dim);">Phase 3 月間収益</span><br>
+        <span class="target" style="color:var(--yellow);">¥120,000 - ¥200,000</span>
+      </div>
+      <div class="breakdown">AdSense ¥50K + メンバー ¥30K + グッズ ¥20K + 案件 ¥30K + スパチャ ¥20K</div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase p4">
+    <div class="phase-header">
+      <span class="phase-num">PHASE 4</span>
+      <span class="phase-period">Month 15-18</span>
+    </div>
+    <div class="phase-title">月30万を安定させる</div>
+    <div class="phase-goal">目標: 登録者 <strong>30,000人</strong> / 月間 <strong>40万再生</strong> / 収益の自動化</div>
+
+    <ul class="task-list">
+      <li><span class="task-check"></span><strong>スポンサー契約を安定化</strong> — 月額固定のスポンサー契約を1〜2社と締結。単発案件から継続契約へ移行</li>
+      <li><span class="task-check"></span><strong>オリジナルブランド化</strong> — SUZURI卒業 → BASE or STORESで自社ショップ開設。利益率を上げる</li>
+      <li><span class="task-check"></span><strong>限定グッズ × 大会連動</strong> — 大会ごとに記念グッズを限定販売。希少性で単価を上げる</li>
+      <li><span class="task-check"></span><strong>メンバーシップの多段化</strong> — ¥490 / ¥990 / ¥2,990の3段階。高ティアにはVOD全アーカイブ・名前入りEDなど</li>
+      <li><span class="task-check"></span><strong>切り抜きチャンネル戦略</strong> — 配信の名場面を切り抜く専門チャンネル（本人 or 許可制）で流入を倍増</li>
+      <li><span class="task-check"></span><strong>大会運営の収益化</strong> — 自主大会にスポンサーを付けて運営費+利益を確保</li>
+    </ul>
+
+    <div class="phase-revenue">
+      <div>
+        <span style="font-size:12px;color:var(--dim);">Phase 4 月間収益</span><br>
+        <span class="target" style="color:var(--green);">¥300,000+</span>
+      </div>
+      <div class="breakdown">AdSense ¥80K + メンバー ¥60K + グッズ ¥50K + 案件 ¥60K + スパチャ ¥50K</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04: グッズ戦略 ============ -->
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--green);">04</div>
+    <span class="section-tag">Merchandise</span>
+  </div>
+  <div class="section-title"><span style="color:var(--green);">グッズ販売</span>の始め方</div>
+  <div class="section-lead">在庫リスクゼロで始められるプリントオンデマンドが最強の入口。</div>
+
+  <div class="grid-3">
+    <div class="card" style="border-left:3px solid var(--yellow);">
+      <h3>SUZURI</h3>
+      <ul>
+        <li>GMOペパボ運営で認知度高い</li>
+        <li>SNS連携が簡単、初心者向け</li>
+        <li>利益率は低め（送料別）</li>
+        <li>Tシャツ1枚で利益500〜1,500円</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--blue);">
+      <h3>pixivFACTORY + BOOTH</h3>
+      <ul>
+        <li>原価がSUZURIより安い</li>
+        <li>デジタル商品も販売可能</li>
+        <li>アクリルスタンド・缶バッジなど種類豊富</li>
+        <li>同人・ゲーム系ユーザーが多い</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <h3>BASE / STORES（将来）</h3>
+      <ul>
+        <li>自社ブランドショップを開設</li>
+        <li>利益率を自分でコントロール</li>
+        <li>在庫管理が必要（発注ロット）</li>
+        <li>登録者1万〜で移行を検討</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>売れるグッズ設計</h3>
+    <table class="spec-table">
+      <tr><th>グッズ</th><th>原価目安</th><th>販売価格</th><th>利益</th><th>ポイント</th></tr>
+      <tr><td>Tシャツ</td><td>¥1,800</td><td class="hl">¥3,500</td><td>¥700〜1,500</td><td>クッパのシルエット+キャッチフレーズ</td></tr>
+      <tr><td>パーカー</td><td>¥3,000</td><td class="hl">¥5,500</td><td>¥1,000〜2,000</td><td>大会名・日付入り限定デザイン</td></tr>
+      <tr><td>ステッカー</td><td>¥200</td><td class="hl">¥500</td><td>¥200〜300</td><td>コントローラーに貼れるサイズ。セット売り推奨</td></tr>
+      <tr><td>アクリルスタンド</td><td>¥400</td><td class="hl">¥1,200</td><td>¥500〜800</td><td>名場面のスクショを素材に。コレクション性</td></tr>
+      <tr><td>デジタル壁紙</td><td>¥0</td><td class="hl">¥300</td><td>¥300（原価ゼロ）</td><td>メンバー限定 or 単品販売。利益率100%</td></tr>
+    </table>
+  </div>
+
+  <div class="callout yellow">
+    <strong>大事な注意点：</strong>任天堂のキャラクター（クッパ）をそのままグッズに使うのは著作権違反。必ず「オリジナルイラスト」「自分のブランドロゴ」「大会のスクショ加工」で対応する。クッパの公式素材はYouTubeサムネイルのみに留める。
+  </div>
+</section>
+
+<!-- ============ 05: YouTube収益の現実 ============ -->
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--blue);">05</div>
+    <span class="section-tag">YouTube Revenue</span>
+  </div>
+  <div class="section-title">YouTube広告の<span style="color:var(--blue);">リアルな数字</span></div>
+  <div class="section-lead">「再生数 × 単価」のシンプルな式だが、単価はジャンルと視聴者で大きく変わる。</div>
+
+  <div class="card">
+    <h3>ゲーム系チャンネルの収益指標（2026年最新）</h3>
+    <table class="spec-table">
+      <tr><th>指標</th><th>ゲーム系の範囲</th><th>Rearletの目標</th><th>出典</th></tr>
+      <tr><td>RPM（1,000再生の手取り）</td><td class="hl">¥75 〜 ¥600</td><td>¥200</td><td>We Streamer / MilX 2026</td></tr>
+      <tr><td>CPM（広告主の支払い）</td><td>¥150 〜 ¥1,350</td><td>—</td><td>MilX / PartneredYT</td></tr>
+      <tr><td>1再生あたりの手取り</td><td class="hl">¥0.1 〜 ¥0.4</td><td>¥0.2</td><td>Digital Reclame 2026</td></tr>
+      <tr><td>Shortsの1再生単価</td><td>¥0.003 〜 ¥0.01</td><td>集客専用</td><td>RPM調査 / Reddit</td></tr>
+    </table>
+
+    <div class="callout blue">
+      <strong>RPMを上げるコツ：</strong>8分以上の動画にする（ミッドロール広告が入る）。デバイスレビューなどテック要素を混ぜると広告単価が上がる。英語字幕を付けて海外視聴者を増やすと、米国の高CPMが効く。
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>月8万円のAdSenseに必要な再生数</h3>
+    <div class="grid-3" style="margin-top:16px;">
+      <div style="text-align:center;background:var(--card2);padding:20px;border-radius:12px;">
+        <div style="font-family:'Orbitron';font-size:28px;font-weight:900;color:var(--red);">¥100</div>
+        <div style="font-size:12px;color:var(--dim);margin:4px 0;">RPM（低い場合）</div>
+        <div style="font-size:14px;color:var(--sub);">月<strong style="color:var(--text);">80万回</strong>再生が必要</div>
+      </div>
+      <div style="text-align:center;background:var(--card2);padding:20px;border-radius:12px;">
+        <div style="font-family:'Orbitron';font-size:28px;font-weight:900;color:var(--yellow);">¥200</div>
+        <div style="font-size:12px;color:var(--dim);margin:4px 0;">RPM（目標値）</div>
+        <div style="font-size:14px;color:var(--sub);">月<strong style="color:var(--text);">40万回</strong>再生が必要</div>
+      </div>
+      <div style="text-align:center;background:var(--card2);padding:20px;border-radius:12px;">
+        <div style="font-family:'Orbitron';font-size:28px;font-weight:900;color:var(--green);">¥400</div>
+        <div style="font-size:12px;color:var(--dim);margin:4px 0;">RPM（テック混合）</div>
+        <div style="font-size:14px;color:var(--sub);">月<strong style="color:var(--text);">20万回</strong>再生が必要</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06: タイムライン ============ -->
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--orange);">06</div>
+    <span class="section-tag">Timeline</span>
+  </div>
+  <div class="section-title">リアル<span style="color:var(--orange);">タイムライン</span></div>
+  <div class="section-lead">最速12ヶ月、現実的には18ヶ月。50%以上のクリエイターは安定に12〜24ヶ月かかる。</div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-month">Month 1-3</div>
+      <div class="tl-title" style="color:var(--red);">基盤構築期（収益: ¥0〜¥5K）</div>
+      <div class="tl-desc">チャンネルブランド統一、サムネ改善、投稿ペース確立、X発信開始。<br>登録者1,000人を全力で目指す。ここが一番きつい。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-month">Month 4-8</div>
+      <div class="tl-title" style="color:var(--orange);">収益化初期（収益: ¥30K〜¥80K）</div>
+      <div class="tl-desc">YouTube収益化承認、メンバーシップ開設、SUZURI開設。<br>コラボ・大会で露出を増やす。グッズの最初の1件が売れる瞬間。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-month">Month 9-14</div>
+      <div class="tl-title" style="color:var(--yellow);">成長期（収益: ¥120K〜¥200K）</div>
+      <div class="tl-desc">企業案件の開始、海外展開、メンバー拡大。<br>自主大会を開催して「Rearlet = クッパの人」のブランドを確立。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-month">Month 15-18</div>
+      <div class="tl-title" style="color:var(--green);">安定期（収益: ¥300K+）</div>
+      <div class="tl-desc">5つの収益チャネルが全て稼働。スポンサー継続契約、自社ショップ、メンバー多段化。<br>ここからは「維持と拡大」のフェーズ。</div>
+    </div>
+  </div>
+
+  <div class="callout yellow">
+    <strong>正直に言うと：</strong>この数字は「週3本投稿 + 週2配信 + 毎日X発信」を18ヶ月間継続した場合の目安。途中で投稿頻度が落ちれば期間は伸びる。逆に動画が1本バズれば大幅に短縮される。継続こそが最大の武器。
+  </div>
+</section>
+
+<!-- ============ 07: やっちゃダメなこと ============ -->
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--red);">07</div>
+    <span class="section-tag">Warning</span>
+  </div>
+  <div class="section-title">絶対<span style="color:var(--red);">やるな</span>リスト</div>
+
+  <div class="grid-2">
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h3 style="color:var(--red);">有料コーチング・コンサル</h3>
+      <p>スマブラコミュニティで「教える系」は炎上リスクが極めて高い。海外でもCoachingは賛否が分かれており、日本ではほぼNG。信頼を失えば全てが崩壊する。</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h3 style="color:var(--red);">任天堂素材のグッズ化</h3>
+      <p>クッパ・スマブラの公式素材をそのままグッズに使うのは著作権違反。任天堂は知的財産の保護に非常に厳しく、最悪チャンネル停止のリスクもある。</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h3 style="color:var(--red);">再生数の購入・ Bot</h3>
+      <p>YouTube のポリシー違反で即アカウント停止。一度BANされると復活はほぼ不可能。地道に積み上げた方が100倍速い。</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red);">
+      <h3 style="color:var(--red);">炎上マーケティング</h3>
+      <p>一時的に数字は伸びるが、スポンサーが離れ、大会出禁になり、コミュニティから排除される。格ゲーコミュニティは狭い。評判は一瞬で広まる。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08: 参考チャンネル ============ -->
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--cyan);">08</div>
+    <span class="section-tag">Reference</span>
+  </div>
+  <div class="section-title"><span style="color:var(--cyan);">参考</span>にすべきチャンネル</div>
+  <div class="section-lead">同じ規模から月30万以上を達成しているゲーム系クリエイターの実例。</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>こんが ch</h3>
+      <ul>
+        <li>スマブラ特化の解説チャンネル</li>
+        <li>サムネ統一感が強く「見ればわかる」ブランド</li>
+        <li>キャラ切り抜き + 太字テキストの王道パターン</li>
+        <li>動画1本あたりの平均再生数が安定して高い</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>skjビレッジ</h3>
+      <ul>
+        <li>大手企業を辞めてゲーム実況YouTuberに転身</li>
+        <li>数年間は赤字〜収支トントンだったが、スマブラ動画がバズって黒字化</li>
+        <li>「続けたから来た」の典型例</li>
+        <li>出典: BizSPA!フレッシュ</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>VGBootCamp</h3>
+      <ul>
+        <li>大会配信チャンネル。VS構図サムネの教科書</li>
+        <li>スポンサーロゴを自然に配置してブランド構築</li>
+        <li>大会アーカイブが長期的に再生数を稼ぐモデル</li>
+        <li>自主大会 + 配信 + スポンサーの三位一体</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>格ゲー配信者全般の傾向</h3>
+      <ul>
+        <li>収益化までに平均12〜24ヶ月</li>
+        <li>AdSense単体では月10万が限界線</li>
+        <li>メンバーシップ+グッズで月20万〜の上乗せ</li>
+        <li>スポンサーが付くと一気に月30万超え</li>
+        <li>出典: Gaming Creator Earnings Statistics 2026</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09: まとめ ============ -->
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--yellow);">09</div>
+    <span class="section-tag">Summary</span>
+  </div>
+  <div class="section-title">明日から<span style="color:var(--yellow);">やること</span></div>
+
+  <div class="card" style="border:2px solid var(--yellow);box-shadow:0 0 40px rgba(255,215,0,0.08);">
+    <h3 style="color:var(--yellow);">今すぐやる5つ</h3>
+    <ul>
+      <li><strong>サムネイルを全動画で統一する</strong> — サムネガイドのテンプレ3パターンで過去動画も差し替える</li>
+      <li><strong>説明文を全動画に書き直す</strong> — キーワード・タイムスタンプ・ハッシュタグを入れる</li>
+      <li><strong>ショート動画を今週中に3本投稿する</strong> — 大会の名場面15〜30秒クリップ</li>
+      <li><strong>SUZURIに無料登録してテスト商品を1つ出す</strong> — ロゴ or キャッチフレーズだけのシンプルTシャツ</li>
+      <li><strong>Xで「クッパ使い」として毎日発信する</strong> — 対戦結果、クリップ、大会情報を最低1日1ポスト</li>
+    </ul>
+  </div>
+
+  <div class="callout green">
+    <strong>最後に：</strong>月30万は「才能」じゃなくて「設計」で到達できる。1つの収益源に頼らず、5つのチャネルを少しずつ育てる。最速12ヶ月、現実的には18ヶ月。きついのは最初の3ヶ月だけ。そこを超えたら数字は加速する。
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p style="font-size:14px;color:var(--sub);">Rearlet Channel — 月30万ロードマップ</p>
+  <p style="margin-top:6px;">出典: Gaming Creator Earnings Statistics 2026 / We Streamer RPMガイド / MilX CPM調査 / Reddit PartneredYouTube / BizSPA! / ぶれどん note / CUC eスポーツ調査 / nextage-tech グッズ比較</p>
+  <p style="margin-top:4px;">© 2026 — Built for Rearlet</p>
+</footer>
+
+</body>
+</html>
