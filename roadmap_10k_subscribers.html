@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登録者1万人ロードマップ（2026年）— Rearlet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=M+PLUS+1p:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  @keyframes slideUp { from { opacity: 0; transform: translateY(36px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 16px rgba(21,101,192,0.25); } 50% { box-shadow: 0 0 32px rgba(21,101,192,0.45); } }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  @keyframes speedLine {
+    0% { transform: translateX(-100%) scaleX(0); opacity: 0; }
+    30% { opacity: 1; }
+    100% { transform: translateX(200%) scaleX(1.4); opacity: 0; }
+  }
+  @keyframes fireFlicker {
+    0%,100% { opacity: 0.35; transform: scale(1); }
+    50% { opacity: 0.65; transform: scale(1.04); }
+  }
+
+  :root {
+    --red: #D32F2F;
+    --blue: #1565C0;
+    --yellow: #F9A825;
+    --green: #2E7D32;
+    --orange: #E65100;
+    --purple: #7B1FA2;
+    --cyan: #00838F;
+    --bg: #FAFAFA;
+    --card: #FFFFFF;
+    --border: #E0E0E0;
+    --text: #1A1A2E;
+    --sub: #555566;
+    --dim: #888899;
+    --radius: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Zen Kaku Gothic New', 'M PLUS 1p', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 56px 20px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('img/bowser_victory.jpg') center/cover no-repeat;
+    filter: brightness(0.26) saturate(1.3);
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(26,26,46,0.9) 0%, rgba(21,101,192,0.32) 50%, rgba(26,26,46,0.92) 100%);
+  }
+  .hero-fire {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 36%;
+    background: linear-gradient(0deg, rgba(21,101,192,0.16), rgba(249,168,37,0.07), transparent);
+    pointer-events: none;
+    animation: fireFlicker 3s ease-in-out infinite;
+    z-index: 1;
+  }
+  .hero-speed-lines { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+  .hero-speed-lines span {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.42), transparent);
+    animation: speedLine 2.4s ease-in-out infinite;
+  }
+  .hero-bowser {
+    position: absolute;
+    right: -48px;
+    bottom: -28px;
+    height: 76%;
+    opacity: 0.13;
+    filter: drop-shadow(0 0 56px rgba(21,101,192,0.4));
+    pointer-events: none;
+    z-index: 1;
+  }
+  .hero-content { position: relative; z-index: 3; max-width: 800px; animation: slideUp 0.9s ease-out; }
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 5px;
+    padding: 9px 24px;
+    border-radius: 99px;
+    margin-bottom: 22px;
+    text-transform: uppercase;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .hero h1 {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+  .hero h1 .gold { color: #FFD700; text-shadow: 0 0 24px rgba(255,215,0,0.32); }
+  .hero h1 .green { color: #90CAF9; }
+  .hero .lead { font-size: 16px; color: rgba(255,255,255,0.78); max-width: 600px; margin: 0 auto 36px; }
+  .hero-stats { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+  .hero-stat {
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 12px;
+    padding: 14px 20px;
+    min-width: 112px;
+    animation: float 3.8s ease-in-out infinite;
+    color: #fff;
+  }
+  .hero-stat:nth-child(2) { animation-delay: 0.45s; }
+  .hero-stat:nth-child(3) { animation-delay: 0.9s; }
+  .hero-stat .num { font-family: 'Orbitron', monospace; font-size: 24px; font-weight: 900; color: #FFD700; }
+  .hero-stat .label { font-size: 10px; color: rgba(255,255,255,0.62); margin-top: 2px; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 0 22px; }
+  section { padding: 68px 0; }
+  section + section { border-top: 1px solid var(--border); }
+
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .section-num { font-family: 'Orbitron', monospace; font-size: 32px; font-weight: 900; line-height: 1; }
+  .section-tag {
+    font-family: 'Bebas Neue', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--dim);
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 3px 12px;
+    border-radius: 6px;
+  }
+  .section-title {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: clamp(24px, 4.5vw, 38px);
+    font-weight: 900;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .section-lead { font-size: 14px; color: var(--sub); margin-bottom: 32px; max-width: 680px; }
+
+  .banner-img {
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 18px;
+    border: 1px solid var(--border);
+  }
+  .banner-img img { width: 100%; height: 170px; object-fit: cover; display: block; filter: brightness(0.72) saturate(1.12); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+  }
+  .card:hover { border-color: var(--blue); box-shadow: 0 4px 14px rgba(0,0,0,0.07); transform: translateY(-1px); }
+  .card h3 { font-family: 'M PLUS 1p', sans-serif; font-size: 17px; font-weight: 900; margin-bottom: 10px; }
+  .card p, .card li { color: var(--sub); font-size: 14px; }
+  .card ul { list-style: none; padding: 0; }
+  .card > ul > li { padding: 5px 0 5px 18px; position: relative; }
+  .card > ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 13px;
+    width: 7px;
+    height: 2px;
+    background: var(--blue);
+    border-radius: 1px;
+  }
+  .card a { color: var(--blue); }
+
+  .callout {
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin: 18px 0;
+    font-size: 14px;
+    position: relative;
+  }
+  .callout::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+  .callout.yellow { background: #FFFDE7; }
+  .callout.yellow::before { background: var(--yellow); }
+  .callout.yellow strong { color: #E65100; }
+  .callout.green { background: #F1F8E9; }
+  .callout.green::before { background: var(--green); }
+  .callout.green strong { color: var(--green); }
+  .callout.blue { background: #E8F0FE; }
+  .callout.blue::before { background: var(--blue); }
+  .callout.blue strong { color: var(--blue); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .metric-card {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .metric-card .big { font-family: 'Orbitron', monospace; font-size: 26px; font-weight: 900; color: var(--blue); }
+  .metric-card h4 { font-family: 'M PLUS 1p', sans-serif; font-size: 13px; font-weight: 900; margin: 8px 0 4px; }
+  .metric-card p { font-size: 11px; color: var(--sub); }
+
+  .phase {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 18px;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .phase::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .phase.p1::before { background: linear-gradient(90deg, var(--red), var(--orange)); }
+  .phase.p2::before { background: linear-gradient(90deg, var(--orange), var(--yellow)); }
+  .phase.p3::before { background: linear-gradient(90deg, var(--yellow), var(--green)); }
+  .phase.p4::before { background: linear-gradient(90deg, var(--green), var(--blue)); }
+  .phase:hover { border-color: var(--blue); box-shadow: 0 4px 18px rgba(21,101,192,0.08); }
+
+  .phase-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .phase-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 900;
+    padding: 5px 11px;
+    border-radius: 7px;
+    background: var(--blue);
+    color: #fff;
+  }
+  .phase-period { font-family: 'Bebas Neue', monospace; font-size: 12px; letter-spacing: 2px; color: var(--dim); }
+  .phase-title { font-family: 'M PLUS 1p', sans-serif; font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+  .phase-goal { font-size: 13px; color: var(--sub); margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .phase-goal strong { color: var(--blue); }
+
+  .phase-img { border-radius: 10px; overflow: hidden; margin-bottom: 12px; border: 1px solid var(--border); }
+  .phase-img img { width: 100%; height: 150px; object-fit: cover; display: block; filter: brightness(0.76) saturate(1.1); transition: filter 0.25s; }
+  .phase:hover .phase-img img { filter: brightness(0.88) saturate(1.2); }
+
+  .task-list { list-style: none; padding: 0; }
+  .task-list li {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #EEEEEE;
+    font-size: 13px;
+    color: var(--sub);
+  }
+  .task-list li:last-child { border-bottom: none; }
+  .task-check {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .task-list li strong { color: var(--text); }
+
+  .spec-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  .spec-table th {
+    padding: 8px 10px;
+    text-align: left;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--dim);
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--border);
+  }
+  .spec-table td { padding: 9px 10px; border-bottom: 1px solid #EEEEEE; color: var(--sub); }
+  .spec-table td:first-child { color: var(--text); font-weight: 600; }
+  .spec-table .hl { color: var(--blue); font-weight: 700; font-family: 'Orbitron', sans-serif; }
+  .spec-table tr:hover td { background: #F5F5F5; }
+
+  .progress-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .progress-track { height: 10px; background: #EEEEEE; border-radius: 5px; overflow: hidden; margin: 12px 0; }
+  .progress-fill { height: 100%; border-radius: 5px; }
+
+  .timeline { position: relative; padding-left: 34px; margin: 18px 0; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--red), var(--orange), var(--yellow), var(--green), var(--blue));
+  }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot {
+    position: absolute;
+    left: -28px;
+    top: 3px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--blue);
+    background: #E3F2FD;
+  }
+  .tl-month { font-family: 'Orbitron', monospace; font-size: 10px; color: var(--dim); margin-bottom: 2px; }
+  .tl-title { font-family: 'M PLUS 1p', sans-serif; font-size: 14px; font-weight: 900; margin-bottom: 2px; }
+  .tl-desc { font-size: 12px; color: var(--sub); }
+
+  footer {
+    text-align: center;
+    padding: 48px 20px;
+    border-top: 1px solid var(--border);
+    color: var(--dim);
+    font-size: 11px;
+  }
+  footer::before { content: '✦'; display: block; font-size: 20px; color: var(--blue); margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-fire"></div>
+  <img class="hero-bowser" src="img/bowser_fire.png" alt="">
+  <div class="hero-speed-lines">
+    <span style="top:14%;width:230px;animation-delay:0s;"></span>
+    <span style="top:32%;width:180px;animation-delay:0.5s;"></span>
+    <span style="top:50%;width:270px;animation-delay:1s;"></span>
+    <span style="top:68%;width:200px;animation-delay:0.3s;"></span>
+    <span style="top:84%;width:150px;animation-delay:1.3s;"></span>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">10K Subscriber Roadmap</div>
+    <h1>2026年<br>登録者<span class="gold">1万人</span><br><span class="green">達成ロードマップ</span></h1>
+    <p class="lead">感覚ではなく「月次の伸び」と「毎週のKPI」で設計する。スマブラ特化チャンネル向けの実務テンプレ。</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">10K</div><div class="label">年末目標</div></div>
+      <div class="hero-stat"><div class="num">+834</div><div class="label">月平均（0→1万）</div></div>
+      <div class="hero-stat"><div class="num">4Q</div><div class="label">四半期で見直し</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--blue);">01</div>
+    <span class="section-tag">North Star</span>
+  </div>
+  <div class="section-title">1万人の<span style="color:var(--blue);">意味</span>と前提</div>
+  <div class="section-lead">数字の先に「収益化の土台」「コラボの門番」「アルゴリズム上の信頼」がある。</div>
+  <div class="banner-img"><img src="img/bowser_ss3.jpg" alt=""></div>
+  <div class="grid-3">
+    <div class="metric-card"><div class="big">1,000</div><h4>収益化ライン</h4><p>パートナープログラム条件のひとつ（他に視聴時間等）</p></div>
+    <div class="metric-card"><div class="big">5,000</div><h4>小案件ライン</h4><p>小規模スポンサー・紹介が現実的になりやすい帯域</p></div>
+    <div class="metric-card"><div class="big">10,000</div><h4>ブランドライン</h4><p>認知とコラボ波及が伸びやすい目安の一つ</p></div>
+  </div>
+  <div class="callout blue">
+    <strong>公式条件の確認：</strong>収益化には登録者に加え、公開動画の視聴時間やショート視聴などの要件があります。必ず
+    <a href="https://support.google.com/youtube/answer/72851" target="_blank" rel="noopener">YouTubeヘルプ（収益化のポリシー）</a>
+    の最新版で確認してください。
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--red);">02</div>
+    <span class="section-tag">Math</span>
+  </div>
+  <div class="section-title">必要な<span style="color:var(--red);">月次ペース</span></div>
+  <div class="section-lead">現在の登録者を <strong>S</strong>、残り月数を <strong>M</strong> とすると、月あたりの純増は <strong>（10,000 − S）÷ M</strong>。</div>
+  <div class="card">
+    <h3>目安表（M＝12ヶ月の場合）</h3>
+    <table class="spec-table">
+      <tr><th>現在 S</th><th>必要ペース（人/月）</th></tr>
+      <tr><td>0</td><td class="hl">約834</td></tr>
+      <tr><td>1,000</td><td class="hl">約750</td></tr>
+      <tr><td>2,500</td><td class="hl">約625</td></tr>
+      <tr><td>5,000</td><td class="hl">約417</td></tr>
+      <tr><td>7,500</td><td class="hl">約208</td></tr>
+    </table>
+    <div class="callout yellow">
+      <strong>補正：</strong>バズは偏るので月次均等にはならない。四半期で見直し、前半は<strong>型（投稿・サムネ・SEO）</strong>、後半は<strong>コラボ・大会・切り抜き</strong>を厚くする。
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--green);">03</div>
+    <span class="section-tag">Quarterly</span>
+  </div>
+  <div class="section-title">2026年<span style="color:var(--green);">四半期</span>の動き方</div>
+  <div class="section-lead">例：年初 <strong>約2,000人</strong>スタートのときの目安（自分の S に置き換えて使う）。</div>
+
+  <div class="phase p1">
+    <div class="phase-header"><span class="phase-num">Q1</span><span class="phase-period">JAN — MAR</span></div>
+    <div class="phase-title">基盤：CTRと投稿の型</div>
+    <div class="phase-img"><img src="img/bowser_render.png" alt=""></div>
+    <div class="phase-goal">目安 四半期末 <strong>3,500〜4,000人</strong></div>
+    <ul class="task-list">
+      <li><span class="task-check"></span><strong>週次</strong>：インプレ・CTR・維持率・純増をStudioでメモ</li>
+      <li><span class="task-check"></span><strong>サムネ3パターン</strong>：大会 / 切り抜き / 企画で固定（別紙ガイドと連動）</li>
+      <li><span class="task-check"></span><strong>ショート＝入口</strong>、<strong>横8分＋</strong>＝ミッドロール前提で本丸</li>
+    </ul>
+  </div>
+
+  <div class="phase p2">
+    <div class="phase-header"><span class="phase-num">Q2</span><span class="phase-period">APR — JUN</span></div>
+    <div class="phase-title">拡散：コラボと外部流入</div>
+    <div class="phase-img"><img src="img/bowser_ss4.jpg" alt=""></div>
+    <div class="phase-goal">目安 <strong>5,500〜6,500人</strong></div>
+    <ul class="task-list">
+      <li><span class="task-check"></span><strong>月1コラボ</strong>：同規模〜やや上の配信者と対戦・企画</li>
+      <li><span class="task-check"></span><strong>X</strong>：クリップ＋短い解説＋URL。検索されやすい語を本文に</li>
+      <li><span class="task-check"></span><strong>切り抜き系列名</strong>を固定してリピートを作る</li>
+    </ul>
+  </div>
+
+  <div class="phase p3">
+    <div class="phase-header"><span class="phase-num">Q3</span><span class="phase-period">JUL — SEP</span></div>
+    <div class="phase-title">加速：イベント連動</div>
+    <div class="phase-img"><img src="img/bowser_ss2.jpg" alt=""></div>
+    <div class="phase-goal">目安 <strong>7,500〜8,500人</strong></div>
+    <ul class="task-list">
+      <li><span class="task-check"></span><strong>大会カレンダー</strong>：前週・当日ハイライト・翌日反省の3点セット</li>
+      <li><span class="task-check"></span><strong>次回予告</strong>を動画末尾に必ず入れる</li>
+      <li><span class="task-check"></span><strong>英語字幕 or 副題</strong>で母数を広げる</li>
+    </ul>
+  </div>
+
+  <div class="phase p4">
+    <div class="phase-header"><span class="phase-num">Q4</span><span class="phase-period">OCT — DEC</span></div>
+    <div class="phase-title">仕上げ：1万人ラストスパート</div>
+    <div class="phase-img"><img src="img/bowser_smash_art.png" alt=""></div>
+    <div class="phase-goal">年末 <strong>10,000人</strong></div>
+    <ul class="task-list">
+      <li><span class="task-check"></span><strong>伸びた本編の再編集</strong>をショートで再送客</li>
+      <li><span class="task-check"></span><strong>年末まとめ枠</strong>：ベストプレイ・今年の振り返り</li>
+      <li><span class="task-check"></span><strong>振り返り</strong>：伸びた要因Top3 / 落ちた要因Top3を数値で残す</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--orange);">04</div>
+    <span class="section-tag">Algorithm</span>
+  </div>
+  <div class="section-title">伸びの<span style="color:var(--orange);">レバー</span></div>
+  <div class="card">
+    <h3>週次で見る3つ</h3>
+    <table class="spec-table">
+      <tr><th>指標</th><th>意味</th><th>打ち手</th></tr>
+      <tr><td>CTR</td><td>サムネ・タイトル</td><td>ABテスト、感情と情報の分担</td></tr>
+      <tr><td>維持率</td><td>期待と中身の一致</td><td>冒頭15秒、テンポ、テロップ、カット</td></tr>
+      <tr><td>インプレ</td><td>露出の量</td><td>頻度、ショート送客、関連に乗る導線</td></tr>
+    </table>
+    <div class="callout green"><strong>注意：</strong>CTRだけ上げて中身がズレると維持率が落ち、次にインプレが減ることがある。</div>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--purple);">05</div>
+    <span class="section-tag">Weekly</span>
+  </div>
+  <div class="section-title">毎週の<span style="color:var(--purple);">最低ライン例</span></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>投稿</h3>
+      <ul>
+        <li>ショート 2〜4本</li>
+        <li>横動画 1本（週1でも質と長さで勝負）</li>
+        <li>配信 1〜2回（切り抜き原料）</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>火曜15分</h3>
+      <ul>
+        <li>先週比：CTR・維持率・純増をメモ</li>
+        <li>伸びた動画の「冒頭の約束」を文章化</li>
+        <li>来週サムネラフ3案だけ</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--cyan);">06</div>
+    <span class="section-tag">Milestones</span>
+  </div>
+  <div class="section-title">月次<span style="color:var(--cyan);">チェック</span></div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-month">毎月1日</div>
+      <div class="tl-title">目標線の更新</div>
+      <div class="tl-desc">（10,000−現在）÷残り月数を再計算。遅れたら原因をCTR / 維持率 / インプレのどれかに寄せる。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-month">毎月15日</div>
+      <div class="tl-title">サムネ刷新デー</div>
+      <div class="tl-desc">直近30日でCTRが低い動画から最大5本だけ差し替え。</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-month">四半期末</div>
+      <div class="tl-title">コラボリスト更新</div>
+      <div class="tl-desc">次の四半期の打診相手と日程を決める。</div>
+    </div>
+  </div>
+  <div class="progress-bar">
+    <p style="font-size:13px;font-weight:700;margin-bottom:6px;">年間カーブのイメージ</p>
+    <div class="progress-track"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue));"></div></div>
+    <p style="font-size:11px;color:var(--dim);margin:0;">年初は遅く見えても型が固まると後半で伸びやすい。判断は月次、数字は週次。</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--red);">07</div>
+    <span class="section-tag">Risk</span>
+  </div>
+  <div class="section-title">避けたいこと</div>
+  <div class="grid-2">
+    <div class="card" style="border-left:3px solid var(--red);"><h3 style="color:var(--red);">登録者購入</h3><p>BANリスク。長期では最悪。</p></div>
+    <div class="card" style="border-left:3px solid var(--red);"><h3 style="color:var(--red);">釣りタイトルだけ</h3><p>維持率が落ち配信面が縮むことがある。</p></div>
+    <div class="card" style="border-left:3px solid var(--red);"><h3 style="color:var(--red);">無計画な増量</h3><p>品質が落ちると悪化が固定化。切り抜き工程を先にテンプレ化。</p></div>
+    <div class="card" style="border-left:3px solid var(--red);"><h3 style="color:var(--red);">炎上ネタ</h3><p>界隈は狭い。信頼が資産。</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <div class="section-num" style="color:var(--blue);">08</div>
+    <span class="section-tag">Links</span>
+  </div>
+  <div class="section-title">参考リンク</div>
+  <div class="card">
+    <ul>
+      <li><a href="https://support.google.com/youtube/answer/72851" target="_blank" rel="noopener">YouTubeヘルプ：収益化のポリシー</a></li>
+      <li><a href="https://www.youtube.com/creators/" target="_blank" rel="noopener">YouTube Creators（公式）</a></li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p style="font-size:13px;color:var(--sub);">Rearlet — 登録者1万人ロードマップ（2026）</p>
+  <p style="margin-top:6px;"><a href="thumbnail_guide.html">サムネイルガイド</a> · <a href="roadmap.html">月30万ロードマップ</a></p>
+  <p style="margin-top:4px;">© 2026</p>
+</footer>
+
+</body>
+</html>
