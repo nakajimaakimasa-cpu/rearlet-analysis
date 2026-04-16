@@ -6,10 +6,10 @@
 <title>登録者1万人ロードマップ（2026年）— Rearlet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=M+PLUS+1p:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@400;700;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=M+PLUS+1p:wght@400;700;800;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
   @keyframes slideUp { from { opacity: 0; transform: translateY(36px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes pulse { 0%,100% { box-shadow: 0 0 16px rgba(21,101,192,0.25); } 50% { box-shadow: 0 0 32px rgba(21,101,192,0.45); } }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 18px rgba(255,109,0,0.35); } 50% { box-shadow: 0 0 36px rgba(46,125,50,0.45); } }
   @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
   @keyframes speedLine {
     0% { transform: translateX(-100%) scaleX(0); opacity: 0; }
@@ -21,27 +21,35 @@
     50% { opacity: 0.65; transform: scale(1.04); }
   }
 
+  /* クッパ調：甲羅の緑 / 炎のオレンジ / スパイクのゴールド */
   :root {
-    --red: #D32F2F;
-    --blue: #1565C0;
-    --yellow: #F9A825;
-    --green: #2E7D32;
-    --orange: #E65100;
-    --purple: #7B1FA2;
-    --cyan: #00838F;
-    --bg: #FAFAFA;
+    --shell: #1B5E20;
+    --shell-mid: #2E7D32;
+    --shell-light: #43A047;
+    --shell-bg: #E8F5E9;
+    --fire: #E65100;
+    --fire-bright: #FF6D00;
+    --ember: #D32F2F;
+    --spike: #FFD54F;
+    --gold: #FFC107;
+    --lava: #BF360C;
+    --bg: #F6FAF4;
     --card: #FFFFFF;
-    --border: #E0E0E0;
-    --text: #1A1A2E;
-    --sub: #555566;
-    --dim: #888899;
+    --border: #C5E1A5;
+    --border-soft: #E0EDD8;
+    --text: #142016;
+    --sub: #3D4A3A;
+    --dim: #6B7B66;
     --radius: 16px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: 'Zen Kaku Gothic New', 'M PLUS 1p', sans-serif;
+    font-family: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+    font-weight: 500;
     background: var(--bg);
+    background-image: radial-gradient(ellipse 900px 500px at 100% 0%, rgba(232,245,233,0.9), transparent),
+      radial-gradient(ellipse 700px 400px at 0% 100%, rgba(255,243,224,0.5), transparent);
     color: var(--text);
     line-height: 1.75;
     overflow-x: hidden;
@@ -66,13 +74,15 @@
   .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(26,26,46,0.9) 0%, rgba(21,101,192,0.32) 50%, rgba(26,26,46,0.92) 100%);
+    background:
+      linear-gradient(135deg, rgba(20,32,22,0.92) 0%, rgba(27,94,32,0.45) 42%, rgba(60,20,12,0.88) 100%),
+      radial-gradient(ellipse 70% 55% at 70% 100%, rgba(230,81,0,0.35), transparent 55%);
   }
   .hero-fire {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    height: 36%;
-    background: linear-gradient(0deg, rgba(21,101,192,0.16), rgba(249,168,37,0.07), transparent);
+    height: 38%;
+    background: linear-gradient(0deg, rgba(230,81,0,0.28), rgba(255,109,0,0.12), rgba(46,125,50,0.08), transparent);
     pointer-events: none;
     animation: fireFlicker 3s ease-in-out infinite;
     z-index: 1;
@@ -81,7 +91,7 @@
   .hero-speed-lines span {
     position: absolute;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.42), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,213,79,0.55), rgba(255,255,255,0.35), transparent);
     animation: speedLine 2.4s ease-in-out infinite;
   }
   .hero-bowser {
@@ -89,20 +99,20 @@
     right: -48px;
     bottom: -28px;
     height: 76%;
-    opacity: 0.13;
-    filter: drop-shadow(0 0 56px rgba(21,101,192,0.4));
+    opacity: 0.14;
+    filter: drop-shadow(0 0 48px rgba(46,125,50,0.55)) drop-shadow(0 0 80px rgba(255,109,0,0.25));
     pointer-events: none;
     z-index: 1;
   }
   .hero-content { position: relative; z-index: 3; max-width: 800px; animation: slideUp 0.9s ease-out; }
   .hero-badge {
     display: inline-block;
-    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    background: linear-gradient(135deg, var(--shell-mid) 0%, var(--fire-bright) 55%, var(--ember) 100%);
     color: #fff;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 13px;
+    font-family: 'Bebas Neue', 'Anton', sans-serif;
+    font-size: 14px;
     font-weight: 800;
-    letter-spacing: 5px;
+    letter-spacing: 6px;
     padding: 9px 24px;
     border-radius: 99px;
     margin-bottom: 22px;
@@ -115,11 +125,12 @@
     font-weight: 900;
     line-height: 1.1;
     margin-bottom: 16px;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     color: #fff;
+    text-shadow: 0 2px 0 rgba(0,0,0,0.35), 0 0 40px rgba(46,125,50,0.35);
   }
-  .hero h1 .gold { color: #FFD700; text-shadow: 0 0 24px rgba(255,215,0,0.32); }
-  .hero h1 .green { color: #90CAF9; }
+  .hero h1 .gold { color: #FFEB3B; text-shadow: 0 0 28px rgba(255,235,59,0.55), 0 2px 0 rgba(0,0,0,0.4); }
+  .hero h1 .green { color: #A5D6A7; text-shadow: 0 0 24px rgba(165,214,167,0.45), 0 2px 0 rgba(0,0,0,0.35); }
   .hero .lead { font-size: 16px; color: rgba(255,255,255,0.78); max-width: 600px; margin: 0 auto 36px; }
   .hero-stats { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
   .hero-stat {
@@ -135,31 +146,40 @@
   }
   .hero-stat:nth-child(2) { animation-delay: 0.45s; }
   .hero-stat:nth-child(3) { animation-delay: 0.9s; }
-  .hero-stat .num { font-family: 'Orbitron', monospace; font-size: 24px; font-weight: 900; color: #FFD700; }
+  .hero-stat .num { font-family: 'Orbitron', monospace; font-size: 24px; font-weight: 900; color: #FFEB3B; text-shadow: 0 0 12px rgba(255,235,59,0.4); }
   .hero-stat .label { font-size: 10px; color: rgba(255,255,255,0.62); margin-top: 2px; }
 
   .container { max-width: 920px; margin: 0 auto; padding: 0 22px; }
   section { padding: 68px 0; }
-  section + section { border-top: 1px solid var(--border); }
+  section + section { border-top: 1px solid var(--border-soft); }
 
   .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
-  .section-num { font-family: 'Orbitron', monospace; font-size: 32px; font-weight: 900; line-height: 1; }
+  .section-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--shell-mid);
+    text-shadow: 0 0 24px rgba(67,160,71,0.25);
+  }
   .section-tag {
-    font-family: 'Bebas Neue', monospace;
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: var(--dim);
+    font-family: 'Bebas Neue', 'Anton', sans-serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--shell);
     text-transform: uppercase;
     border: 1px solid var(--border);
-    padding: 3px 12px;
+    background: linear-gradient(180deg, #fff, var(--shell-bg));
+    padding: 4px 12px;
     border-radius: 6px;
   }
   .section-title {
     font-family: 'M PLUS 1p', sans-serif;
-    font-size: clamp(24px, 4.5vw, 38px);
+    font-size: clamp(24px, 4.5vw, 40px);
     font-weight: 900;
     margin-bottom: 10px;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    color: var(--shell);
   }
   .section-lead { font-size: 14px; color: var(--sub); margin-bottom: 32px; max-width: 680px; }
 
@@ -167,7 +187,8 @@
     border-radius: var(--radius);
     overflow: hidden;
     margin-bottom: 18px;
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
+    box-shadow: 0 4px 16px rgba(27,94,32,0.12);
   }
   .banner-img img { width: 100%; height: 170px; object-fit: cover; display: block; filter: brightness(0.72) saturate(1.12); }
 
@@ -180,8 +201,15 @@
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
   }
-  .card:hover { border-color: var(--blue); box-shadow: 0 4px 14px rgba(0,0,0,0.07); transform: translateY(-1px); }
-  .card h3 { font-family: 'M PLUS 1p', sans-serif; font-size: 17px; font-weight: 900; margin-bottom: 10px; }
+  .card:hover { border-color: var(--shell-light); box-shadow: 0 6px 20px rgba(27,94,32,0.12); transform: translateY(-1px); }
+  .card h3 {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 17px;
+    font-weight: 900;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+    color: var(--shell);
+  }
   .card p, .card li { color: var(--sub); font-size: 14px; }
   .card ul { list-style: none; padding: 0; }
   .card > ul > li { padding: 5px 0 5px 18px; position: relative; }
@@ -192,10 +220,11 @@
     top: 13px;
     width: 7px;
     height: 2px;
-    background: var(--blue);
+    background: linear-gradient(90deg, var(--fire-bright), var(--shell-light));
     border-radius: 1px;
   }
-  .card a { color: var(--blue); }
+  .card a { color: var(--shell-mid); font-weight: 700; text-underline-offset: 3px; }
+  .card a:hover { color: var(--fire); }
 
   .callout {
     border-radius: var(--radius);
@@ -205,30 +234,36 @@
     position: relative;
   }
   .callout::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
-  .callout.yellow { background: #FFFDE7; }
-  .callout.yellow::before { background: var(--yellow); }
-  .callout.yellow strong { color: #E65100; }
-  .callout.green { background: #F1F8E9; }
-  .callout.green::before { background: var(--green); }
-  .callout.green strong { color: var(--green); }
-  .callout.blue { background: #E8F0FE; }
-  .callout.blue::before { background: var(--blue); }
-  .callout.blue strong { color: var(--blue); }
+  .callout.yellow { background: linear-gradient(135deg, #FFF8E1, #FFECB3); }
+  .callout.yellow::before { background: linear-gradient(180deg, var(--spike), var(--gold)); }
+  .callout.yellow strong { color: var(--lava); }
+  .callout.green { background: linear-gradient(135deg, #F1F8E9, #E8F5E9); }
+  .callout.green::before { background: linear-gradient(180deg, var(--shell-light), var(--shell)); }
+  .callout.green strong { color: var(--shell); }
+  .callout.blue { background: linear-gradient(135deg, #E8F5E9, #FFF8E1); }
+  .callout.blue::before { background: linear-gradient(180deg, var(--shell-mid), var(--fire)); }
+  .callout.blue strong { color: var(--shell-mid); }
 
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   @media (max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
 
   .metric-card {
-    background: #fff;
+    background: linear-gradient(165deg, #fff 0%, var(--shell-bg) 100%);
     border: 2px solid var(--border);
     border-radius: var(--radius);
     padding: 20px;
     text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 10px rgba(27,94,32,0.08);
   }
-  .metric-card .big { font-family: 'Orbitron', monospace; font-size: 26px; font-weight: 900; color: var(--blue); }
-  .metric-card h4 { font-family: 'M PLUS 1p', sans-serif; font-size: 13px; font-weight: 900; margin: 8px 0 4px; }
+  .metric-card .big {
+    font-family: 'Orbitron', monospace;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--shell);
+    text-shadow: 0 0 20px rgba(67,160,71,0.35), 0 1px 0 #fff;
+  }
+  .metric-card h4 { font-family: 'M PLUS 1p', sans-serif; font-size: 13px; font-weight: 900; margin: 8px 0 4px; color: var(--shell); }
   .metric-card p { font-size: 11px; color: var(--sub); }
 
   .phase {
@@ -242,26 +277,35 @@
     transition: border-color 0.25s, box-shadow 0.25s;
   }
   .phase::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-  .phase.p1::before { background: linear-gradient(90deg, var(--red), var(--orange)); }
-  .phase.p2::before { background: linear-gradient(90deg, var(--orange), var(--yellow)); }
-  .phase.p3::before { background: linear-gradient(90deg, var(--yellow), var(--green)); }
-  .phase.p4::before { background: linear-gradient(90deg, var(--green), var(--blue)); }
-  .phase:hover { border-color: var(--blue); box-shadow: 0 4px 18px rgba(21,101,192,0.08); }
+  .phase.p1::before { background: linear-gradient(90deg, var(--ember), var(--fire-bright)); }
+  .phase.p2::before { background: linear-gradient(90deg, var(--fire-bright), var(--gold)); }
+  .phase.p3::before { background: linear-gradient(90deg, var(--gold), var(--shell-light)); }
+  .phase.p4::before { background: linear-gradient(90deg, var(--shell-light), var(--shell)); }
+  .phase:hover { border-color: var(--shell-light); box-shadow: 0 6px 22px rgba(46,125,50,0.15); }
 
   .phase-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
   .phase-num {
-    font-family: 'Orbitron', monospace;
-    font-size: 12px;
-    font-weight: 900;
-    padding: 5px 11px;
+    font-family: 'Bebas Neue', 'Anton', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 6px 12px;
     border-radius: 7px;
-    background: var(--blue);
+    background: linear-gradient(135deg, var(--shell-mid), var(--shell));
     color: #fff;
+    box-shadow: 0 2px 8px rgba(27,94,32,0.35);
   }
   .phase-period { font-family: 'Bebas Neue', monospace; font-size: 12px; letter-spacing: 2px; color: var(--dim); }
-  .phase-title { font-family: 'M PLUS 1p', sans-serif; font-size: 20px; font-weight: 900; margin-bottom: 4px; }
-  .phase-goal { font-size: 13px; color: var(--sub); margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-  .phase-goal strong { color: var(--blue); }
+  .phase-title {
+    font-family: 'M PLUS 1p', sans-serif;
+    font-size: 21px;
+    font-weight: 900;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+    color: var(--shell);
+  }
+  .phase-goal { font-size: 13px; color: var(--sub); margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-soft); }
+  .phase-goal strong { color: var(--fire); font-family: 'Orbitron', sans-serif; font-weight: 900; }
 
   .phase-img { border-radius: 10px; overflow: hidden; margin-bottom: 12px; border: 1px solid var(--border); }
   .phase-img img { width: 100%; height: 150px; object-fit: cover; display: block; filter: brightness(0.76) saturate(1.1); transition: filter 0.25s; }
@@ -300,7 +344,7 @@
   }
   .spec-table td { padding: 9px 10px; border-bottom: 1px solid #EEEEEE; color: var(--sub); }
   .spec-table td:first-child { color: var(--text); font-weight: 600; }
-  .spec-table .hl { color: var(--blue); font-weight: 700; font-family: 'Orbitron', sans-serif; }
+  .spec-table .hl { color: var(--fire); font-weight: 800; font-family: 'Orbitron', sans-serif; }
   .spec-table tr:hover td { background: #F5F5F5; }
 
   .progress-bar {
@@ -321,7 +365,7 @@
     top: 0;
     bottom: 0;
     width: 2px;
-    background: linear-gradient(180deg, var(--red), var(--orange), var(--yellow), var(--green), var(--blue));
+    background: linear-gradient(180deg, var(--ember), var(--fire-bright), var(--gold), var(--shell-light), var(--shell));
   }
   .tl-item { position: relative; margin-bottom: 20px; }
   .tl-dot {
@@ -331,11 +375,12 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 2px solid var(--blue);
-    background: #E3F2FD;
+    border: 2px solid var(--shell-mid);
+    background: var(--shell-bg);
+    box-shadow: 0 0 0 2px rgba(255,213,79,0.35);
   }
   .tl-month { font-family: 'Orbitron', monospace; font-size: 10px; color: var(--dim); margin-bottom: 2px; }
-  .tl-title { font-family: 'M PLUS 1p', sans-serif; font-size: 14px; font-weight: 900; margin-bottom: 2px; }
+  .tl-title { font-family: 'M PLUS 1p', sans-serif; font-size: 14px; font-weight: 900; margin-bottom: 2px; color: var(--shell); }
   .tl-desc { font-size: 12px; color: var(--sub); }
 
   footer {
@@ -345,7 +390,16 @@
     color: var(--dim);
     font-size: 11px;
   }
-  footer::before { content: '✦'; display: block; font-size: 20px; color: var(--blue); margin-bottom: 12px; }
+  footer::before {
+    content: '✦';
+    display: block;
+    font-size: 22px;
+    background: linear-gradient(135deg, var(--shell-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
 </style>
 </head>
 <body>
@@ -378,10 +432,10 @@
 
 <section>
   <div class="section-header">
-    <div class="section-num" style="color:var(--blue);">01</div>
+    <div class="section-num" style="color:var(--shell-mid);">01</div>
     <span class="section-tag">North Star</span>
   </div>
-  <div class="section-title">1万人の<span style="color:var(--blue);">意味</span>と前提</div>
+  <div class="section-title">1万人の<span style="color:var(--shell-light);">意味</span>と前提</div>
   <div class="section-lead">数字の先に「収益化の土台」「コラボの門番」「アルゴリズム上の信頼」がある。</div>
   <div class="banner-img"><img src="img/bowser_ss3.jpg" alt=""></div>
   <div class="grid-3">
@@ -398,10 +452,10 @@
 
 <section>
   <div class="section-header">
-    <div class="section-num" style="color:var(--red);">02</div>
+    <div class="section-num" style="color:var(--ember);">02</div>
     <span class="section-tag">Math</span>
   </div>
-  <div class="section-title">必要な<span style="color:var(--red);">月次ペース</span></div>
+  <div class="section-title">必要な<span style="color:var(--fire-bright);">月次ペース</span></div>
   <div class="section-lead">現在の登録者を <strong>S</strong>、残り月数を <strong>M</strong> とすると、月あたりの純増は <strong>（10,000 − S）÷ M</strong>。</div>
   <div class="card">
     <h3>目安表（M＝12ヶ月の場合）</h3>
@@ -421,10 +475,10 @@
 
 <section>
   <div class="section-header">
-    <div class="section-num" style="color:var(--green);">03</div>
+    <div class="section-num" style="color:var(--shell);">03</div>
     <span class="section-tag">Quarterly</span>
   </div>
-  <div class="section-title">2026年<span style="color:var(--green);">四半期</span>の動き方</div>
+  <div class="section-title">2026年<span style="color:var(--shell-mid);">四半期</span>の動き方</div>
   <div class="section-lead">例：年初 <strong>約2,000人</strong>スタートのときの目安（自分の S に置き換えて使う）。</div>
 
   <div class="phase p1">
@@ -478,10 +532,10 @@
 
 <section>
   <div class="section-header">
-    <div class="section-num" style="color:var(--orange);">04</div>
+    <div class="section-num" style="color:var(--fire);">04</div>
     <span class="section-tag">Algorithm</span>
   </div>
-  <div class="section-title">伸びの<span style="color:var(--orange);">レバー</span></div>
+  <div class="section-title">伸びの<span style="color:var(--fire-bright);">レバー</span></div>
   <div class="card">
     <h3>週次で見る3つ</h3>
     <table class="spec-table">
@@ -496,10 +550,10 @@
 
 <section>
   <div class="section-header">
-    <div class="section-num" style="color:var(--purple);">05</div>
+    <div class="section-num" style="color:var(--gold);">05</div>
     <span class="section-tag">Weekly</span>
   </div>
-  <div class="section-title">毎週の<span style="color:var(--purple);">最低ライン例</span></div>
+  <div class="section-title">毎週の<span style="color:var(--lava);">最低ライン例</span></div>
   <div class="grid-2">
     <div class="card">
       <h3>投稿</h3>
@@ -522,10 +576,10 @@
 
 <section>
   <div class="section-header">
-    <div class="section-num" style="color:var(--cyan);">06</div>
+    <div class="section-num" style="color:var(--shell-light);">06</div>
     <span class="section-tag">Milestones</span>
   </div>
-  <div class="section-title">月次<span style="color:var(--cyan);">チェック</span></div>
+  <div class="section-title">月次<span style="color:var(--shell-mid);">チェック</span></div>
   <div class="timeline">
     <div class="tl-item">
       <div class="tl-dot"></div>
@@ -547,29 +601,29 @@
     </div>
   </div>
   <div class="progress-bar">
-    <p style="font-size:13px;font-weight:700;margin-bottom:6px;">年間カーブのイメージ</p>
-    <div class="progress-track"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue));"></div></div>
+    <p style="font-size:13px;font-weight:900;margin-bottom:6px;font-family:'M PLUS 1p',sans-serif;color:var(--shell);letter-spacing:0.5px;">年間カーブのイメージ</p>
+    <div class="progress-track"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,var(--ember),var(--fire-bright),var(--gold),var(--shell-light),var(--shell));"></div></div>
     <p style="font-size:11px;color:var(--dim);margin:0;">年初は遅く見えても型が固まると後半で伸びやすい。判断は月次、数字は週次。</p>
   </div>
 </section>
 
 <section>
   <div class="section-header">
-    <div class="section-num" style="color:var(--red);">07</div>
+    <div class="section-num" style="color:var(--ember);">07</div>
     <span class="section-tag">Risk</span>
   </div>
   <div class="section-title">避けたいこと</div>
   <div class="grid-2">
-    <div class="card" style="border-left:3px solid var(--red);"><h3 style="color:var(--red);">登録者購入</h3><p>BANリスク。長期では最悪。</p></div>
-    <div class="card" style="border-left:3px solid var(--red);"><h3 style="color:var(--red);">釣りタイトルだけ</h3><p>維持率が落ち配信面が縮むことがある。</p></div>
-    <div class="card" style="border-left:3px solid var(--red);"><h3 style="color:var(--red);">無計画な増量</h3><p>品質が落ちると悪化が固定化。切り抜き工程を先にテンプレ化。</p></div>
-    <div class="card" style="border-left:3px solid var(--red);"><h3 style="color:var(--red);">炎上ネタ</h3><p>界隈は狭い。信頼が資産。</p></div>
+    <div class="card" style="border-left:3px solid var(--ember);"><h3 style="color:var(--ember);">登録者購入</h3><p>BANリスク。長期では最悪。</p></div>
+    <div class="card" style="border-left:3px solid var(--ember);"><h3 style="color:var(--ember);">釣りタイトルだけ</h3><p>維持率が落ち配信面が縮むことがある。</p></div>
+    <div class="card" style="border-left:3px solid var(--ember);"><h3 style="color:var(--ember);">無計画な増量</h3><p>品質が落ちると悪化が固定化。切り抜き工程を先にテンプレ化。</p></div>
+    <div class="card" style="border-left:3px solid var(--ember);"><h3 style="color:var(--ember);">炎上ネタ</h3><p>界隈は狭い。信頼が資産。</p></div>
   </div>
 </section>
 
 <section>
   <div class="section-header">
-    <div class="section-num" style="color:var(--blue);">08</div>
+    <div class="section-num" style="color:var(--shell-mid);">08</div>
     <span class="section-tag">Links</span>
   </div>
   <div class="section-title">参考リンク</div>
