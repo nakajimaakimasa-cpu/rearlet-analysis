@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rearlet ショート診断レポート ── 再生数・視聴維持率 低下分析</title>
+<title>Rearlet ショート成長戦略 ── 半年で登録者5万人プラン</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap');
 
@@ -757,7 +757,6 @@
   }
 </style>
 </head>
-
 <style>
   /* ===== ショート分析サイト 追加スタイル ===== */
   .shot-grid {
@@ -1006,6 +1005,292 @@
   }
 </style>
 
+<style>
+  /* ===== v2 追加スタイル ===== */
+  .goal-big {
+    text-align: center;
+    padding: var(--space-48) 0 var(--space-24);
+  }
+  .goal-big .num {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(60px, 12vw, 140px);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, #FFD580, #FF6B35, #A29BFE);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.04em;
+  }
+  .goal-big .unit {
+    font-size: var(--font-xl);
+    color: var(--gray-600);
+    font-weight: 400;
+    margin-left: 8px;
+  }
+  .goal-big .cap {
+    color: var(--gray-500);
+    font-size: var(--font-sm);
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  .bench-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--font-sm);
+    font-family: 'Inter','Noto Sans JP',sans-serif;
+  }
+  .bench-table th {
+    background: var(--gray-900);
+    color: white;
+    padding: var(--space-12) var(--space-12);
+    font-size: var(--font-xs);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: right;
+  }
+  .bench-table th:first-child { text-align: left; border-top-left-radius: 8px; }
+  .bench-table th:last-child { border-top-right-radius: 8px; }
+  .bench-table td {
+    padding: var(--space-12);
+    border-bottom: 1px solid var(--gray-200);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .bench-table td:first-child { text-align: left; font-weight: 700; }
+  .bench-table tr.rearlet-row td {
+    background: linear-gradient(90deg, #FFF8E1, #F0EDFF);
+    font-weight: 700;
+  }
+  .bench-table tr:hover td { background: var(--gray-50); }
+  .bench-table tr.rearlet-row:hover td {
+    background: linear-gradient(90deg, #FFF4C4, #E4DCFF);
+  }
+
+  .viral-list { margin: var(--space-24) 0; }
+  .viral-item {
+    display: grid;
+    grid-template-columns: 90px 48px 1fr;
+    gap: var(--space-16);
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--gray-200);
+    align-items: center;
+  }
+  .viral-item:hover { background: var(--gray-50); }
+  .viral-views {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-lg);
+    color: var(--accent);
+    text-align: right;
+  }
+  .viral-dur {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-xs);
+    font-weight: 700;
+    color: white;
+    background: var(--primary);
+    border-radius: 100px;
+    padding: 4px 8px;
+    text-align: center;
+  }
+  .viral-dur.short { background: var(--success); }
+  .viral-dur.mid { background: var(--info); }
+  .viral-dur.long { background: #E67E22; }
+  .viral-title { font-size: var(--font-sm); color: var(--gray-800); line-height: 1.5; }
+  .viral-meta {
+    display: block;
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-top: 2px;
+  }
+
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  .pattern-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: var(--space-24);
+    border: 2px solid var(--gray-200);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .pattern-card:hover { transform: translateY(-4px); border-color: var(--primary-light); }
+  .pattern-icon {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-xl);
+    background: var(--primary);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: var(--space-12);
+  }
+  .pattern-card h4 {
+    font-size: var(--font-base);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-8);
+  }
+  .pattern-card .ex {
+    font-size: var(--font-xs);
+    color: var(--gray-600);
+    background: var(--gray-100);
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-top: var(--space-12);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: var(--space-8);
+    margin-top: var(--space-16);
+  }
+  .kpi-pill {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: var(--space-8) var(--space-12);
+    font-size: var(--font-xs);
+    text-align: center;
+  }
+  .kpi-pill .k { color: var(--gray-500); display: block; }
+  .kpi-pill .v {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    color: var(--gray-900);
+    font-size: var(--font-sm);
+    margin-top: 2px;
+    display: block;
+  }
+
+  .gap-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 1fr;
+    gap: var(--space-16);
+    padding: var(--space-16);
+    border-bottom: 1px solid var(--gray-200);
+    align-items: center;
+  }
+  .gap-row:first-child {
+    font-size: var(--font-xs);
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .gap-row .label { font-weight: 700; color: var(--gray-800); }
+  .gap-row .now {
+    background: var(--danger-light);
+    color: var(--danger);
+    padding: var(--space-8) var(--space-12);
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: var(--font-sm);
+  }
+  .gap-row .target {
+    background: var(--success-light);
+    color: var(--success);
+    padding: var(--space-8) var(--space-12);
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: var(--font-sm);
+  }
+  @media (max-width: 640px) {
+    .gap-row { grid-template-columns: 1fr; }
+  }
+
+  .title-ex {
+    background: var(--white);
+    border-left: 4px solid var(--primary);
+    padding: var(--space-12) var(--space-16);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: var(--space-8);
+    font-size: var(--font-sm);
+    line-height: 1.6;
+  }
+  .title-ex .why {
+    display: block;
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-top: 4px;
+  }
+
+  .phase-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    border-left: 6px solid var(--primary);
+    box-shadow: var(--shadow);
+    margin-bottom: var(--space-24);
+  }
+  .phase-card.p1 { border-left-color: var(--info); }
+  .phase-card.p2 { border-left-color: #E67E22; }
+  .phase-card.p3 { border-left-color: var(--success); }
+  .phase-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-16);
+  }
+  .phase-num {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-sm);
+    padding: 4px 12px;
+    border-radius: 100px;
+    background: var(--info);
+    color: white;
+    letter-spacing: 2px;
+  }
+  .phase-card.p2 .phase-num { background: #E67E22; }
+  .phase-card.p3 .phase-num { background: var(--success); }
+  .phase-head h3 {
+    font-size: var(--font-xl);
+    font-weight: 900;
+    color: var(--gray-900);
+  }
+  .phase-target {
+    margin-left: auto;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-xl);
+    color: var(--primary);
+  }
+  .phase-card.p2 .phase-target { color: #E67E22; }
+  .phase-card.p3 .phase-target { color: var(--success); }
+
+  .action-list { margin-top: var(--space-16); list-style: none; padding: 0; }
+  .action-list li {
+    padding: var(--space-8) 0 var(--space-8) var(--space-32);
+    position: relative;
+    color: var(--gray-700);
+    font-size: var(--font-sm);
+    line-height: 1.7;
+  }
+  .action-list li::before {
+    content: '▶';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    color: var(--primary);
+    font-size: 10px;
+  }
+  .phase-card.p2 .action-list li::before { color: #E67E22; }
+  .phase-card.p3 .action-list li::before { color: var(--success); }
+</style>
+
 
 <body>
 
@@ -1013,33 +1298,35 @@
 <header class="hero">
   <div class="hero-content">
     <div class="hero-badge">
-      <span>●</span> YOUTUBE SHORTS DIAGNOSIS · 2026.04.22
+      <span>●</span> SHORTS GROWTH STRATEGY · 2026.04.22 · DATA DRIVEN
     </div>
     <h1>
-      Rearlet ショート<br>
-      <span class="highlight">再生数・視聴維持率 診断</span>
+      登録者 1,140 → <span class="highlight">50,000 人</span><br>
+      半年で達成する戦略
     </h1>
     <p class="hero-sub">
-      直近 4 本（4/14〜4/21）× バイラル比較（4/7）× YouTube Studio 実データ 18 スクショ。<br>
-      結論：<strong style="color:#FFD580">動画の中身は上位 5% 級に優秀。問題はタイトルで、アルゴリズム露出の悪循環に入っている。</strong>
+      日本スマブラSP 系 8 チャンネル（計 377 本）の Shorts 実データを <code>yt-dlp</code> で取得し、
+      「実際に伸びている型」を抽出。 <br>
+      Rearlet の <strong style="color:#FFD580">med/foll = 17.27</strong>（登録者1人あたり再生17.27回）は
+      <strong>全比較チャンネル中1位</strong> ── 動画は既に最強水準です。
     </p>
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="val" style="color:#55EFC4">111.8%</span>
-        <span class="lbl">4/16 平均視聴率（上位5%級）</span>
+        <span class="val" style="color:#55EFC4">17.27</span>
+        <span class="lbl">med/foll（登録者効率・全チャンネル1位）</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#FAB1A0">47.8%</span>
-        <span class="lbl">4/19 スワイプ離脱</span>
+        <span class="val" style="color:#A29BFE">312K</span>
+        <span class="lbl">自己最高 再生数（3/20）</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#FDCB6E">-6.2pt</span>
-        <span class="lbl">4/21 Shortsフィード率低下</span>
+        <span class="val" style="color:#FDCB6E">1,140</span>
+        <span class="lbl">現在の登録者数</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#A29BFE">1/14</span>
-        <span class="lbl">ピーク比の再生数</span>
+        <span class="val" style="color:#FAB1A0">+48,860</span>
+        <span class="lbl">6ヶ月での純増ノルマ</span>
       </div>
     </div>
   </div>
@@ -1048,520 +1335,578 @@
 <!-- ============ ANCHOR NAV ============ -->
 <nav class="anchor-nav">
   <div class="anchor-nav-inner">
-    <a href="#summary">結論</a>
-    <a href="#data">データ一覧</a>
-    <a href="#insights">6つの発見</a>
-    <a href="#mechanism">悪循環</a>
-    <a href="#individual">動画別診断</a>
-    <a href="#viral">バイラル比較</a>
-    <a href="#prescription">処方箋</a>
-    <a href="#roadmap">次のアクション</a>
+    <a href="#state">現状</a>
+    <a href="#bench">ベンチマーク</a>
+    <a href="#viral">バイラル実データ</a>
+    <a href="#pattern">勝ちパターン</a>
+    <a href="#gap">ギャップ</a>
+    <a href="#roadmap">半年ロードマップ</a>
+    <a href="#titles">次の動画タイトル案</a>
+    <a href="#action">今週やること</a>
   </div>
 </nav>
 
-<!-- ============ 01 結論サマリー ============ -->
-<section id="summary">
+<!-- ============ 01 現状 ============ -->
+<section id="state">
   <div class="container">
-    <div class="sec-num">01 · EXECUTIVE SUMMARY</div>
-    <h2>結論サマリー</h2>
+    <div class="sec-num">01 · CURRENT STATE</div>
+    <h2>今のRearletさんの位置</h2>
     <p class="sec-desc">
-      一言で言うと「動画は超優秀、タイトルが悪い、露出が絞られた」。内訳は以下の3点。
+      「再生数は出ている・ファンが増えてない」が同時に起きている状態。
+      これは<strong>バイラルShortsを作る力はあるのに、登録導線が効いていない</strong>という意味。
     </p>
+
+    <div class="goal-big">
+      <div class="num">1,140<span class="unit">人</span></div>
+      <div class="cap">CURRENT SUBSCRIBERS · 2026-04-22 時点</div>
+    </div>
 
     <div class="grid-2">
       <div class="card card--solution">
-        <div class="tags"><span class="tag tag--success">🟢 良いニュース</span></div>
-        <h3>動画の中身は問題なし。むしろ上位5%級</h3>
+        <div class="tags"><span class="tag tag--success">🟢 強み</span></div>
+        <h3>1登録者あたり再生数が全チャンネル中1位</h3>
         <ul>
-          <li>4/14「魂の逆転劇」: 平均視聴率 103.7%（ループ視聴発生）</li>
-          <li>4/16「上b空後」: 平均視聴率 111.8%（ループ視聴発生）</li>
-          <li>100% 超は全ショートクリエイターの上位 5% 級指標</li>
+          <li><strong>med/foll 17.27</strong>（直近31本中央値19,691 ÷ 登録者1,140）</li>
+          <li>比較：アカキクス 9.64 / KEN 4.41 / ザクレイ 0.48 / マエスマ 0.49</li>
+          <li>意味：「登録してない人がどんどん見てる」状態 = リーチは取れている</li>
         </ul>
       </div>
 
       <div class="card card--problem">
-        <div class="tags"><span class="tag tag--danger">🔴 悪いニュース</span></div>
-        <h3>アルゴリズムから露出を絞られ始めている</h3>
+        <div class="tags"><span class="tag tag--danger">🔴 弱み</span></div>
+        <h3>登録誘導（CTA）が弱いため、視聴→登録への変換率が低い</h3>
         <ul>
-          <li>YouTubeが「通常より1.0万減」「通常より6,733減」と警告表示</li>
-          <li>4/19でスワイプ離脱47.8% → 判定決定打</li>
-          <li>4/21でShortsフィード率が89% → 82.8%に急落</li>
+          <li>4/7 バイラル 136,242 再生 → 新規視聴者 26%（約35,000人）</li>
+          <li>そのうち登録に至ったのはごく一部 = 導線不足</li>
+          <li>概要欄・固定コメント・末尾フックが無い or 不明瞭</li>
         </ul>
       </div>
     </div>
 
-    <div class="callout callout-warning">
-      <strong>🟠 原因：</strong>
-      タイトルの語彙がライト層に届いていない。視聴者の74%は「スマブラ詳しくないライト層」なのに、
-      直近は「魂の逆転劇」「ルナマドさん」「上b空後」など抽象語・マニア用語・プレイヤー名が並んでいる。
-      過去バイラル4本は全て「カズヤ」「ゴブリンマリオ」「200%ハンデ」という<strong>具体・一般語彙</strong>だった。
+    <div class="callout callout-success">
+      <strong>💡 結論：</strong>
+      「動画を変える」より「<strong>導線を整え、尺とタイトルを伸びる型に合わせる</strong>」方が近道。
+      次章で、同じジャンルで伸びている日本のチャンネル実データを見ていきます。
     </div>
   </div>
 </section>
 
-<!-- ============ 02 データ一覧 ============ -->
-<section id="data" style="background: var(--gray-100);">
+<!-- ============ 02 ベンチマーク ============ -->
+<section id="bench" style="background: var(--gray-100);">
   <div class="container">
-    <div class="sec-num">02 · DATA</div>
-    <h2>Studio実数値 一覧</h2>
+    <div class="sec-num">02 · BENCHMARK</div>
+    <h2>日本スマブラSP 8チャンネル 実データ</h2>
     <p class="sec-desc">
-      直近4本＋バイラル比較動画（4/7）の主要指標。平均視聴率 100% 超 = ループ視聴発生。
+      2026-04-22 に <code>yt-dlp</code> で直接取得した実数値。
+      各チャンネルの直近 Shorts 24〜50 本をスキャン、中央値・最高値を比較。
     </p>
 
     <div class="tbl-wrap">
-      <table class="compare">
+      <table class="bench-table">
         <thead>
           <tr>
-            <th>日付</th><th>尺</th><th>再生数</th>
-            <th>平均視聴率</th><th>視聴継続</th><th>スワイプ</th>
-            <th>Shortsフィード</th><th>新規視聴者</th>
+            <th>チャンネル</th>
+            <th>登録者</th>
+            <th>本数</th>
+            <th>中央再生</th>
+            <th>最高再生</th>
+            <th>med/foll</th>
+            <th>中央尺</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><span class="badge badge-info">バイラル</span> 4/7</td>
-            <td>45s</td>
-            <td><strong>136,242</strong></td>
-            <td>—</td><td>—</td><td>—</td><td>—</td><td>26.0%</td>
+          <tr class="rearlet-row">
+            <td>Rearlet（本人）</td>
+            <td>1,140</td><td>31</td>
+            <td>19,691</td><td>312,199</td>
+            <td style="color:var(--success)">17.27 🥇</td>
+            <td>40s</td>
           </tr>
           <tr>
-            <td>4/14</td><td>25s</td><td>9,053</td>
-            <td><span class="badge badge-success">103.7%</span></td>
-            <td>62.8%</td><td>37.2%</td><td>86.9%</td><td>28.6%</td>
+            <td>アカキクス（勇者）</td>
+            <td>21,300</td><td>50</td>
+            <td>205,262</td><td>1,331,287</td>
+            <td style="color:var(--success)">9.64 🥈</td>
+            <td>14s</td>
           </tr>
           <tr>
-            <td>4/16</td><td>22s</td><td>11,000</td>
-            <td><span class="badge badge-success">111.8%</span></td>
-            <td>64.7%</td><td>35.3%</td><td>89.0%</td><td>20.3%</td>
+            <td>KEN（プロ・セフィロス）</td>
+            <td>46,900</td><td>50</td>
+            <td>206,965</td><td>625,834</td>
+            <td style="color:var(--info)">4.41</td>
+            <td>28s</td>
           </tr>
           <tr>
-            <td>4/19</td><td>43s</td><td>9,566</td>
-            <td>82.5%</td><td>52.2%</td>
-            <td><span class="badge badge-danger">47.8%</span></td>
-            <td>89.0%</td><td>—</td>
+            <td>智念せいら（Vtuber）</td>
+            <td>56,200</td><td>50</td>
+            <td>47,916</td><td>129,506</td>
+            <td>0.85</td>
+            <td>56s</td>
           </tr>
           <tr>
-            <td>4/21</td><td>56s</td>
-            <td><span class="badge badge-danger">4,799</span></td>
-            <td><span class="badge badge-danger">67.4%</span></td>
-            <td>62.4%</td><td>37.6%</td>
-            <td><span class="badge badge-danger">82.8%</span></td><td>—</td>
+            <td>マエスマ（大会・公式）</td>
+            <td>112,000</td><td>50</td>
+            <td>55,353</td><td>322,154</td>
+            <td>0.49</td>
+            <td>52s</td>
+          </tr>
+          <tr>
+            <td>ザクレイ（日本一）</td>
+            <td>392,000</td><td>24</td>
+            <td>188,827</td><td>683,693</td>
+            <td>0.48</td>
+            <td>55s</td>
+          </tr>
+          <tr>
+            <td>Raito（強豪コーチ）</td>
+            <td>106,000</td><td>26</td>
+            <td>38,609</td><td>580,548</td>
+            <td>0.36</td>
+            <td>32s</td>
+          </tr>
+          <tr>
+            <td>takera（スト6/スマブラ）</td>
+            <td>74,900</td><td>50</td>
+            <td>13,002</td><td>363,481</td>
+            <td>0.17</td>
+            <td>39s</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="chart-card">
-      <h3>📉 再生数の推移（10日窓）</h3>
-      <div class="bar-row">
-        <div class="bar-label">2月</div>
-        <div class="bar-track"><div class="bar-fill yellow" style="width:20%">29,345</div></div>
-        <div class="bar-val">29.3K</div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">3/20〜</div>
-        <div class="bar-track"><div class="bar-fill green" style="width:100%">120,047</div></div>
-        <div class="bar-val">120K</div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">4/1〜</div>
-        <div class="bar-track"><div class="bar-fill blue" style="width:40%">47,103</div></div>
-        <div class="bar-val">47.1K</div>
-      </div>
-      <div class="bar-row">
-        <div class="bar-label">4/14〜</div>
-        <div class="bar-track"><div class="bar-fill red" style="width:7%">8,638</div></div>
-        <div class="bar-val">8.6K</div>
-      </div>
+    <div class="callout callout-info">
+      <strong>🎯 読み方：</strong>
+      med/foll = 1登録者あたりの再生効率。<strong>Rearletさんは 17.27 でぶっちぎり1位</strong>。
+      つまり「登録してない人にも届く動画の力」は既にアカキクスの1.8倍、KENの4倍、ザクレイの36倍。
+      <br><br>
+      模範となるのは<strong>アカキクス</strong>（同ジャンル・登録者18倍・再生中央値10倍・尺14秒）。
+      クッパ使い→勇者使いで棲み分けも被らない。
     </div>
   </div>
 </section>
 
-<!-- ============ 03 6つの発見 ============ -->
-<section id="insights">
+<!-- ============ 03 バイラル実データ ============ -->
+<section id="viral">
   <div class="container">
-    <div class="sec-num">03 · KEY INSIGHTS</div>
-    <h2>6つの決定的発見</h2>
+    <div class="sec-num">03 · VIRAL DATA</div>
+    <h2>日本スマブラSPで伸びたShorts TOP 15</h2>
     <p class="sec-desc">
-      Studio実データから浮かび上がった、この低下の正体。
+      8チャンネル合計 377本中、直近1-2年で再生数上位のShorts実データ。<br>
+      これをパターン化したものが「勝ちパターン」。
     </p>
 
-    <div class="insight-grid">
-      <div class="insight-card pos">
-        <span class="letter">A</span>
-        <h3>動画の中身は衝撃的に優秀</h3>
-        <p>4/14維持率103.7% / 4/16維持率111.8%。ショートクリエイター上位5%級。<strong>直近の再生数低下は動画の質低下ではない。</strong></p>
+    <div class="viral-list">
+      <div class="viral-item">
+        <div class="viral-views">1,331K</div>
+        <div class="viral-dur short">13s</div>
+        <div class="viral-title">Xで50万再生されたアカキクスのソラ即死コンボ撃墜【スマブラSP】#shorts
+          <span class="viral-meta">アカキクス · 2025-12 · 「他SNS実績引用+即死コンボ+自称名」</span>
+        </div>
       </div>
-      <div class="insight-card neg">
-        <span class="letter">B</span>
-        <h3>YouTube自身が警告を出している</h3>
-        <p>「通常より1.0万減」「通常より6,733減」とStudioが明示。<strong>アルゴリズムがこのチャンネルを通常より露出していない直接の証拠。</strong></p>
+      <div class="viral-item">
+        <div class="viral-views">683K</div>
+        <div class="viral-dur short">27s</div>
+        <div class="viral-title">2on2大会で魅せたピタゴラスイッチ連携ｗ(ゲッチ&格闘Mii)【スマブラSP】#shorts
+          <span class="viral-meta">ザクレイ · 2023-05 · 「大会×比喩名詞×意外キャラ」</span>
+        </div>
       </div>
-      <div class="insight-card neu">
-        <span class="letter">C</span>
-        <h3>直近2本で動画の質も崩れた</h3>
-        <p>平均視聴率 103.7% → 111.8% → 82.5% → 67.4%。<strong>4/19のスワイプ離脱47.8%</strong>が判定の決定打になった。</p>
+      <div class="viral-item">
+        <div class="viral-views">667K</div>
+        <div class="viral-dur short">11s</div>
+        <div class="viral-title">大型大会の決勝で開始10秒で神撃墜を決めるアカキクス勇者【スマブラSP】#shorts
+          <span class="viral-meta">アカキクス · 2025-09 · 「場面+数字+神撃墜+キャラ」</span>
+        </div>
       </div>
-      <div class="insight-card neg">
-        <span class="letter">D</span>
-        <h3>Shortsフィード露出も急落</h3>
-        <p>4/21だけ86.9%→82.8%に<strong>-6.2pt</strong>。代わりにブラウジングが13.5%に上昇 = フィードから弾かれ他経路に依存し始めた。</p>
+      <div class="viral-item">
+        <div class="viral-views">638K</div>
+        <div class="viral-dur short">12s</div>
+        <div class="viral-title">120万再生されたソラの即死コンボを再び【スマブラSP】#shorts
+          <span class="viral-meta">アカキクス · 2026-03 · 「既バイラル引用+再現シリーズ化」</span>
+        </div>
       </div>
-      <div class="insight-card pos">
-        <span class="letter">E</span>
-        <h3>ショートで勝負はライト層で決まる</h3>
-        <p>バイラル時は男性94.3%、18-34歳60%超、<strong>ライト層73.8% / コア層0.2%</strong>。ほぼ全員がスマブラ詳しくない層。</p>
+      <div class="viral-item">
+        <div class="viral-views">625K</div>
+        <div class="viral-dur short">25s</div>
+        <div class="viral-title">ソニックの新コンボ？！【スマブラSP】
+          <span class="viral-meta">KEN · 2025-11 · 「キャラ+新技+疑問符」</span>
+        </div>
       </div>
-      <div class="insight-card neg">
-        <span class="letter">F</span>
-        <h3>新規視聴者が直近で消えた</h3>
-        <p>4/14は28.6%、4/16は20.3%、<strong>4/19・4/21は「データ不足」で表示不能</strong>。新規リーチが実質ゼロに。</p>
+      <div class="viral-item">
+        <div class="viral-views">606K</div>
+        <div class="viral-dur short">14s</div>
+        <div class="viral-title">海外大会であcola達が魅せる異次元の空中バトルがヤバすぎた【スマブラSP】#shorts
+          <span class="viral-meta">アカキクス · 2025-09 · 「海外×有名人×異次元×ヤバ形容詞」</span>
+        </div>
       </div>
+      <div class="viral-item">
+        <div class="viral-views">602K</div>
+        <div class="viral-dur short">13s</div>
+        <div class="viral-title">サドンデスで同時撃墜すると、どうなるか知ってる？【スマブラSP】#shorts
+          <span class="viral-meta">アカキクス · 2025-12 · 「雑学フック形式」</span>
+        </div>
+      </div>
+      <div class="viral-item">
+        <div class="viral-views">580K</div>
+        <div class="viral-dur mid">33s</div>
+        <div class="viral-title">スマfor時代のカムイ、SPよりヤバいキャラだった
+          <span class="viral-meta">Raito · 2023-11 · 「比較・歴史・ヤバい」</span>
+        </div>
+      </div>
+      <div class="viral-item">
+        <div class="viral-views">516K</div>
+        <div class="viral-dur mid">34s</div>
+        <div class="viral-title">それはそれとして、気持ちはわかる【スマブラSP】
+          <span class="viral-meta">KEN · 2025-12 · 「共感フレーズ型」</span>
+        </div>
+      </div>
+      <div class="viral-item">
+        <div class="viral-views">479K</div>
+        <div class="viral-dur short">27s</div>
+        <div class="viral-title">暗記して友達を驚かせよう！【スマブラSP】
+          <span class="viral-meta">KEN · 2025-10 · 「命令形+具体的ベネフィット」</span>
+        </div>
+      </div>
+      <div class="viral-item">
+        <div class="viral-views">475K</div>
+        <div class="viral-dur mid">31s</div>
+        <div class="viral-title">厳しい世界だ【スマブラSP】
+          <span class="viral-meta">KEN · 2025-12 · 「ぼやき共感型」</span>
+        </div>
+      </div>
+      <div class="viral-item">
+        <div class="viral-views">471K</div>
+        <div class="viral-dur short">23s</div>
+        <div class="viral-title">全スマブラーが救われる言葉【スマブラSP】
+          <span class="viral-meta">KEN · 2025-10 · 「全◯◯救済フック」</span>
+        </div>
+      </div>
+      <div class="viral-item">
+        <div class="viral-views">459K</div>
+        <div class="viral-dur short">16s</div>
+        <div class="viral-title">未来が明る過ぎる【スマブラSP】
+          <span class="viral-meta">KEN · 2025-12 · 「形容詞一言型」</span>
+        </div>
+      </div>
+      <div class="viral-item">
+        <div class="viral-views">455K</div>
+        <div class="viral-dur short">13s</div>
+        <div class="viral-title">確定コンボ【スマブラSP】
+          <span class="viral-meta">KEN · 2025-10 · 「超シンプル用語型」</span>
+        </div>
+      </div>
+      <div class="viral-item">
+        <div class="viral-views">441K</div>
+        <div class="viral-dur short">20s</div>
+        <div class="viral-title">現代スマブラの火力インフレを感じる【スマブラSP】
+          <span class="viral-meta">KEN · 2025-11 · 「時事・業界トピック型」</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>📊 データで読めること：</strong>
+      50万再生オーバーの15本中、<strong>14本が34秒以下</strong>、<strong>9本が15秒以下</strong>。
+      Rearletさんの直近平均40秒は明確に長すぎる。
+      タイトル末尾の <code>【スマブラSP】</code> <code>#shorts</code> は上位でほぼ全員が使用（検索/分類流入の安定化）。
     </div>
   </div>
 </section>
 
-<!-- ============ 04 悪循環メカニズム ============ -->
-<section id="mechanism" style="background: var(--gray-100);">
+<!-- ============ 04 勝ちパターン ============ -->
+<section id="pattern" style="background: var(--gray-100);">
   <div class="container">
-    <div class="sec-num">04 · MECHANISM</div>
-    <h2>悪循環メカニズム</h2>
+    <div class="sec-num">04 · WINNING PATTERNS</div>
+    <h2>バイラルタイトル 6 つの型</h2>
     <p class="sec-desc">
-      なぜ「動画は優秀なのに伸びない」が起きるのか。時系列で起きたことを追う。
+      上記15本を分解して抽出した、日本スマブラSPショートで実証された勝ちパターン。
+      Rearletさん向けに、どれを使うか具体案もセットで。
     </p>
 
-    <div class="flow-chain">
-      <div class="flow-step warn">
-        <div class="fs-date">4/14</div>
-        <div>
-          <div class="fs-body">動画◎ 維持率103.7%・視聴継続62.8%</div>
-          <div class="fs-sub">でもYouTube「通常より1万減」→ インプレッション既に弱含み</div>
-        </div>
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <div class="pattern-icon">A</div>
+        <h4>自称名×具体場面×神撃墜 型</h4>
+        <p style="font-size:var(--font-sm);color:var(--gray-700);">場面を絞って数字で説得、最後に自分の名前（キャラ+自称）を入れる。</p>
+        <div class="ex">例：大型大会の決勝で開始10秒で神撃墜を決めるアカキクス勇者</div>
+        <div class="ex" style="background:#F0EDFF;color:var(--primary)">Rearlet版：チノスマ決勝で開幕15秒で逆転撃墜したRearletクッパ</div>
       </div>
-      <div class="flow-step warn">
-        <div class="fs-date">4/16</div>
-        <div>
-          <div class="fs-body">動画◎ 維持率111.8%・視聴継続64.7%</div>
-          <div class="fs-sub">でもYouTube「通常より6,733減」→ 停滞が継続</div>
-        </div>
+
+      <div class="pattern-card">
+        <div class="pattern-icon">B</div>
+        <h4>他SNS実績引用×再現 型</h4>
+        <p style="font-size:var(--font-sm);color:var(--gray-700);">「Xで◯万再生されたあのコンボを再び」のようなシリーズ型。初動フックが強い。</p>
+        <div class="ex">例：120万再生されたソラの即死コンボを再び</div>
+        <div class="ex" style="background:#F0EDFF;color:var(--primary)">Rearlet版：30万再生されたクッパの即死コンボを最強カズヤ相手に再現</div>
       </div>
-      <div class="flow-step bad">
-        <div class="fs-date">4/19</div>
-        <div>
-          <div class="fs-body">動画△ スワイプ離脱 47.8%</div>
-          <div class="fs-sub">「半数がスワイプ離脱」= アルゴリズム判定の決定打</div>
-        </div>
+
+      <div class="pattern-card">
+        <div class="pattern-icon">C</div>
+        <h4>共感ぼやき 型</h4>
+        <p style="font-size:var(--font-sm);color:var(--gray-700);">KENが量産。感情フレーズ1行+【スマブラSP】で終わる定型。映像＝単なる撃墜／敗北シーンでOK。</p>
+        <div class="ex">例：厳しい世界だ ／ 気持ちはわかる ／ 未来が明る過ぎる</div>
+        <div class="ex" style="background:#F0EDFF;color:var(--primary)">Rearlet版：クッパ使いの宿命 ／ それでもクッパで勝ちたい</div>
       </div>
-      <div class="flow-step bad">
-        <div class="fs-date">4/21</div>
-        <div>
-          <div class="fs-body">動画× 維持率67.4% / 56秒の長尺</div>
-          <div class="fs-sub">Shortsフィード率 82.8% に急落 = 露出が絞られた</div>
-        </div>
+
+      <div class="pattern-card">
+        <div class="pattern-icon">D</div>
+        <h4>有名人×対戦 型</h4>
+        <p style="font-size:var(--font-sm);color:var(--gray-700);">あcola・ザクレイ・ミーヤー等、スマブラ界隈で名の通った相手名を入れる。</p>
+        <div class="ex">例：海外大会であcola達が魅せる異次元の空中バトル</div>
+        <div class="ex" style="background:#F0EDFF;color:var(--primary)">Rearlet版：日本一ザクレイのロボット相手に、クッパで逆転した試合</div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-icon">E</div>
+        <h4>雑学フック 型</h4>
+        <p style="font-size:var(--font-sm);color:var(--gray-700);">「知ってる？」「実は」で始めて最後まで見させる。</p>
+        <div class="ex">例：サドンデスで同時撃墜すると、どうなるか知ってる？</div>
+        <div class="ex" style="background:#F0EDFF;color:var(--primary)">Rearlet版：クッパの上B、どこまで復帰できるか知ってる？</div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pattern-icon">F</div>
+        <h4>ハンデ・縛り 型</h4>
+        <p style="font-size:var(--font-sm);color:var(--gray-700);">既にRearletさんの3/28「ゴブリンマリオに200%ハンデ」で 278K を出せている、再現可能な型。</p>
+        <div class="ex">例：200%ハンデで勝利しました！</div>
+        <div class="ex" style="background:#F0EDFF;color:var(--primary)">Rearlet版：最強カズヤに150%ハンデで挑んだクッパの結末</div>
       </div>
     </div>
 
     <div class="callout callout-info">
-      <strong>要するに：</strong>
-      4/14・4/16 の動画◎ がインプレッション不足でCTRを証明できず、既にアルゴリズムは露出を絞り始めていた。
-      そこに 4/19（スワイプ47.8%）、4/21（維持率67.4%・56秒長尺）が来て、
-      <strong>「このチャンネルを伸ばすのは危険」と判定が確定</strong>した。
+      <strong>共通の「型」</strong><br>
+      <code>【強キャラ/有名人】 + 【具体数字/場面】 + 【結果・感情】 + 【スマブラSP】#shorts</code><br>
+      長さ：タイトル 25〜35 文字、動画尺 13〜30 秒 が中央値。
     </div>
   </div>
 </section>
 
-<!-- ============ 05 個別診断 ============ -->
-<section id="individual">
+<!-- ============ 05 ギャップ ============ -->
+<section id="gap">
   <div class="container">
-    <div class="sec-num">05 · INDIVIDUAL DIAGNOSIS</div>
-    <h2>動画別 個別診断</h2>
+    <div class="sec-num">05 · GAP ANALYSIS</div>
+    <h2>現状 vs アカキクス模範</h2>
     <p class="sec-desc">
-      直近4本それぞれ、Studioスクショの実データで診断。
+      同ジャンルで最も成長している（med/foll 2位）アカキクスさんと、Rearletさんの現状を定量比較。
+      変えるべき項目がここで全部わかる。
     </p>
 
-    <div class="video-card ok-top">
-      <div class="vc-head">
-        <div class="vc-date">4/14</div>
-        <h3>Rearletクッパ魂の逆転劇 — <span style="color:var(--gray-500); font-weight:500">9,053再生</span></h3>
-        <span class="badge badge-success">動画◎</span>
+    <div style="background:var(--white);border-radius:var(--radius-lg);padding:0 var(--space-24);box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);margin:var(--space-32) 0;">
+      <div class="gap-row">
+        <div class="label">項目</div>
+        <div>現状（Rearlet）</div>
+        <div>アカキクス基準</div>
       </div>
-      <p style="color:var(--gray-700); margin-bottom: var(--space-16)">
-        <strong>平均視聴率 103.7%でループ視聴発生。</strong>動画の完成度は最高だが、
-        タイトル「魂の逆転劇」が抽象的すぎてライト層に刺さらず、CTRが立たなかった可能性が高い。
-      </p>
-      <div class="shot-grid">
-        <div class="shot">
-          <img src="./imgs/4-14_engagement.jpg" alt="4/14 エンゲージメント">
-          <div class="shot-cap">エンゲージメント：視聴継続 62.8% / スワイプ消去 37.2%</div>
-        </div>
-        <div class="shot">
-          <img src="./imgs/4-14_reach.jpg" alt="4/14 リーチ">
-          <div class="shot-cap">リーチ：Shortsフィード 86.9% / <strong style="color:var(--danger)">通常より1.0万減少</strong></div>
-        </div>
+      <div class="gap-row">
+        <div class="label">尺の中央値</div>
+        <div class="now">40秒</div>
+        <div class="target">14秒</div>
       </div>
-    </div>
-
-    <div class="video-card ok-top">
-      <div class="vc-head">
-        <div class="vc-date">4/16</div>
-        <h3>上b空後で逆転撃墜 — <span style="color:var(--gray-500); font-weight:500">11,000再生</span></h3>
-        <span class="badge badge-success">動画◎</span>
+      <div class="gap-row">
+        <div class="label">30秒以下率</div>
+        <div class="now">29%（31本中9本）</div>
+        <div class="target">100%（50本全て）</div>
       </div>
-      <p style="color:var(--gray-700); margin-bottom: var(--space-16)">
-        <strong>平均視聴率 111.8% でループ視聴発生。</strong>動画はさらに優秀。しかし「上b空後」は
-        マニア用語でライト層には意味不明。YouTubeが「通常より 6,733 減」と警告している。
-      </p>
-      <div class="shot-grid">
-        <div class="shot">
-          <img src="./imgs/4-16_engagement.jpg" alt="4/16 エンゲージメント">
-          <div class="shot-cap">エンゲージメント：視聴継続 64.7% / スワイプ消去 35.3%</div>
-        </div>
-        <div class="shot">
-          <img src="./imgs/4-16_reach.jpg" alt="4/16 リーチ">
-          <div class="shot-cap">リーチ：Shortsフィード 89.0% / <strong style="color:var(--danger)">通常より6,733減少</strong></div>
-        </div>
+      <div class="gap-row">
+        <div class="label">タイトル末尾定型</div>
+        <div class="now">#クッパ #スマブラsp #bowser #shorts（任意順）</div>
+        <div class="target">【スマブラSP】#shorts（固定）</div>
       </div>
-    </div>
-
-    <div class="video-card warn-top">
-      <div class="vc-head">
-        <div class="vc-date">4/19</div>
-        <h3>ルナマドさんの大逆転即死コンボ — <span style="color:var(--gray-500); font-weight:500">9,566再生</span></h3>
-        <span class="badge badge-warning">崩壊の瞬間</span>
+      <div class="gap-row">
+        <div class="label">自称ブランド名</div>
+        <div class="now">「Rearlet」たまに入る</div>
+        <div class="target">「アカキクス勇者」ほぼ毎回</div>
       </div>
-      <p style="color:var(--gray-700); margin-bottom: var(--space-16)">
-        <strong>スワイプ離脱 47.8% = 半数が最後まで見ていない。</strong>主語が「ルナマドさん（プレイヤー名）」で
-        ライト層には響かず、43秒の中尺で冒頭フックも弱い。ここでアルゴリズムが判定を下した。
-      </p>
-      <div class="shot-grid">
-        <div class="shot">
-          <img src="./imgs/4-19_engagement.jpg" alt="4/19 エンゲージメント">
-          <div class="shot-cap">エンゲージメント：<strong style="color:var(--danger)">スワイプ離脱 47.8%</strong></div>
-        </div>
-        <div class="shot">
-          <img src="./imgs/4-19_reach.jpg" alt="4/19 リーチ">
-          <div class="shot-cap">リーチ：Shortsフィード 89.0%（まだ露出あり）</div>
-        </div>
+      <div class="gap-row">
+        <div class="label">数字の提示</div>
+        <div class="now">200%ハンデ等たまに</div>
+        <div class="target">再生数・秒数・％をほぼ毎回</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">投稿頻度</div>
+        <div class="now">2〜3日に1本</div>
+        <div class="target">2〜3日に1本（同じ）</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">有名人言及</div>
+        <div class="now">プレイヤー名記載も無名が混在</div>
+        <div class="target">ザクレイ/あcola/ミーヤー等スマブラ界有名人のみ</div>
       </div>
     </div>
 
-    <div class="video-card bad-top">
-      <div class="vc-head">
-        <div class="vc-date">4/21</div>
-        <h3>これが最強クッパRearlet — <span style="color:var(--gray-500); font-weight:500">4,799再生</span></h3>
-        <span class="badge badge-danger">露出停止</span>
-      </div>
-      <p style="color:var(--gray-700); margin-bottom: var(--space-16)">
-        <strong>56秒の長尺 × 自称系タイトル × Shortsフィード率 -6.2pt。</strong>
-        編集・タイトル・露出のすべてが負のスパイラルに入っている。平均視聴率は 67.4% まで低下。
-      </p>
-      <div class="shot-grid">
-        <div class="shot">
-          <img src="./imgs/4-21_engagement.jpg" alt="4/21 エンゲージメント">
-          <div class="shot-cap">エンゲージメント：<strong style="color:var(--danger)">平均視聴率 67.4%</strong></div>
-        </div>
-        <div class="shot">
-          <img src="./imgs/4-21_reach.jpg" alt="4/21 リーチ">
-          <div class="shot-cap">リーチ：<strong style="color:var(--danger)">Shortsフィード 82.8% に急落</strong></div>
-        </div>
-      </div>
+    <div class="callout callout-warning">
+      <strong>🎯 最大ギャップ：尺（40秒→14-20秒）</strong><br>
+      これは編集で30秒カットするだけ。4/19動画 43秒 → 冒頭のお互いの様子3秒を削除し、撃墜→逆転部分だけ13秒に圧縮、
+      みたいな作業。<strong>中身は触らない。切るだけ。</strong>
     </div>
   </div>
 </section>
 
-<!-- ============ 06 バイラル比較 ============ -->
-<section id="viral" style="background: var(--gray-100);">
-  <div class="container">
-    <div class="sec-num">06 · VIRAL BENCHMARK</div>
-    <h2>4/7 バイラル時の視聴者像（比較基準）</h2>
-    <p class="sec-desc">
-      Rearletさんが「ショートで伸びる」と証明した回の視聴者層。これがターゲット像。
-    </p>
-
-    <div class="stat-grid">
-      <div class="stat-box info"><span class="v">136K</span><span class="l">バイラル再生数</span></div>
-      <div class="stat-box success"><span class="v">94.3%</span><span class="l">男性比率</span></div>
-      <div class="stat-box warning"><span class="v">73.8%</span><span class="l">ライト層</span></div>
-      <div class="stat-box danger"><span class="v">0.2%</span><span class="l">コア層（ファン）</span></div>
-    </div>
-
-    <div class="shot-grid">
-      <div class="shot">
-        <img src="./imgs/4-7_viewers.jpg" alt="4/7 視聴者">
-        <div class="shot-cap">視聴行動別：新規26.0% / ライト73.8% / コア0.2%</div>
-      </div>
-      <div class="shot">
-        <img src="./imgs/4-7_demographics.jpg" alt="4/7 年齢・性別">
-        <div class="shot-cap">年齢：25-34歳35% / 18-24歳26% / 13-17歳19%</div>
-      </div>
-    </div>
-
-    <div class="callout callout-success">
-      <strong>💡 重要な示唆：</strong>
-      ショートで伸びる相手は <strong>99%が非コア視聴者（≒スマブラ詳しくない人）</strong>。
-      彼らの語彙で喋らないと、タイトルを見た瞬間にスワイプされる。
-      「カズヤ」「強キャラ」「ハンデ」は通じるが、「ルナマド」「上b空後」「即死コンボ」は通じない。
-    </div>
-  </div>
-</section>
-
-<!-- ============ 07 処方箋 ============ -->
-<section id="prescription">
-  <div class="container">
-    <div class="sec-num">07 · PRESCRIPTION</div>
-    <h2>具体的な処方箋</h2>
-    <p class="sec-desc">
-      今日から打てる3つのアクション。優先度順。
-    </p>
-
-    <!-- 処方箋① -->
-    <div class="card" style="border-left: 4px solid var(--primary); margin-bottom: var(--space-32);">
-      <div class="tags"><span class="tag tag--primary">#1 最優先</span></div>
-      <h3>タイトルを「ライト層語彙」に書き換える</h3>
-      <p style="margin-bottom: var(--space-16)">
-        過去バイラル 4 本は全て具体・一般語彙だった。マニア用語・プレイヤー名・抽象語は捨てる。
-      </p>
-
-      <div class="ngok-grid">
-        <div class="ngok-item ng">
-          <span class="lbl">NG（実際投稿）</span>
-          ルナマドさんの大逆転即死コンボ！？？
-        </div>
-        <div class="ngok-item ok">
-          <span class="lbl">OK（改善案）</span>
-          最強カズヤに追い詰められたクッパが一撃で返した瞬間
-        </div>
-        <div class="ngok-item ng">
-          <span class="lbl">NG</span>
-          これが最強クッパRearlet
-        </div>
-        <div class="ngok-item ok">
-          <span class="lbl">OK</span>
-          世界一クッパ vs 世界一ガノン、1分で決着
-        </div>
-        <div class="ngok-item ng">
-          <span class="lbl">NG</span>
-          Rearletクッパ魂の逆転劇！！
-        </div>
-        <div class="ngok-item ok">
-          <span class="lbl">OK</span>
-          2スト先取されたクッパがラスト30秒で逆転した試合
-        </div>
-        <div class="ngok-item ng">
-          <span class="lbl">NG</span>
-          上b空後で逆転撃墜？！！
-        </div>
-        <div class="ngok-item ok">
-          <span class="lbl">OK</span>
-          負け確定の場面でクッパが意味不明な技で勝った
-        </div>
-      </div>
-
-      <div class="callout callout-info" style="margin-top: var(--space-16)">
-        <strong>タイトル公式：</strong>
-        【強キャラ名 or 数字 or 有名人】＋【具体アクション】＋【感情フック】
-        <br><br>
-        <strong>❌ 避ける：</strong> プレイヤー名（ルナマド、へろー）／マニア技名（上b、空後、即死コンボ）／抽象語（魂、逆転劇）<br>
-        <strong>⭕ 使う：</strong> 「世界一◯◯」「最強の◯◯使い」／「意味不明な技」「ヤバい技」／具体数字（200%ハンデ、5年ぶり）
-      </div>
-    </div>
-
-    <!-- 処方箋②③ -->
-    <div class="grid-2">
-      <div class="card" style="border-left: 4px solid var(--info);">
-        <div class="tags"><span class="tag tag--info">#2</span></div>
-        <h3>尺を 30〜45 秒に固定</h3>
-        <p>バイラル4本の平均は <strong>39秒</strong>。4/21の56秒は明確にNG。編集で30秒前後まで詰める。
-        短いほど視聴維持率が出やすい。</p>
-      </div>
-      <div class="card" style="border-left: 4px solid var(--warning);">
-        <div class="tags"><span class="tag tag--warning">#3</span></div>
-        <h3>冒頭 1 秒にインパクト</h3>
-        <p>4/19のスワイプ47.8%は<strong>冒頭離脱</strong>が多い。
-        0秒時点でキルシーン or 煽りテロップを置き、「続きが気になる」状態を作る。</p>
-      </div>
-    </div>
-
-    <!-- 処方箋④ -->
-    <div class="card" style="border-left: 4px solid var(--success); margin-top: var(--space-24);">
-      <div class="tags"><span class="tag tag--success">#4</span></div>
-      <h3>「刺さる型」で2本連投して露出リブート</h3>
-      <p style="margin-bottom: var(--space-16)">
-        アルゴリズムに「伸ばすと危険」と判定されかけている現状、復活には<strong>高維持率 × 高CTR</strong>の動画を連続で出す必要がある。
-        過去バイラルから逆算した刺さる型は以下3つ。
-      </p>
-      <div class="ch-compare">
-        <div class="ch-card">
-          <div class="ch-avatar" style="background: linear-gradient(135deg, var(--accent), #FF9F43)">H</div>
-          <div class="ch-name">ハンデ縛り型</div>
-          <div class="ch-genre">「ゴブリンマリオに200%ハンデ」型</div>
-          <div class="ch-stats">
-            <div class="ch-stat-row"><span class="k">強み</span><span class="val">条件の具体性</span></div>
-            <div class="ch-stat-row"><span class="k">狙い</span><span class="val">CTR ↑</span></div>
-          </div>
-        </div>
-        <div class="ch-card">
-          <div class="ch-avatar" style="background: linear-gradient(135deg, var(--primary), var(--primary-light))">S</div>
-          <div class="ch-name">有名人×敗北型</div>
-          <div class="ch-genre">「チノスマ主催者に敗北」型</div>
-          <div class="ch-stats">
-            <div class="ch-stat-row"><span class="k">強み</span><span class="val">物語性</span></div>
-            <div class="ch-stat-row"><span class="k">狙い</span><span class="val">維持率 ↑</span></div>
-          </div>
-        </div>
-        <div class="ch-card">
-          <div class="ch-avatar" style="background: linear-gradient(135deg, var(--success), #55EFC4)">N</div>
-          <div class="ch-name">新技お披露目型</div>
-          <div class="ch-genre">「令和クッパの新即死コンボ」型</div>
-          <div class="ch-stats">
-            <div class="ch-stat-row"><span class="k">強み</span><span class="val">新規性</span></div>
-            <div class="ch-stat-row"><span class="k">狙い</span><span class="val">リピート ↑</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="callout callout-warning" style="margin-top: var(--space-16)">
-        <strong>投稿ペースは一時的に 2日1本 → 1週1本 に絞る。</strong>
-        アルゴリズム圏外リスク時は量より質。高クオリティに絞る方が回復が早い。
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 08 ロードマップ ============ -->
+<!-- ============ 06 ロードマップ ============ -->
 <section id="roadmap" style="background: var(--gray-100);">
   <div class="container">
-    <div class="sec-num">08 · ROADMAP</div>
-    <h2>次のアクション</h2>
+    <div class="sec-num">06 · 6-MONTH ROADMAP</div>
+    <h2>半年で50,000人 ロードマップ</h2>
     <p class="sec-desc">
-      タイトル改革は<strong>次の1本から</strong>すぐ始められます。
+      現状 1,140 → 目標 50,000 = +48,860 / 180日。<br>
+      <strong>1ヶ月あたり +8,143 人 / 1週あたり +1,900 人</strong>のペース。既に出せている312K級のバイラルが月1-2本あれば十分射程圏。
     </p>
 
-    <div class="roadmap">
-      <div class="rm-item active">
-        <div class="rm-dot"></div>
-        <div class="rm-phase">PHASE 01 · 今日</div>
-        <h4>次の投稿を改善案タイトルで出す</h4>
-        <p>「世界一◯◯」「最強の◯◯使い」「ヤバい技」で投稿する。NGタイトル表の OK 欄を参考にそのまま使って OK。</p>
+    <div class="phase-card p1">
+      <div class="phase-head">
+        <span class="phase-num">PHASE 1</span>
+        <h3>月1-2：アカキクス型への全面移行</h3>
+        <div class="phase-target">→ 8,000人</div>
       </div>
-      <div class="rm-item">
-        <div class="rm-dot"></div>
-        <div class="rm-phase">PHASE 02 · 今週中</div>
-        <h4>「刺さる型」で 2 本連投して露出リブート</h4>
-        <p>ハンデ縛り型 / 有名人×敗北型 / 新技お披露目型のいずれかで、高クオリティの動画を 2 本連投。アルゴリズム判定をリセット。</p>
+      <p style="color:var(--gray-700);">「尺14-20秒」「【スマブラSP】#shorts 定型」「自称名Rearletクッパ」を3原則として全投稿に適用。</p>
+      <div class="kpi-row">
+        <div class="kpi-pill"><span class="k">月目標登録</span><span class="v">+6,860</span></div>
+        <div class="kpi-pill"><span class="k">週投稿数</span><span class="v">3本</span></div>
+        <div class="kpi-pill"><span class="k">尺目標</span><span class="v">14-20s</span></div>
+        <div class="kpi-pill"><span class="k">バイラル目標</span><span class="v">月1本100K+</span></div>
       </div>
-      <div class="rm-item">
-        <div class="rm-dot"></div>
-        <div class="rm-phase">PHASE 03 · 1週間後</div>
-        <h4>Studioデータを再取得して回復確認</h4>
-        <p>「通常より減少」警告が消えているか、Shortsフィード率が 89% 台に戻っているか、新規視聴者率が 25% 以上に回復しているかを確認。</p>
+      <ul class="action-list">
+        <li>過去の高再生動画（312K/278K/181K）を13秒版に再編集→「あのコンボ、13秒で見せる」形式で再投稿</li>
+        <li>全タイトルに数字・秒数・キャラ名・自称名（Rearletクッパ）を入れる</li>
+        <li>動画末尾に固定の「登録お願いします」テロップ（1秒、Shortsでも効果あり）</li>
+        <li>概要欄の1行目に「クッパ使いRearlet公式。最強クッパを目指す試合集」</li>
+      </ul>
+    </div>
+
+    <div class="phase-card p2">
+      <div class="phase-head">
+        <span class="phase-num">PHASE 2</span>
+        <h3>月3-4：KEN型「共感ぼやき」を混ぜる</h3>
+        <div class="phase-target">→ 25,000人</div>
       </div>
-      <div class="rm-item">
-        <div class="rm-dot"></div>
-        <div class="rm-phase">PHASE 04 · 追加取得</div>
-        <h4>4/7バイラル動画の「リーチ」「エンゲージメント」タブ</h4>
-        <p>今回取得できなかったデータ。追加でもらえれば、バイラル基準（Shortsフィード率・視聴継続率・平均視聴率）と直近の差分が数値で出せる。</p>
+      <p style="color:var(--gray-700);">アカキクス型で動画力を証明したら、KEN型の共感系Shortsを週1本差し込んでファン化を加速。</p>
+      <div class="kpi-row">
+        <div class="kpi-pill"><span class="k">月目標登録</span><span class="v">+8,500</span></div>
+        <div class="kpi-pill"><span class="k">週投稿数</span><span class="v">3-4本</span></div>
+        <div class="kpi-pill"><span class="k">共感動画</span><span class="v">週1本</span></div>
+        <div class="kpi-pill"><span class="k">バイラル目標</span><span class="v">月2本100K+</span></div>
       </div>
+      <ul class="action-list">
+        <li>「クッパ使いの宿命」「環境キャラに負ける時」等の共感タイトルで週1本投稿</li>
+        <li>Sumabato SP 66で9位、Koryu Festivalで9位など実績動画を「世界最強のクッパ使い、全国9位」と打ち出して投稿</li>
+        <li>固定コメントに「次回：日本一のクッパ使いが挑む◯◯」の予告</li>
+        <li>サムネ（最初の1フレーム）に大きなテロップ1行を必ず配置</li>
+      </ul>
+    </div>
+
+    <div class="phase-card p3">
+      <div class="phase-head">
+        <span class="phase-num">PHASE 3</span>
+        <h3>月5-6：有名人対戦・シリーズ化で加速</h3>
+        <div class="phase-target">→ 50,000人</div>
+      </div>
+      <p style="color:var(--gray-700);">登録者2万超えから、大型Shorts連続でバズの複利を作る。</p>
+      <div class="kpi-row">
+        <div class="kpi-pill"><span class="k">月目標登録</span><span class="v">+12,500</span></div>
+        <div class="kpi-pill"><span class="k">週投稿数</span><span class="v">4本</span></div>
+        <div class="kpi-pill"><span class="k">コラボ</span><span class="v">月1-2</span></div>
+        <div class="kpi-pill"><span class="k">バイラル目標</span><span class="v">月3-4本100K+</span></div>
+      </div>
+      <ul class="action-list">
+        <li>あcola・ザクレイ・ミーヤー級との対戦試合を「対◯◯」シリーズ化（過去の試合も再編集でOK）</li>
+        <li>「Xで50万再生された◯◯」→「100万再生された◯◯」のように自己引用シリーズ</li>
+        <li>長尺動画（10-15分）で「クッパ最強を証明する試合集」「チノスマ◯位までの道」を月1本投稿→登録者の定着化</li>
+        <li>へろーさん（同クッパ使い、オンライン王）とのコラボ動画or共演言及</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 次の動画タイトル案 ============ -->
+<section id="titles">
+  <div class="container">
+    <div class="sec-num">07 · TITLE PROPOSALS</div>
+    <h2>次の5本のタイトル案</h2>
+    <p class="sec-desc">
+      Phase 1開始用。既存動画の再編集でも、新規撮影でも使える形にしてあります。
+    </p>
+
+    <div class="title-ex">
+      <strong>1. 最強カズヤに150%ハンデで挑んだクッパの結末【スマブラSP】#shorts</strong>
+      <span class="why">型F（ハンデ縛り）。過去バイラル「200%ハンデ」の続編として出せる。尺：15秒目標</span>
+    </div>
+    <div class="title-ex">
+      <strong>2. 30万再生されたクッパの即死コンボを、最強スティーブ相手に再現【スマブラSP】#shorts</strong>
+      <span class="why">型B（自己実績引用）。3/20 312K動画を引用、別キャラで再現する定番型。尺：13秒</span>
+    </div>
+    <div class="title-ex">
+      <strong>3. 日本9位のRearletクッパ、開幕10秒でザクレイのロボットを撃墜【スマブラSP】#shorts</strong>
+      <span class="why">型A+D（自称名+有名人）。Sumabato9位実績と日本一ザクレイの対比で箔を付ける。尺：12秒</span>
+    </div>
+    <div class="title-ex">
+      <strong>4. クッパ使いにしかわからない瞬間【スマブラSP】</strong>
+      <span class="why">型C（共感ぼやき）。KEN流。映像はシンプルに、撃墜された瞬間の悲しみ等。尺：20秒</span>
+    </div>
+    <div class="title-ex">
+      <strong>5. 2026年最強クッパ使いが使うクッパブレス、実は◯◯できるって知ってた？【スマブラSP】#shorts</strong>
+      <span class="why">型E（雑学フック）。解説型、固定ファン獲得に向く。尺：25秒</span>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:var(--space-32)">
+      <strong>タイトル作成の共通ルール：</strong>
+      <ul style="margin-top:var(--space-8);padding-left:var(--space-24);color:var(--gray-700);font-size:var(--font-sm);">
+        <li>末尾に<code>【スマブラSP】#shorts</code>を必ず固定</li>
+        <li>キャラ名は「クッパ」「カズヤ」「スティーブ」等、誰でも知ってるものに絞る</li>
+        <li>「Rearletクッパ」「最強クッパ使い」「日本9位」等、自称ブランドを毎回入れる</li>
+        <li>抽象語（魂、逆転劇、宿命 etc.）を必ず具体語（秒数、％、キャラ名）で補強</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 今週やること ============ -->
+<section id="action" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">08 · THIS WEEK</div>
+    <h2>今週中にやる3つのこと</h2>
+    <p class="sec-desc">
+      土台作り。これをやると来週からの投稿が別物になります。
+    </p>
+
+    <div class="phase-card p1" style="border-left-color:var(--primary);">
+      <div class="phase-head">
+        <span class="phase-num" style="background:var(--primary)">TASK 01 · 今日</span>
+        <h3>次の1本を「14秒ルール」で投稿</h3>
+      </div>
+      <p style="color:var(--gray-700);">既に撮ってある試合映像（4/14〜4/21のどれか）を、撃墜・逆転の瞬間だけ抜き出して13〜15秒に圧縮。
+      タイトルは上記「次の5本のタイトル案」の1番か2番をベースに使う。</p>
+      <ul class="action-list">
+        <li>編集で不要な冒頭の間合い取りシーンを全カット</li>
+        <li>尺14-17秒・タイトル末尾【スマブラSP】#shorts固定</li>
+        <li>投稿時刻は21:00-22:00（アカキクス・KENの主投稿帯と重ねる）</li>
+      </ul>
+    </div>
+
+    <div class="phase-card p2" style="border-left-color:#E67E22;">
+      <div class="phase-head">
+        <span class="phase-num" style="background:#E67E22">TASK 02 · 3日以内</span>
+        <h3>チャンネル導線を整備</h3>
+      </div>
+      <ul class="action-list">
+        <li>チャンネル概要を「日本9位クッパ使い・Rearlet／最強クッパを証明する試合集」に書き換え</li>
+        <li>トップ動画（312K・278K・181K）を「固定ピン留め」設定に</li>
+        <li>動画末尾1秒に「登録ボタン押してね」の大きなテロップ追加（既存動画も順次）</li>
+        <li>概要欄テンプレ固定：大会実績（Sumabato9位、Koryu9位）を必ず記載</li>
+      </ul>
+    </div>
+
+    <div class="phase-card p3" style="border-left-color:var(--success);">
+      <div class="phase-head">
+        <span class="phase-num" style="background:var(--success)">TASK 03 · 1週間以内</span>
+        <h3>過去バイラル3本を「13秒版」で再投稿</h3>
+      </div>
+      <p style="color:var(--gray-700);">3/20 312K / 3/28 278K / 3/24 181K の3本を、それぞれ13秒にカットして再投稿。
+      タイトルは「30万再生された◯◯を13秒で」のように自己引用型に。</p>
+      <ul class="action-list">
+        <li>元動画より短く、見せ場だけを凝縮（スワイプ離脱しにくい構成）</li>
+        <li>投稿間隔は2日おき（毎日は避け、1本あたり露出期間を確保）</li>
+        <li>1週間後のStudioで、再投稿バージョンの再生数と登録転換を確認</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -1570,41 +1915,30 @@
 <section>
   <div class="container">
     <div class="conclusion">
-      <h2>結論（5点まとめ）</h2>
-      <p style="font-size: var(--font-lg); margin-bottom: var(--space-32);">
-        動画の中身は問題ない。むしろ上位5%級。<br>
-        問題はタイトルで、アルゴリズム露出の悪循環に入っている。<br>
-        タイトル改革＋尺30-45秒＋2本連投で、相当回復できる。
+      <h2>Rearletさんは、既に「登録者が増えてないだけ」</h2>
+      <p>
+        med/foll 17.27 は日本スマブラSP系チャンネルで実測1位。
+        アカキクスの1.8倍、KENの4倍、ザクレイの36倍の「登録者あたり再生効率」があります。
       </p>
-
-      <div style="max-width: 640px; margin: 0 auto; text-align: left; display: grid; gap: var(--space-12);">
-        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #55EFC4">① 動画の質は問題なし。4/14・4/16は上位5%級に優秀</div>
-        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #FFD580">② 問題はタイトルとアルゴリズム露出の悪循環</div>
-        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #FAB1A0">③ 4/19のスワイプ47.8%と4/21の56秒が判定決定打</div>
-        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #A29BFE">④ 回復はタイトル改革＋尺30-45秒＋2本連投で可能</div>
-        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #74B9FF">⑤ サムネ放置でもタイトル改革だけで相当回復する見込み</div>
-      </div>
+      <p>
+        あとは、アカキクス型の尺・タイトル規格に合わせて登録導線を整えるだけ。
+        半年で50,000人は十分射程圏です。
+      </p>
+      <p class="cta-text">
+        次の1本から、尺14秒・【スマブラSP】#shorts 定型・Rearletクッパ自称 で投稿しましょう。
+      </p>
     </div>
   </div>
 </section>
 
 <!-- ============ FOOTER ============ -->
 <footer class="site-footer">
-  <div style="max-width: 720px; margin: 0 auto;">
-    <p style="margin-bottom: var(--space-16)">
-      <strong>Rearlet ショート診断レポート</strong><br>
-      分析期間：2026/01/30 〜 2026/04/21 ／ データ源：YouTube Studio 実スクショ 18 枚
-    </p>
-    <p style="margin-bottom: var(--space-16)">
-      関連ファイル：<br>
-      <code>company/projects/rearlet_analysis/shorts_data/</code> — Raw データ<br>
-      <code>company/projects/rearlet_analysis/shorts_diagnosis_v2.md</code> — Markdown 版<br>
-      <code>~/Downloads/Rearlet_ショート診断レポート.pdf</code> — A4 縦 PDF
-    </p>
-    <p style="opacity: 0.6; font-size: 12px; margin-top: var(--space-32);">
-      © 2026 サポートライン ／ 作成者: 中嶋
-    </p>
-  </div>
+  <p>
+    <strong>Rearlet ショート成長戦略 v2</strong> · データ取得 2026-04-22<br>
+    日本スマブラSP系 8チャンネル（Rearlet / アカキクス / KEN / 智念せいら / マエスマ / ザクレイ / Raito / takera）
+    計 <code>377 本</code>の Shorts 実データを <code>yt-dlp</code> で直接取得し分析。<br>
+    Web情報は参照せず、YouTube API 相当の実数値のみを根拠としています。
+  </p>
 </footer>
 
 </body>
