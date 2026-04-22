@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rearlet Shorts 行動レポート ── 今日から始める半年5万人プラン</title>
+<title>Rearlet Shorts 真犯人レポート ── 原因はタイトルではなかった</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap');
 
@@ -1643,114 +1643,702 @@
   .sec-tight h2 { margin-bottom: var(--space-16); }
 </style>
 
+<style>
+  /* === v5 追加: 真犯人セクション === */
+  .shock-banner {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    padding: var(--space-64) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .shock-banner::before {
+    content: '⚠';
+    position: absolute;
+    font-size: 400px;
+    opacity: 0.08;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .shock-banner .label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 4px;
+    background: rgba(255,255,255,0.15);
+    padding: 6px 16px;
+    border-radius: 100px;
+    display: inline-block;
+    margin-bottom: var(--space-16);
+  }
+  .shock-banner h2 {
+    color: white;
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: var(--space-16);
+    line-height: 1.3;
+    position: relative;
+  }
+  .shock-banner p {
+    font-size: var(--font-lg);
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.7;
+    opacity: 0.95;
+    position: relative;
+  }
+  .shock-banner strong {
+    background: #FFD580;
+    color: #8B1E0F;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 900;
+  }
+
+  /* 逆転テーブル */
+  .reverse-table {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow-lg);
+    margin: var(--space-32) 0;
+    border: 3px solid var(--danger);
+  }
+  .reverse-table h3 {
+    font-size: var(--font-xl);
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: var(--space-24);
+    color: var(--danger);
+  }
+  .reverse-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+  }
+  @media (max-width: 768px) { .reverse-grid { grid-template-columns: 1fr; } }
+  .reverse-col {
+    padding: var(--space-24);
+    border-radius: 12px;
+    border: 2px solid;
+  }
+  .reverse-col.top {
+    border-color: var(--info);
+    background: var(--info-light);
+  }
+  .reverse-col.bot {
+    border-color: var(--success);
+    background: var(--success-light);
+  }
+  .reverse-col .head {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: var(--space-8);
+  }
+  .reverse-col.top .head { color: var(--info); }
+  .reverse-col.bot .head { color: var(--success); }
+  .reverse-col h4 {
+    font-size: var(--font-lg);
+    font-weight: 900;
+    color: var(--gray-900);
+    margin-bottom: var(--space-16);
+  }
+  .reverse-metric {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-8) 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    font-size: var(--font-sm);
+  }
+  .reverse-metric:last-child { border-bottom: none; }
+  .reverse-metric .k { color: var(--gray-600); }
+  .reverse-metric .v {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    color: var(--gray-900);
+  }
+  .reverse-metric .v.big {
+    color: var(--danger);
+    font-size: var(--font-base);
+  }
+
+  /* 犯人カード */
+  .suspect-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    margin: var(--space-32) 0;
+  }
+  .suspect {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    box-shadow: var(--shadow);
+    display: grid;
+    grid-template-columns: 80px 1fr 180px;
+    gap: var(--space-16);
+    align-items: center;
+    border-left: 6px solid var(--gray-300);
+  }
+  @media (max-width: 768px) {
+    .suspect { grid-template-columns: 64px 1fr; }
+    .suspect .weight-bar { grid-column: 1 / -1; margin-top: var(--space-12); }
+  }
+  .suspect.rank1 { border-left-color: var(--danger); }
+  .suspect.rank2 { border-left-color: #E67E22; }
+  .suspect.rank3 { border-left-color: var(--warning); }
+  .suspect.rank4 { border-left-color: var(--primary); }
+  .suspect.rank5 { border-left-color: var(--info); }
+  .suspect.rank6 { border-left-color: var(--success); }
+  .suspect .medal {
+    font-size: 40px;
+    text-align: center;
+    line-height: 1;
+  }
+  .suspect h4 {
+    font-size: var(--font-lg);
+    font-weight: 900;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+  }
+  .suspect .why {
+    font-size: var(--font-sm);
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+  .suspect .why strong { color: var(--gray-900); }
+  .suspect .weight-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .suspect .weight-bar .weight-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--gray-500);
+    font-family: 'Inter', sans-serif;
+  }
+  .suspect .weight-bar .bar {
+    background: var(--gray-100);
+    height: 12px;
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .suspect .weight-bar .fill {
+    height: 100%;
+    border-radius: 100px;
+  }
+  .suspect.rank1 .fill { background: var(--danger); width: 100%; }
+  .suspect.rank2 .fill { background: #E67E22; width: 80%; }
+  .suspect.rank3 .fill { background: var(--warning); width: 65%; }
+  .suspect.rank4 .fill { background: var(--primary); width: 50%; }
+  .suspect.rank5 .fill { background: var(--info); width: 35%; }
+  .suspect.rank6 .fill { background: var(--success); width: 25%; }
+
+  /* サムネ設計 */
+  .thumb-anatomy {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    margin: var(--space-32) 0;
+  }
+  .thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-16);
+    margin-top: var(--space-16);
+  }
+  @media (max-width: 900px) { .thumb-grid { grid-template-columns: 1fr; } }
+  .thumb-mock {
+    background: linear-gradient(135deg, #2C3E50, #4A5F78);
+    border-radius: 8px;
+    aspect-ratio: 9/16;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .thumb-mock.good {
+    background: linear-gradient(135deg, #C0392B 0%, #E67E22 50%, #F1C40F 100%);
+  }
+  .thumb-mock.bad {
+    background: linear-gradient(135deg, #34495E, #2C3E50);
+  }
+  .thumb-mock .top-txt {
+    font-weight: 900;
+    font-size: 20px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+    line-height: 1.2;
+  }
+  .thumb-mock .bot-txt {
+    font-weight: 900;
+    font-size: 28px;
+    text-align: center;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.7);
+    line-height: 1.1;
+  }
+  .thumb-mock .badge {
+    display: inline-block;
+    background: #E74C3C;
+    color: white;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    align-self: flex-start;
+  }
+  .thumb-mock .center-icon {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    opacity: 0.9;
+  }
+  .thumb-label {
+    text-align: center;
+    margin-top: var(--space-8);
+    font-size: var(--font-sm);
+    font-weight: 700;
+    color: var(--gray-700);
+  }
+  .thumb-spec {
+    margin-top: var(--space-12);
+    font-size: var(--font-xs);
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+
+  /* 冒頭1秒フック */
+  .hook-viz {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    margin: var(--space-32) 0;
+  }
+  .hook-frames {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-8);
+    margin: var(--space-24) 0;
+  }
+  @media (max-width: 768px) { .hook-frames { grid-template-columns: repeat(2, 1fr); } }
+  .frame {
+    aspect-ratio: 9/16;
+    background: linear-gradient(135deg, #34495E, #2C3E50);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    font-weight: 900;
+    font-size: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  .frame .t {
+    background: rgba(0,0,0,0.5);
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+  }
+  .frame .body { font-size: 14px; line-height: 1.3; }
+  .frame .emoji { font-size: 32px; }
+  .frame.ok { background: linear-gradient(135deg, #27AE60, #2ECC71); }
+  .frame.warn { background: linear-gradient(135deg, #E67E22, #F39C12); }
+
+  /* 4要素カード */
+  .four-elem-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  @media (max-width: 768px) { .four-elem-grid { grid-template-columns: 1fr; } }
+  .elem {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    box-shadow: var(--shadow);
+    border-top: 5px solid var(--primary);
+  }
+  .elem.e2 { border-top-color: #E67E22; }
+  .elem.e3 { border-top-color: var(--success); }
+  .elem.e4 { border-top-color: var(--info); }
+  .elem .elem-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+  .elem .elem-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background: var(--primary-light);
+  }
+  .elem.e2 .elem-icon { background: var(--warning-light); }
+  .elem.e3 .elem-icon { background: var(--success-light); }
+  .elem.e4 .elem-icon { background: var(--info-light); }
+  .elem h4 {
+    font-size: var(--font-lg);
+    font-weight: 900;
+    color: var(--gray-900);
+  }
+  .elem .elem-hint {
+    font-size: var(--font-sm);
+    color: var(--gray-600);
+    line-height: 1.6;
+    margin-bottom: var(--space-12);
+  }
+  .elem .elem-do {
+    background: var(--success-light);
+    border-left: 3px solid var(--success);
+    border-radius: 0 8px 8px 0;
+    padding: var(--space-12);
+    font-size: var(--font-sm);
+    color: var(--gray-800);
+    line-height: 1.6;
+  }
+  .elem .elem-do strong {
+    color: var(--success);
+    font-weight: 900;
+    display: block;
+    margin-bottom: 4px;
+    font-size: var(--font-xs);
+    letter-spacing: 1px;
+  }
+</style>
+
 
 <body>
 
 <div class="report-meta">
-  🎮 REARLET SHORTS <strong>行動</strong>レポート v4 · 2026-04-22 · 日本スマブラSP 11ch 406本解析 · 実タイトル31本に基づく変換案
+  🎮 REARLET SHORTS <strong>真犯人</strong>レポート v5 · 2026-04-22 · 原因を徹底再検証
 </div>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="hero-content">
     <div class="hero-badge">
-      <span>●</span> ACTION FIRST · 5分読んで次の1本が撮れる
+      <span>●</span> REAL CAUSE ANALYSIS · データで検証済み
     </div>
     <h1>
-      読んだら、<span class="highlight">次の1本</span>が作れる。<br>
-      半年で5万人。
+      原因は、<span class="highlight">タイトルじゃなかった。</span><br>
+      真犯人は別にいる。
     </h1>
     <p class="hero-sub">
-      データも戦略も書いてありますが、まず <strong style="color:#FFD580">「今日やる3つ」</strong> から読んでください。<br>
-      後半に詳細分析（11ch・406本のデータ）も入れてますが、<strong style="color:#FFD580">最初の§A〜§Hだけ読めば行動できます</strong>。
+      Rearletさんの実データ31本を「再生数上位 vs 下位」で再分析した結果、
+      <strong style="color:#FFD580">驚きの事実</strong>が判明しました。<br>
+      前レポートの <strong style="color:#FFD580">優先順位を完全に見直し</strong>、本当に効く改善ポイントを提示します。
     </p>
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="val" style="color:#55EFC4">§A</span>
-        <span class="lbl">今日やる3つ</span>
+        <span class="val" style="color:#FAB1A0">逆転</span>
+        <span class="lbl">下位の方がいいね率高い</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#FDCB6E">§B</span>
-        <span class="lbl">直近動画の変換</span>
+        <span class="val" style="color:#FFD580">1.23%</span>
+        <span class="lbl">下位25%のいいね率</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#A29BFE">§C</span>
-        <span class="lbl">タイトル穴埋め</span>
+        <span class="val" style="color:#55EFC4">0.85%</span>
+        <span class="lbl">上位25%のいいね率</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#FAB1A0">§H</span>
-        <span class="lbl">今週チェック</span>
+        <span class="val" style="color:#A29BFE">#1</span>
+        <span class="lbl">真犯人はサムネイル</span>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ============ §A 今日やる3つ ============ -->
+<!-- ============ ショックバナー ============ -->
+<section class="shock-banner">
+  <div class="container">
+    <div class="label">⚠ 衝撃の発見</div>
+    <h2>下位動画の方が、<br>視聴者の反応が良い</h2>
+    <p>
+      Rearletさんの <strong>下位25%動画の「いいね率」は1.23%</strong>。
+      上位25%動画の <strong>0.85%</strong> より、実に <strong>45%も高い</strong>。<br>
+      つまり「再生されれば、内容は評価されている」。問題は <strong>クリックの手前</strong> にあります。
+    </p>
+  </div>
+</section>
+
+<!-- ============ §0 原因の再解剖 ============ -->
 <section>
   <div class="container">
-    <div class="sec-num">§A · TODAY'S 3 STEPS</div>
-    <h2>今日、これだけやる</h2>
+    <div class="sec-num">§0 · ROOT CAUSE</div>
+    <h2>原因の再解剖：タイトルは主犯ではない</h2>
     <p class="sec-desc">
-      5万人への道は、この3つを<strong>今日1日</strong>でやれば始まります。合計30分、頭は使いません。
+      Rearletさん31本の実データで、再生数上位/下位を <strong>タイトル品質スコア・いいね率・コメ率・尺</strong> 全軸で比較。
+      仮説「タイトルが原因」は部分的に正しいが、<strong>最大要因ではない</strong>ことが分かりました。
+    </p>
+
+    <div class="reverse-table">
+      <h3>🔬 再生数トップ25% vs 下位25% 全項目比較</h3>
+      <div class="reverse-grid">
+        <div class="reverse-col top">
+          <div class="head">ZONE · TOP 25%</div>
+          <h4>再生194,858回</h4>
+          <div class="reverse-metric">
+            <span class="k">代表動画</span>
+            <span class="v">チノスマ敗北(312K)</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">いいね率</span>
+            <span class="v">0.85%</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">コメント率</span>
+            <span class="v">0.022%</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">タイトル品質</span>
+            <span class="v big">2.2/7</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">平均尺</span>
+            <span class="v">38.4秒</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">大会ワード含む</span>
+            <span class="v">40%</span>
+          </div>
+        </div>
+
+        <div class="reverse-col bot">
+          <div class="head">ZONE · BOTTOM 25%</div>
+          <h4>再生5,161回</h4>
+          <div class="reverse-metric">
+            <span class="k">代表動画</span>
+            <span class="v">Komeリベンジ(3.7K)</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">いいね率</span>
+            <span class="v big">1.23% ↑45%</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">コメント率</span>
+            <span class="v big">0.111% ↑5倍</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">タイトル品質</span>
+            <span class="v">1.6/7</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">平均尺</span>
+            <span class="v">51.0秒</span>
+          </div>
+          <div class="reverse-metric">
+            <span class="k">大会ワード含む</span>
+            <span class="v">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>🔑 このデータが示す3つの事実：</strong><br>
+      ① <strong>下位動画の中身は、決して悪くない</strong>（むしろ反応はいい）<br>
+      ② <strong>上位動画が伸びた主因は「クリックされる力」</strong>（＝サムネ＋タイトル）<br>
+      ③ <strong>上位・下位の最大差は「大会ワード有無」と「ハンデ要素」</strong>（タイトル品質の差はわずか0.6ポイント）
+    </div>
+
+    <h3 style="margin-top:var(--space-48);font-size:var(--font-xl);font-weight:900;">⚖️ 原因の優先順位を再設定</h3>
+    <p style="color:var(--gray-700);line-height:1.8;margin-bottom:var(--space-24);">
+      前レポートはタイトル中心でしたが、実データ再分析の結果、以下が正しい優先順位です。
+      各要素に「改善効果の重み（バー）」を示しています。
+    </p>
+
+    <div class="suspect-list">
+      <div class="suspect rank1">
+        <div class="medal">🥇</div>
+        <div>
+          <h4>#1 サムネイル</h4>
+          <div class="why">
+            Shortsはスワイプ中に <strong>0.3-0.5秒</strong> で判断される。タイトルより <strong>先に</strong> 見られる最重要要素。
+            Rearletさん現在は<strong>動画スクショ任せ</strong>が多く、表情・テロップ・色味の設計が不足。
+            <strong>§I で徹底改善案あり</strong>。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">IMPACT · 100%</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+
+      <div class="suspect rank2">
+        <div class="medal">🥈</div>
+        <div>
+          <h4>#2 冒頭1秒のフック</h4>
+          <div class="why">
+            Shortsでスクロール継続が決まるのは <strong>冒頭1秒</strong>。
+            現状 Rearlet は「試合開幕演出」を残すケースが多く、視聴維持率が急落。
+            <strong>§J で冒頭の型を提示</strong>。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">IMPACT · 80%</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+
+      <div class="suspect rank3">
+        <div class="medal">🥉</div>
+        <div>
+          <h4>#3 撃墜演出・BGM・SE</h4>
+          <div class="why">
+            スマブラShortsは「画の強度」勝負。バイラル動画は必ず <strong>スローモ・ズーム・効果音</strong> の加工あり。
+            Rearlet は素のゲーム画面が多く、視覚的インパクトが弱い。<strong>§K 第1要素</strong>。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">IMPACT · 65%</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+
+      <div class="suspect rank4">
+        <div class="medal">4️⃣</div>
+        <div>
+          <h4>#4 タイトル</h4>
+          <div class="why">
+            重要だが、サムネより後。タイトル品質スコアは上位2.2 vs 下位1.6 と、差は限定的。
+            ただし末尾の <code>【スマブラSP】#shorts</code> 定型化はアルゴリズム的に効く。<strong>前章の§B/§C 参照</strong>。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">IMPACT · 50%</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+
+      <div class="suspect rank5">
+        <div class="medal">5️⃣</div>
+        <div>
+          <h4>#5 尺（14-25秒化）</h4>
+          <div class="why">
+            上位平均38秒、下位51秒でやや差があるが、これ単独の影響は大きくない。
+            ただし <strong>上位25%本（アカキクス14s）への到達にはマスト</strong>。前章§E 参照。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">IMPACT · 35%</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+
+      <div class="suspect rank6">
+        <div class="medal">6️⃣</div>
+        <div>
+          <h4>#6 投稿頻度</h4>
+          <div class="why">
+            週2.65→週4-5本への増加は確実にアルゴリズム露出を増やすが、それ単独では再生数爆発には直結しない。
+            <strong>#1-#5 の改善と合わせて効く土台</strong>。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">IMPACT · 25%</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-danger">
+      <strong>⚠️ 前レポートとの大きな違い：</strong>
+      前レポートは「タイトル→尺→投稿頻度」の順で扱いました。
+      でも、Rearletさんの<strong>下位動画のいいね率が1.23%で同規模Shuton（1.29%）と近い</strong>ことから、
+      <strong>中身の力は既にある</strong>と判断できます。
+      だから、最優先は<strong>「届けるための入口＝サムネ」</strong>です。
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ §A 今日やる3つ（修正版） ============ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">§A · TODAY'S 3 STEPS</div>
+    <h2>今日やる3つ（真犯人ベース）</h2>
+    <p class="sec-desc">
+      サムネ改善が最優先に変わったので、今日の3タスクもそれに合わせて再設計しました。
     </p>
 
     <div class="step-hero">
       <div class="step-card" data-step="1">
-        <div class="step-label">STEP 1</div>
-        <div class="step-time">今から15分</div>
-        <h3>直近1本を<br>16秒版に切る</h3>
+        <div class="step-label">STEP 1 · 新規</div>
+        <div class="step-time">今から30分</div>
+        <h3>次の1本の<br>サムネを作る</h3>
         <div class="step-body">
-          直近の動画を <strong>14〜20秒</strong> に縮めるだけ。撮り直し不要。
-          撃墜の瞬間＋結果テロップ2秒＋余韻2秒、それ以外はすべてカット。
+          Canvaで <strong>9:16 (1080x1920)</strong> の縦長サムネを1枚作る。
+          顔orキャラアップ＋大文字テロップ3語＋赤や黄色の派手色。
+          後述§Iに作り方の設計図あり。
         </div>
         <div class="step-cta">
-          <strong>どの動画？</strong>
-          4/14「魂の逆転劇」25秒→16秒、または4/16「上b空後で逆転撃墜」22秒→14秒
-          のどちらか。後述の§Eに切り方の図解あり。
+          <strong>テンプレ例：</strong>
+          上半分＝キャラ（クッパ）のアップ顔<br>
+          下半分＝「200%ハンデ<br>日本9位 VS 最強カズヤ」（黄色+赤縁取りで大文字）
         </div>
       </div>
 
       <div class="step-card s2" data-step="2">
         <div class="step-label">STEP 2</div>
-        <div class="step-time">今から5分</div>
-        <h3>タイトルを<br>公式に当てはめる</h3>
+        <div class="step-time">今から15分</div>
+        <h3>冒頭1秒を<br>作り直す</h3>
         <div class="step-body">
-          後述§Cの <strong>穴埋めテンプレ</strong> に、今日の動画の内容を入れる。
-          「！」を「？」に変えて、末尾を<code>【スマブラSP】#shorts</code>で固定。
+          動画の先頭0-1秒に <strong>「VS 最強カズヤ / 200%ハンデ」</strong>
+          の巨大テロップ＋効果音（バシッ！）を追加。スワイプの指を止める。
         </div>
         <div class="step-cta">
-          <strong>例：</strong>
-          「上b空後で逆転撃墜？！！」
-          →「最凶カズヤの即死、<br>クッパで耐えられますか？【スマブラSP】#shorts」
+          <strong>NG：</strong>ステージ選択画面、試合開始カウントダウン<br>
+          <strong>OK：</strong>冒頭いきなり撃墜シーンの一部フラッシュ→条件テロップ
         </div>
       </div>
 
       <div class="step-card s3" data-step="3">
         <div class="step-label">STEP 3</div>
         <div class="step-time">21時ジャスト</div>
-        <h3>夜21時に<br>投稿する</h3>
+        <h3>サムネ＋タイトル<br>セットで投稿</h3>
         <div class="step-body">
-          スマブラ層の退勤〜就寝前がゴールデンタイム。
-          <strong>投稿ボタンを押すだけ</strong>。コメント欄には「次回：〇〇予告」を固定。
+          新サムネ＆修正タイトル（前章§C参照）＆16秒版を <strong>21時ジャスト</strong>に。
+          投稿後30分で、Studioで「インプレッションCTR」の数字を確認。
         </div>
         <div class="step-cta">
-          <strong>投稿後30分でやること：</strong>
-          早期コメントにいいね＋返信、視聴者保持率＆CTRをStudioで即確認。
-          数値が悪ければ翌日にタイトル差し替えで再挑戦。
+          <strong>CTR目標：</strong>
+          現状推定2-3% → <strong>新サムネで6-10%</strong>へ。
+          Shortsの平均CTRは8%前後が理想。
         </div>
       </div>
     </div>
 
     <div class="callout callout-success">
-      <strong>🎯 今日これをやると何が起きるか：</strong>
-      Rearletさんの med/foll 17.27 は既に全11chで1位。
-      あとは <strong>尺を短く</strong>・<strong>タイトルを型に</strong>・<strong>投稿時刻を固定</strong> の3条件が揃うだけで、
-      平均再生は現在の 19,691回 → 40,000〜80,000回 のレンジに到達可能です（同型チャンネルの実績値）。
+      <strong>🎯 新しい仮説：</strong>
+      Rearletさんの下位動画は「中身いいのに入口で止まっていた」。
+      サムネで入口を強化し、冒頭1秒で離脱を防げば、
+      <strong>今の動画スキルのまま再生数が2-5倍に跳ねる可能性</strong>があります（あくまで可能性）。
     </div>
   </div>
 </section>
-
 <!-- ============ §B Before→After ============ -->
 <section style="background: var(--gray-100);">
   <div class="container">
@@ -2416,12 +3004,320 @@
   </div>
 </section>
 
+
+<!-- ============ §I サムネイル改善 ============ -->
+<section>
+  <div class="container">
+    <div class="sec-num">§I · THUMBNAIL</div>
+    <h2>真犯人#1：サムネイル改善の設計図</h2>
+    <p class="sec-desc">
+      サムネがShortsで果たす役割は「スワイプの指を止める」こと。
+      バイラル系チャンネルのサムネ共通構造から、Rearlet用の設計ルールを抽出しました。
+    </p>
+
+    <div class="thumb-anatomy">
+      <h3 style="font-size:var(--font-lg);font-weight:900;margin-bottom:var(--space-16);">
+        ❌ Rearlet現状サムネの問題 vs ⭕ 理想型
+      </h3>
+      <div class="thumb-grid">
+        <div>
+          <div class="thumb-mock bad">
+            <span class="badge">BEFORE</span>
+            <div class="center-icon" style="opacity:0.3;">🎮</div>
+            <div class="bot-txt" style="font-size:14px;">動画のスクショ<br>そのまま</div>
+          </div>
+          <div class="thumb-label">❌ 現状：動画任せ</div>
+          <div class="thumb-spec">
+            ・スクショそのままで情報量ゼロ<br>
+            ・小さい文字は読めない<br>
+            ・スワイプ中の視認性×
+          </div>
+        </div>
+
+        <div>
+          <div class="thumb-mock good">
+            <span class="badge">AFTER</span>
+            <div class="top-txt">日本9位<br>クッパ</div>
+            <div class="center-icon">😤</div>
+            <div class="bot-txt">200%<br>ハンデ</div>
+          </div>
+          <div class="thumb-label">⭕ 理想型：情報+表情+大文字</div>
+          <div class="thumb-spec">
+            ・肩書「日本9位」で権威性<br>
+            ・キャラ顔で感情伝達<br>
+            ・下段に条件（200%ハンデ）
+          </div>
+        </div>
+
+        <div>
+          <div class="thumb-mock good" style="background:linear-gradient(135deg, #8E44AD 0%, #3498DB 100%);">
+            <span class="badge">AFTER</span>
+            <div class="top-txt">VS<br>最強カズヤ</div>
+            <div class="center-icon">⚡</div>
+            <div class="bot-txt">撃墜<br>できる？</div>
+          </div>
+          <div class="thumb-label">⭕ 疑問型：好奇心刺激</div>
+          <div class="thumb-spec">
+            ・相手名明記で検索HIT<br>
+            ・疑問で結末を見たくさせる<br>
+            ・Shuton型サムネに近い
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:var(--space-48);font-size:var(--font-xl);font-weight:900;">サムネ6つの必須ルール</h3>
+    <div class="dodont" style="margin-top: var(--space-24);">
+      <div class="dd-col do">
+        <h3><span class="ic">⭕</span> 必ず入れる6要素</h3>
+        <ul>
+          <li><b>①肩書：</b>「日本9位」「チノスマTOP8」等の権威ワード（左上に小さく）</li>
+          <li><b>②顔orキャラ：</b>感情が伝わる表情のアップ（驚き・悔しさ・笑顔）</li>
+          <li><b>③数字：</b>「200%」「30万再生」「5年ぶり」等の具体数値</li>
+          <li><b>④相手名：</b>「vs 最強カズヤ」「vs ザクレイ」等の固有名詞</li>
+          <li><b>⑤大文字テロップ：</b>3語以内、塗り潰し＋縁取り、スマホで読める大きさ</li>
+          <li><b>⑥色コントラスト：</b>赤or黄色の派手色でスワイプ中でも目立たせる</li>
+        </ul>
+      </div>
+      <div class="dd-col dont">
+        <h3><span class="ic">❌</span> 絶対NG</h3>
+        <ul>
+          <li><b>①動画スクショ任せ：</b>ゲーム画面そのままだと埋もれる</li>
+          <li><b>②小さいフォント：</b>スマホのShortsフィードで読めない</li>
+          <li><b>③白背景・単色：</b>視認性低く、他動画に負ける</li>
+          <li><b>④情報過多：</b>4個以上の要素を詰め込まない</li>
+          <li><b>⑤グラデ抑えめ：</b>パステル系は弱い、派手に振り切る</li>
+          <li><b>⑥キャラ後ろ向き・遠景：</b>必ず正面or横顔の近景</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>🛠 Canvaでの作り方（15分）：</strong>
+      ① 1080x1920（縦長）でキャンバス新規作成<br>
+      ② 背景に赤or黄色のグラデーション<br>
+      ③ 上1/3：肩書「日本9位クッパ」（白文字＋黒縁取り）<br>
+      ④ 中央：クッパor自分の顔の切り抜き画像（感情表現の強いもの）<br>
+      ⑤ 下1/3：条件or疑問「200%ハンデ」等を黄色ベタ文字＋赤縁取り<br>
+      ⑥ 書き出し（PNG）→ YouTube Studio でカスタムサムネ設定
+    </div>
+  </div>
+</section>
+
+<!-- ============ §J 冒頭1秒フック ============ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">§J · FIRST SECOND HOOK</div>
+    <h2>真犯人#2：冒頭1秒の作り方</h2>
+    <p class="sec-desc">
+      Shortsの視聴維持率は <strong>0-1秒で50%以上が決まる</strong>。
+      ここで「見続ける理由」を示せないと、その後どれだけ良くても離脱されます。
+    </p>
+
+    <div class="hook-viz">
+      <h3 style="font-size:var(--font-lg);font-weight:900;margin-bottom:var(--space-16);">
+        ⏱️ 0-5秒の理想フレーム設計
+      </h3>
+      <div class="hook-frames">
+        <div class="frame ok">
+          <span class="t">0.0s</span>
+          <div class="body">撃墜シーンの<br>一瞬フラッシュ</div>
+          <div class="emoji">⚡</div>
+        </div>
+        <div class="frame ok">
+          <span class="t">0.5-1.5s</span>
+          <div class="body">条件テロップ<br>「200%ハンデ」</div>
+          <div class="emoji">💥</div>
+        </div>
+        <div class="frame warn">
+          <span class="t">1.5-3s</span>
+          <div class="body">対戦相手紹介<br>「VS 最強カズヤ」</div>
+          <div class="emoji">🔥</div>
+        </div>
+        <div class="frame warn">
+          <span class="t">3-5s</span>
+          <div class="body">直前のやり取り<br>を素早く</div>
+          <div class="emoji">⚔️</div>
+        </div>
+        <div class="frame">
+          <span class="t">5-16s</span>
+          <div class="body">撃墜の<br>瞬間＋結果</div>
+          <div class="emoji">🏆</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dodont">
+      <div class="dd-col do">
+        <h3><span class="ic">⭕</span> 冒頭1秒に入れる3要素</h3>
+        <ul>
+          <li><b>①視覚的インパクト：</b>撃墜の一瞬の映像を冒頭に先出し（スロー or 静止画）</li>
+          <li><b>②効果音：</b>「バシッ！」「ドン！」系のSEでスワイプの指を止める</li>
+          <li><b>③条件テロップ：</b>「200%ハンデ」「5年ぶりリベンジ」等、動画を見る理由</li>
+        </ul>
+      </div>
+      <div class="dd-col dont">
+        <h3><span class="ic">❌</span> 冒頭にやってはいけない</h3>
+        <ul>
+          <li><b>①ステージ選択・READY：</b>絶対カット、3秒で離脱</li>
+          <li><b>②BGMのフェードイン：</b>静かな立ち上がりは即脱落</li>
+          <li><b>③挨拶・名乗り：</b>Shortsには不要（長尺用）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-success">
+      <strong>🎬 具体例・Rearlet 4/16「上b空後で逆転撃墜」22秒版の改造案：</strong><br>
+      現状（推定）：試合開幕→攻防→撃墜 の22秒<br>
+      改造版：<br>
+      <strong>0-1秒</strong>「上b空後で逆転撃墜の瞬間」をスロー再生＋SE（ネタバレ先出し）<br>
+      <strong>1-3秒</strong>「VS 最凶カズヤ／2ストックビハインド」テロップ<br>
+      <strong>3-10秒</strong>：直前のやり取り（早送り）<br>
+      <strong>10-14秒</strong>：撃墜の瞬間を通常速度で再生<br>
+      <strong>14-16秒</strong>：「日本9位クッパ」勝利テロップ＋登録促し<br>
+      → 先出しで視聴維持率が一気に高まり、アルゴリズム評価が跳ねる。
+    </div>
+  </div>
+</section>
+
+<!-- ============ §K 中身の4要素 ============ -->
+<section>
+  <div class="container">
+    <div class="sec-num">§K · CONTENT 4 ELEMENTS</div>
+    <h2>真犯人#3：動画の中身の4要素</h2>
+    <p class="sec-desc">
+      Rearletさんの動画は既に「いいね率」ではShutonに近いレベル。
+      でもバイラル系チャンネル（Raito 2.27%、せいら 1.85%）にはまだ差があります。
+      そこを埋める4つの改善要素。
+    </p>
+
+    <div class="four-elem-grid">
+      <div class="elem">
+        <div class="elem-head">
+          <div class="elem-icon">⚡</div>
+          <h4>①撃墜演出の強化</h4>
+        </div>
+        <div class="elem-hint">
+          撃墜の瞬間を <strong>0.5倍スロー＋ズームイン＋リプレイ</strong> の3点セットで再構成。
+          プロトバナム・アカキクスはこれを必ず入れています。
+        </div>
+        <div class="elem-do">
+          <strong>今日やる</strong>
+          CapCutで撃墜の直前1秒を0.5倍速にして、
+          その後に同じシーンを0.3倍で繰り返す（計約2-3秒）。
+          効果音「キラーン」も追加。
+        </div>
+      </div>
+
+      <div class="elem e2">
+        <div class="elem-head">
+          <div class="elem-icon">🎵</div>
+          <h4>②BGM・SEで緊張感</h4>
+        </div>
+        <div class="elem-hint">
+          静かな試合映像は Shorts で一番弱い。
+          <strong>BGMは終始派手系、SEは撃墜ごとに必ず入れる</strong>。
+          音が変わるタイミング=視聴者の集中が戻る瞬間。
+        </div>
+        <div class="elem-do">
+          <strong>今日やる</strong>
+          CapCutの無料BGMから「スポーツ系ハードロック」を選択、
+          撃墜の瞬間に「バシッ！」「ドン！」のSEを1発、
+          勝利時に「キラーン」を追加。
+        </div>
+      </div>
+
+      <div class="elem e3">
+        <div class="elem-head">
+          <div class="elem-icon">📖</div>
+          <h4>③ストーリー構造</h4>
+        </div>
+        <div class="elem-hint">
+          「状況→緊張→決着」の3幕構造。
+          Shuton型は「できますか？」で期待を作り、結末で応える。
+          Rearletの下位動画は結末まで平坦に流している。
+        </div>
+        <div class="elem-do">
+          <strong>今日やる</strong>
+          冒頭1-3秒で「問い」を立てる（例：2ストビハ、最凶カズヤ、勝てるのか）→
+          中盤3-10秒で「緊張」（ギリギリの攻防）→
+          終盤10-16秒で「決着」（撃墜＋勝利）。
+        </div>
+      </div>
+
+      <div class="elem e4">
+        <div class="elem-head">
+          <div class="elem-icon">💬</div>
+          <h4>④エンゲージ誘導</h4>
+        </div>
+        <div class="elem-hint">
+          いいね率1.23%はすでに標準以上。でもバイラル層はコメ率で差をつける。
+          <strong>動画末尾 or 固定コメで「問いかけ」</strong>を置く。
+        </div>
+        <div class="elem-do">
+          <strong>今日やる</strong>
+          動画末尾テロップに「みんなはどう思う？」<br>
+          固定コメで「次はどのキャラと当たりたい？」<br>
+          → コメ返しでエンゲージ率↑、アルゴ評価↑。
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>📊 中身改善の成果目安：</strong>
+      いいね率 0.93% → <strong>1.5%以上</strong>（Shuton/ブリカワ水準）になれば、
+      同じインプレッションから <strong>1.6倍の視聴維持</strong> が期待できます。
+      サムネ改善 × 冒頭フック × 中身改善 の3つが揃うと、
+      <strong>平均再生が現状の2-3倍に跳ねる</strong>のが現実的な目標値です。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 統合サマリー ============ -->
+<section style="background: var(--gray-900); color: white;">
+  <div class="container">
+    <div class="sec-num" style="color:#FFD580;">THE WAY · 統合サマリー</div>
+    <h2 style="color:white;">結局、何をすればいいのか</h2>
+    <p class="sec-desc" style="color:rgba(255,255,255,0.8);">
+      今日・今週・今月 の3スケールで、何をやるかをもう一度整理します。
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-16);margin:var(--space-32) 0;">
+      <div style="background:rgba(255,255,255,0.05);border-radius:var(--radius-lg);padding:var(--space-24);border-top:4px solid #FFD580;">
+        <div style="color:#FFD580;font-family:'Inter',sans-serif;font-weight:900;font-size:11px;letter-spacing:2px;">TODAY · 今日</div>
+        <h4 style="color:white;font-size:var(--font-lg);font-weight:900;margin:var(--space-8) 0;">サムネ1枚作る</h4>
+        <p style="color:rgba(255,255,255,0.7);font-size:var(--font-sm);line-height:1.6;">
+          Canvaで9:16サイズ・肩書＋キャラ顔＋大文字テロップの3要素で1枚。
+          次の投稿からこの新サムネを必ず使う。
+        </p>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:var(--radius-lg);padding:var(--space-24);border-top:4px solid #FDCB6E;">
+        <div style="color:#FDCB6E;font-family:'Inter',sans-serif;font-weight:900;font-size:11px;letter-spacing:2px;">THIS WEEK · 今週</div>
+        <h4 style="color:white;font-size:var(--font-lg);font-weight:900;margin:var(--space-8) 0;">冒頭1秒フック定着</h4>
+        <p style="color:rgba(255,255,255,0.7);font-size:var(--font-sm);line-height:1.6;">
+          4本投稿する。全部の動画で「冒頭0-1秒に撃墜シーン先出し＋条件テロップ」を徹底。
+          維持率がStudioで上がっていくのを確認。
+        </p>
+      </div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:var(--radius-lg);padding:var(--space-24);border-top:4px solid #55EFC4;">
+        <div style="color:#55EFC4;font-family:'Inter',sans-serif;font-weight:900;font-size:11px;letter-spacing:2px;">THIS MONTH · 今月</div>
+        <h4 style="color:white;font-size:var(--font-lg);font-weight:900;margin:var(--space-8) 0;">中身4要素を習慣化</h4>
+        <p style="color:rgba(255,255,255,0.7);font-size:var(--font-sm);line-height:1.6;">
+          撃墜スロー＋BGM＋SE＋問いかけを全動画に入れる。
+          いいね率1.5%超えを目標。登録者 +2,000人（Phase1前半ライン）。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <div class="reference-notice">
   <div class="container">
-    <h3>📚 ここから下は「詳細データ・参考資料」です</h3>
+    <h3>📚 以下は「詳細データ・参考資料」</h3>
     <p>
-      行動に必要なことは<strong>§A〜§H</strong>で全て書きました。<br>
-      「なぜそうするのか」「他チャンネルとどう違うのか」を知りたい時に以下を参照してください。
+      行動に必要なことは<strong>§0〜§K</strong>で全て書きました。<br>
+      「なぜそうするのか」の根拠データは以下を参照してください。
     </p>
   </div>
 </div>
@@ -2431,9 +3327,6 @@
   <div class="container">
     <div class="sec-num">REFERENCE 01 · TRIAGE</div>
     <h2>エンタ×ガチ系の3つの型（詳細）</h2>
-    <p class="sec-desc">
-      「J!さん路線」の実体をデータで分解すると、3つの完全に異なる成功モデルに分かれました。
-    </p>
 
     <div class="triage-grid">
       <div class="triage-card akakikus">
@@ -2490,10 +3383,6 @@
   <div class="container">
     <div class="sec-num">REFERENCE 02 · FULL DATA</div>
     <h2>日本スマブラSP 11チャンネル 完全データ</h2>
-    <p class="sec-desc">
-      2026-04-22 取得・計406本のShorts実データ。
-      med/foll（登録者1人あたり中央再生数）で Rearlet は全11chで1位。
-    </p>
 
     <div class="mega-table-wrap">
       <table class="mega-table">
@@ -2819,160 +3708,68 @@
   </div>
 </section>
 
-<!-- ============ 参考④：投稿頻度 ============ -->
+<!-- ============ 参考④：エンゲージ率比較 ============ -->
 <section style="background: var(--gray-100);">
   <div class="container">
-    <div class="sec-num">REFERENCE 04 · POSTING FREQUENCY</div>
-    <h2>投稿頻度ランキング</h2>
+    <div class="sec-num">REFERENCE 04 · ENGAGEMENT</div>
+    <h2>いいね率比較（動画の中身の刺さり度）</h2>
+    <p class="sec-desc">
+      いいね率＝見た人がどれだけ「良い」と感じているかの代理指標。
+      Rearlet は標準〜やや低めですが、下位25%動画は1.23%でバイラル層に迫る。
+    </p>
+
     <div class="freq-chart">
       <div class="freq-row">
-        <div class="ch">ブリとカワウソ</div>
+        <div class="ch">Raito</div>
         <div class="bar"><div class="fill " style="width:100%"></div></div>
-        <div class="val">4.88本/週</div>
+        <div class="val">2.27%</div>
       </div>
       <div class="freq-row">
         <div class="ch">智念せいら</div>
-        <div class="bar"><div class="fill " style="width:98%"></div></div>
-        <div class="val">4.79本/週</div>
-      </div>
-      <div class="freq-row">
-        <div class="ch">Rearlet（本人）</div>
-        <div class="bar"><div class="fill mid" style="width:54%"></div></div>
-        <div class="val">2.65本/週</div>
-      </div>
-      <div class="freq-row">
-        <div class="ch">KEN</div>
-        <div class="bar"><div class="fill mid" style="width:52%"></div></div>
-        <div class="val">2.57本/週</div>
-      </div>
-      <div class="freq-row">
-        <div class="ch">マエスマ</div>
-        <div class="bar"><div class="fill mid" style="width:32%"></div></div>
-        <div class="val">1.58本/週</div>
-      </div>
-      <div class="freq-row">
-        <div class="ch">アカキクス</div>
-        <div class="bar"><div class="fill mid" style="width:30%"></div></div>
-        <div class="val">1.50本/週</div>
-      </div>
-      <div class="freq-row">
-        <div class="ch">プロトバナム</div>
-        <div class="bar"><div class="fill low" style="width:18%"></div></div>
-        <div class="val">0.91本/週</div>
-      </div>
-      <div class="freq-row">
-        <div class="ch">Shuton</div>
-        <div class="bar"><div class="fill low" style="width:15%"></div></div>
-        <div class="val">0.75本/週</div>
-      </div>
-      <div class="freq-row">
-        <div class="ch">Raito</div>
-        <div class="bar"><div class="fill low" style="width:3%"></div></div>
-        <div class="val">0.18本/週</div>
+        <div class="bar"><div class="fill " style="width:81%"></div></div>
+        <div class="val">1.85%</div>
       </div>
       <div class="freq-row">
         <div class="ch">ザクレイ</div>
-        <div class="bar"><div class="fill low" style="width:2%"></div></div>
-        <div class="val">0.11本/週</div>
+        <div class="bar"><div class="fill " style="width:73%"></div></div>
+        <div class="val">1.67%</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">ブリとカワウソ</div>
+        <div class="bar"><div class="fill " style="width:67%"></div></div>
+        <div class="val">1.54%</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">マエスマ</div>
+        <div class="bar"><div class="fill mid" style="width:65%"></div></div>
+        <div class="val">1.48%</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">Shuton</div>
+        <div class="bar"><div class="fill mid" style="width:56%"></div></div>
+        <div class="val">1.29%</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">KEN</div>
+        <div class="bar"><div class="fill low" style="width:42%"></div></div>
+        <div class="val">0.97%</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">プロトバナム</div>
+        <div class="bar"><div class="fill low" style="width:41%"></div></div>
+        <div class="val">0.94%</div>
+      </div>
+      <div class="freq-row" style="font-weight:900;color:var(--primary);">
+        <div class="ch">Rearlet（本人）</div>
+        <div class="bar"><div class="fill low" style="width:40%"></div></div>
+        <div class="val">0.93%</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">アカキクス</div>
+        <div class="bar"><div class="fill low" style="width:37%"></div></div>
+        <div class="val">0.86%</div>
       </div>
 
-    </div>
-  </div>
-</section>
-
-<!-- ============ 参考⑤：半年ロードマップ ============ -->
-<section>
-  <div class="container">
-    <div class="sec-num">REFERENCE 05 · 6-MONTH ROADMAP</div>
-    <h2>半年で5万人 ロードマップ</h2>
-
-    <div class="phase-card p1">
-      <div class="phase-head">
-        <span class="phase-num">PHASE 1</span>
-        <h3>月1-2：土台構築（アカキクス型×短尺量産）</h3>
-        <div class="phase-target">→ 8,000人</div>
-      </div>
-      <p style="color:var(--gray-700);">尺14-20秒に全面移行、週4-5本投稿、タイトル末尾定型化。med/foll 17.27を最大化する形。</p>
-      <ul class="action-list">
-        <li>過去バイラル3本（312K/278K/181K）を13秒版に再編集→シリーズ化で再投稿</li>
-        <li>タイトル末尾【スマブラSP】#shorts 完全統一、「！」を「？」に置換</li>
-        <li>概要欄1行目「日本9位クッパ使いRearlet。最強クッパを目指す試合集」</li>
-        <li>動画末尾1秒に登録テロップ固定化</li>
-      </ul>
-    </div>
-
-    <div class="phase-card p2">
-      <div class="phase-head">
-        <span class="phase-num">PHASE 2</span>
-        <h3>月3-4：Shuton型エンタ要素を注入</h3>
-        <div class="phase-target">→ 25,000人</div>
-      </div>
-      <p style="color:var(--gray-700);">疑問形・視聴者参加型Shortsを週2本組み込み、月1本は1分超の長尺（1試合解説）も投入。</p>
-      <ul class="action-list">
-        <li>視聴者参加企画「クッパで試すコンボ送って」をXで募集→Shorts化</li>
-        <li>疑問形タイトル「〇〇にクッパで勝てますか？」を週2本投下</li>
-        <li>長尺5-10分「日本9位クッパの試合解説」月1本で固定ファン化</li>
-        <li>Sumabato/Koryu大会実績を毎動画のサムネ or 冒頭1秒に表示</li>
-      </ul>
-    </div>
-
-    <div class="phase-card p3">
-      <div class="phase-head">
-        <span class="phase-num">PHASE 3</span>
-        <h3>月5-6：コラボ・シリーズ化で加速</h3>
-        <div class="phase-target">→ 50,000人</div>
-      </div>
-      <p style="color:var(--gray-700);">2.5万登録者の実績でコラボ依頼が通りやすくなる。有名プレイヤーとの対戦Shortsで一気にスケール。</p>
-      <ul class="action-list">
-        <li>あcola・ザクレイ・ミーヤー級との対戦動画を「対◯◯シリーズ」化</li>
-        <li>へろー（クッパ使い同士）とのコラボShorts or 長尺1on1</li>
-        <li>「100万再生された〇〇」自己引用シリーズで複利的にバズ誘発</li>
-        <li>長尺「チノスマ優勝への道」ドキュメンタリー型で固定ファン基盤</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 参考⑥：収益化 ============ -->
-<section style="background: var(--gray-100);">
-  <div class="container">
-    <div class="sec-num">REFERENCE 06 · REVENUE</div>
-    <h2>登録者別の月収目安</h2>
-
-    <div class="revenue-chart">
-      <div class="rev-row">
-        <div class="milestone">1,140</div>
-        <div class="bar-container"><div class="bar-fill" style="width:2%;">現状</div></div>
-        <div class="revenue">¥0〜</div>
-      </div>
-      <div class="rev-row">
-        <div class="milestone">10,000</div>
-        <div class="bar-container"><div class="bar-fill" style="width:20%;">Phase1完了</div></div>
-        <div class="revenue">¥30,000〜</div>
-      </div>
-      <div class="rev-row">
-        <div class="milestone">25,000</div>
-        <div class="bar-container"><div class="bar-fill" style="width:50%;">Phase2完了</div></div>
-        <div class="revenue">¥150,000〜</div>
-      </div>
-      <div class="rev-row">
-        <div class="milestone">50,000</div>
-        <div class="bar-container"><div class="bar-fill" style="width:100%;">Phase3完了・目標</div></div>
-        <div class="revenue">¥300,000〜</div>
-      </div>
-      <div class="rev-row">
-        <div class="milestone">95,800</div>
-        <div class="bar-container"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#E67E22,#FDCB6E);color:#333;">Shuton基準</div></div>
-        <div class="revenue">¥600,000〜</div>
-      </div>
-    </div>
-
-    <div class="callout callout-info">
-      <strong>💰 収益の内訳：</strong>
-      ① Shorts広告（1万登録〜）¥200-500/1万再生<br>
-      ② メンバーシップ（5千登録〜）月1-5万円<br>
-      ③ スポンサー案件（3万登録〜）1案件10-30万円<br>
-      ④ プロチーム打診（5万登録〜）月額固定
     </div>
   </div>
 </section>
@@ -2981,14 +3778,15 @@
 <section>
   <div class="container">
     <div class="conclusion">
-      <h2>まず、今日の1本から。</h2>
+      <h2>タイトル×サムネ×中身×頻度。</h2>
       <p>
-        全部やる必要はありません。<br>
-        まず <strong style="color:#FFD580">§A の STEP 1</strong>（直近動画を16秒版に切る）だけやれば、
-        残りは自然に繋がります。
+        前回のレポートで「タイトル改善」を強調しすぎました。<br>
+        データで再検証したら、<strong style="color:#FFD580">真犯人はサムネと冒頭1秒</strong>でした。<br>
+        Rearletさんの動画の中身は、すでにShutonに近いレベルで刺さっています。
+        あとは<strong style="color:#FFD580">「入口」と「最初の1秒」</strong>を整えるだけです。
       </p>
       <p class="cta-text">
-        半年後、50,000人の向こう側で会いましょう。
+        まず、今日のサムネ1枚から。
       </p>
     </div>
   </div>
@@ -2996,9 +3794,9 @@
 
 <footer class="site-footer">
   <p>
-    <strong>Rearlet Shorts 行動レポート v4</strong> · 2026-04-22<br>
-    日本スマブラSP系 <strong>11チャンネル・計406本</strong>・Rearletさん実タイトル31本を <code>yt-dlp</code> で取得し分析。<br>
-    Web情報は参照せず、YouTube配信中のリアルタイム値のみを根拠としています。
+    <strong>Rearlet Shorts 真犯人レポート v5</strong> · 2026-04-22<br>
+    Rearletさん31本+他10ch375本=計406本の実データを <code>yt-dlp</code> で直接取得・分析。<br>
+    再生数/いいね率/コメ率/タイトル品質/尺/投稿頻度の6軸で因果を検証。
   </p>
 </footer>
 
