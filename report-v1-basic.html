@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>横動画が伸びない原因と改善戦略 ── Rearlet チャンネル分析</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap');
+
+  :root {
+    --primary: #6C5CE7;
+    --primary-light: #A29BFE;
+    --primary-dark: #5A4BD1;
+    --accent: #FF6B35;
+    --accent-light: #FFEEE6;
+    --success: #00B894;
+    --success-light: #E6FFF8;
+    --warning: #FDCB6E;
+    --warning-light: #FFF8E1;
+    --danger: #E17055;
+    --danger-light: #FDECEA;
+    --info: #0984E3;
+    --info-light: #E3F2FD;
+    --dark: #2D3436;
+    --gray-50: #FAFBFC;
+    --gray-100: #F1F3F5;
+    --gray-200: #E9ECEF;
+    --gray-300: #DEE2E6;
+    --gray-400: #CED4DA;
+    --gray-500: #ADB5BD;
+    --gray-600: #868E96;
+    --gray-700: #495057;
+    --gray-800: #343A40;
+    --gray-900: #212529;
+    --white: #FFFFFF;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow: 0 4px 16px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+    --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+    --space-80: 80px;
+    --space-120: 120px;
+    --font-xs: 12px;
+    --font-sm: 13px;
+    --font-base: 15px;
+    --font-lg: 17px;
+    --font-xl: 20px;
+    --font-2xl: 24px;
+    --font-3xl: 30px;
+    --font-4xl: 40px;
+    --font-5xl: 52px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans JP', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    line-height: 1.8;
+    font-size: var(--font-base);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(160deg, #0f0c29 0%, #302b63 40%, #24243e 100%);
+    color: white;
+    padding: var(--space-120) var(--space-24) var(--space-80);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(108,92,231,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(255,107,53,0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(9,132,227,0.08) 0%, transparent 50%);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: var(--space-8) var(--space-24);
+    border-radius: 100px;
+    font-size: var(--font-sm);
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-32);
+    backdrop-filter: blur(8px);
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, var(--font-5xl));
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: var(--space-24);
+    letter-spacing: -0.02em;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(90deg, var(--accent), #FF9F43);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: var(--font-lg);
+    opacity: 0.75;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* Hero Stats */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-16);
+    max-width: 720px;
+    margin: var(--space-48) auto 0;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: var(--radius);
+    padding: var(--space-24) var(--space-16);
+    backdrop-filter: blur(8px);
+  }
+  .hero-stat .val {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-3xl);
+    font-weight: 900;
+    display: block;
+    line-height: 1.1;
+  }
+  .hero-stat .lbl {
+    font-size: var(--font-xs);
+    opacity: 0.5;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: var(--space-4);
+    display: block;
+  }
+  @media (max-width: 640px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .hero { padding: var(--space-80) var(--space-16) var(--space-64); }
+  }
+
+  /* ===== LAYOUT ===== */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 var(--space-24); }
+  .wide-container { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-24); }
+  section { padding: var(--space-80) 0; }
+
+  /* ===== SECTION HEADERS ===== */
+  .sec-num {
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+  .sec-num::before {
+    content: '';
+    width: 32px;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 1px;
+  }
+  section h2 {
+    font-size: clamp(var(--font-2xl), 4vw, var(--font-4xl));
+    font-weight: 900;
+    color: var(--gray-900);
+    margin-bottom: var(--space-12);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .sec-desc {
+    color: var(--gray-600);
+    font-size: var(--font-base);
+    max-width: 680px;
+    margin-bottom: var(--space-48);
+    line-height: 1.8;
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: var(--space-32);
+    margin-bottom: var(--space-24);
+    border: 1px solid var(--gray-200);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .card h3 {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-12);
+    line-height: 1.4;
+  }
+  .card p { color: var(--gray-700); line-height: 1.8; }
+  .card ul { list-style: none; margin-top: var(--space-16); }
+  .card ul li {
+    padding: var(--space-8) 0 var(--space-8) var(--space-24);
+    position: relative;
+    color: var(--gray-700);
+    line-height: 1.7;
+  }
+  .card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary-light);
+  }
+
+  .card--problem { border-left: 4px solid var(--danger); }
+  .card--solution { border-left: 4px solid var(--success); }
+  .card--info { border-left: 4px solid var(--info); }
+
+  /* ===== TAGS ===== */
+  .tags { display: flex; flex-wrap: wrap; gap: var(--space-8); margin-bottom: var(--space-16); }
+  .tag {
+    font-size: var(--font-xs);
+    font-weight: 600;
+    padding: var(--space-4) var(--space-12);
+    border-radius: 100px;
+    background: var(--gray-100);
+    color: var(--gray-600);
+  }
+  .tag--danger { background: var(--danger-light); color: var(--danger); }
+  .tag--success { background: var(--success-light); color: var(--success); }
+  .tag--warning { background: var(--warning-light); color: #E67E22; }
+  .tag--info { background: var(--info-light); color: var(--info); }
+  .tag--primary { background: #F0EDFF; color: var(--primary); }
+
+  /* ===== STAT GRID ===== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-16);
+    margin-bottom: var(--space-48);
+  }
+  .stat-box {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: var(--space-24);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+  }
+  .stat-box .v {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-3xl);
+    font-weight: 900;
+    display: block;
+    line-height: 1.1;
+    color: var(--gray-900);
+  }
+  .stat-box .l {
+    font-size: var(--font-xs);
+    color: var(--gray-600);
+    margin-top: var(--space-4);
+    display: block;
+  }
+  .stat-box.danger .v { color: var(--danger); }
+  .stat-box.success .v { color: var(--success); }
+  .stat-box.warning .v { color: #E67E22; }
+  .stat-box.info .v { color: var(--info); }
+
+  /* ===== BAR CHART ===== */
+  .chart-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    margin-bottom: var(--space-32);
+  }
+  .chart-card h3 {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-24);
+    color: var(--gray-900);
+  }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-8);
+    gap: var(--space-12);
+  }
+  .bar-label {
+    width: 48px;
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 600;
+    color: var(--gray-500);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .bar-track {
+    flex: 1;
+    height: 24px;
+    background: var(--gray-100);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    padding-left: var(--space-12);
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    transition: width 0.8s ease;
+    white-space: nowrap;
+  }
+  .bar-fill.green { background: linear-gradient(90deg, #00B894, #55EFC4); }
+  .bar-fill.blue { background: linear-gradient(90deg, #0984E3, #74B9FF); }
+  .bar-fill.yellow { background: linear-gradient(90deg, #E67E22, #FDCB6E); color: var(--gray-900); }
+  .bar-fill.red { background: linear-gradient(90deg, #E17055, #FAB1A0); }
+  .bar-val {
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 700;
+    color: var(--gray-500);
+    width: 64px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ===== COMPARE TABLE ===== */
+  .tbl-wrap {
+    overflow-x: auto;
+    margin: var(--space-24) 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  table.compare {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--font-sm);
+  }
+  table.compare th {
+    background: var(--gray-100);
+    padding: var(--space-12) var(--space-16);
+    font-weight: 700;
+    text-align: left;
+    color: var(--gray-600);
+    font-size: var(--font-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+  }
+  table.compare td {
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--gray-100);
+    vertical-align: top;
+  }
+  table.compare tbody tr:hover td { background: var(--gray-50); }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .badge-danger { background: var(--danger-light); color: var(--danger); }
+  .badge-success { background: var(--success-light); color: var(--success); }
+  .badge-warning { background: var(--warning-light); color: #E67E22; }
+  .badge-info { background: var(--info-light); color: var(--info); }
+  .badge-primary { background: #F0EDFF; color: var(--primary); }
+
+  /* ===== CALLOUT BOXES ===== */
+  .callout {
+    padding: var(--space-24);
+    border-radius: var(--radius);
+    margin: var(--space-24) 0;
+    line-height: 1.8;
+  }
+  .callout strong { font-weight: 700; }
+  .callout-danger {
+    background: var(--danger-light);
+    border-left: 4px solid var(--danger);
+    color: var(--gray-800);
+  }
+  .callout-success {
+    background: var(--success-light);
+    border-left: 4px solid var(--success);
+  }
+  .callout-info {
+    background: var(--info-light);
+    border-left: 4px solid var(--info);
+  }
+  .callout-warning {
+    background: var(--warning-light);
+    border-left: 4px solid var(--warning);
+  }
+
+  /* ===== TWO COLUMN GRID ===== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+  }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ===== SVG ILLUSTRATIONS ===== */
+  .illustration {
+    width: 100%;
+    max-width: 100%;
+    margin: var(--space-32) 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .illustration svg { display: block; width: 100%; height: auto; }
+
+  /* ===== CHANNEL COMPARE ===== */
+  .ch-compare {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  @media (max-width: 768px) { .ch-compare { grid-template-columns: 1fr; } }
+  .ch-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    text-align: center;
+  }
+  .ch-card.highlight {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 2px var(--primary-light), var(--shadow);
+  }
+  .ch-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin: 0 auto var(--space-12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    color: white;
+  }
+  .ch-name {
+    font-size: var(--font-base);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-4);
+  }
+  .ch-genre {
+    font-size: var(--font-xs);
+    color: var(--gray-500);
+    margin-bottom: var(--space-16);
+  }
+  .ch-stats { text-align: left; }
+  .ch-stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-8) 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: var(--font-sm);
+  }
+  .ch-stat-row:last-child { border-bottom: none; }
+  .ch-stat-row .k { color: var(--gray-500); }
+  .ch-stat-row .val { font-weight: 700; color: var(--gray-900); }
+
+  /* ===== THUMBNAIL COMPARE (SVG) ===== */
+  .thumb-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+    margin: var(--space-32) 0;
+  }
+  @media (max-width: 640px) { .thumb-compare { grid-template-columns: 1fr; } }
+  .thumb-box {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+  }
+  .thumb-box .label {
+    font-size: var(--font-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: var(--space-12) var(--space-16);
+    text-align: center;
+  }
+  .thumb-box.bad .label { background: var(--danger-light); color: var(--danger); }
+  .thumb-box.good .label { background: var(--success-light); color: var(--success); }
+
+  /* ===== ROADMAP ===== */
+  .roadmap { position: relative; padding-left: 48px; }
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary), var(--success));
+    border-radius: 1px;
+  }
+  .rm-item { position: relative; margin-bottom: var(--space-48); }
+  .rm-item:last-child { margin-bottom: 0; }
+  .rm-dot {
+    position: absolute;
+    left: -37px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 3px solid var(--primary);
+  }
+  .rm-item.active .rm-dot { background: var(--primary); }
+  .rm-phase {
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 2px;
+    margin-bottom: var(--space-4);
+  }
+  .rm-item h4 {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-8);
+  }
+  .rm-item p { color: var(--gray-600); font-size: var(--font-sm); line-height: 1.8; }
+
+  /* ===== CONCLUSION ===== */
+  .conclusion {
+    background: linear-gradient(160deg, #0f0c29 0%, #302b63 40%, #24243e 100%);
+    color: white;
+    padding: var(--space-80) var(--space-24);
+    border-radius: var(--radius-xl);
+    margin: var(--space-48) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .conclusion::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(108,92,231,0.12) 0%, transparent 60%);
+  }
+  .conclusion > * { position: relative; z-index: 1; }
+  .conclusion h2 { color: white; font-size: var(--font-3xl); margin-bottom: var(--space-24); }
+  .conclusion p {
+    opacity: 0.8;
+    max-width: 640px;
+    margin: 0 auto var(--space-16);
+    line-height: 1.8;
+    font-size: var(--font-base);
+  }
+  .conclusion .cta-text {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    opacity: 1;
+    margin-top: var(--space-32);
+  }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 0;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: var(--space-48) var(--space-24);
+    color: var(--gray-500);
+    font-size: var(--font-xs);
+  }
+
+  /* ===== REAL THUMBNAIL GRID ===== */
+  .thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  .thumb-item {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .thumb-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+  .thumb-item img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+  }
+  .thumb-meta {
+    padding: var(--space-12) var(--space-16);
+  }
+  .thumb-title {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--gray-900);
+    line-height: 1.4;
+    margin-bottom: var(--space-4);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .thumb-views {
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 700;
+  }
+  .thumb-views.high { color: var(--success); }
+  .thumb-views.low { color: var(--danger); }
+  .thumb-views.mid { color: var(--info); }
+  .thumb-type {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: var(--space-8);
+    text-transform: uppercase;
+  }
+  .thumb-type.shorts { background: #E8F5E9; color: #2E7D32; }
+  .thumb-type.long { background: #FFEBEE; color: #C62828; }
+  .thumb-type.compare { background: #E3F2FD; color: #1565C0; }
+
+  /* ===== SEARCH FLOW DIAGRAM ===== */
+  .flow-step {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-16);
+    margin-bottom: var(--space-16);
+  }
+  .flow-num {
+    width: 48px;
+    min-height: 48px;
+    background: var(--primary);
+    color: white;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', monospace;
+    font-weight: 900;
+    font-size: var(--font-xl);
+    flex-shrink: 0;
+  }
+  .flow-num.fail { background: var(--danger); }
+  .flow-num.pass { background: var(--success); }
+  .flow-body {
+    flex: 1;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: var(--space-16) var(--space-24);
+    border: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .flow-body h4 { font-size: var(--font-base); font-weight: 700; color: var(--gray-900); margin-bottom: var(--space-4); }
+  .flow-body p { font-size: var(--font-sm); color: var(--gray-600); margin: 0; line-height: 1.6; }
+
+  /* ===== SCORE RADAR (CSS) ===== */
+  .score-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    margin: var(--space-24) 0;
+  }
+  @media (max-width: 640px) { .score-grid { grid-template-columns: 1fr; } }
+  .score-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+  }
+  .score-label {
+    width: 96px;
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--gray-700);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .score-bar {
+    flex: 1;
+    height: 12px;
+    background: var(--gray-100);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .score-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.8s ease;
+  }
+  .score-val {
+    width: 36px;
+    font-family: 'Inter', monospace;
+    font-size: var(--font-sm);
+    font-weight: 700;
+    color: var(--gray-600);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<nav aria-label="関連HTML" style="background:#1e1b4b;color:#e0e7ff;padding:10px 16px;font-size:13px;text-align:center;line-height:1.6;border-bottom:1px solid rgba(255,255,255,.12);">
+  <span style="opacity:.85">GitHub Pages のパスは </span><code style="background:rgba(255,255,255,.12);padding:2px 8px;border-radius:4px;color:#fff;">rearlet-analysis</code><span style="opacity:.85">（ハイフン）。</span>
+  <a href="./" style="color:#c4b5fd;margin-left:10px;">分析</a>
+  <a href="roadmap_10k_subscribers.html" style="color:#c4b5fd;margin-left:10px;">1万人ロードマップ</a>
+  <a href="roadmap-10k.html" style="color:#c4b5fd;margin-left:10px;">1万人（短いURL）</a>
+  <a href="roadmap.html" style="color:#c4b5fd;margin-left:10px;">月30万</a>
+  <a href="thumbnail_guide.html" style="color:#c4b5fd;margin-left:10px;">サムネガイド</a>
+</nav>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║              HERO SECTION                ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<div class="hero" style="position:relative;">
+  <div style="position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;z-index:0;">
+    <img src="https://img.youtube.com/vi/SklqqujVTTo/maxresdefault.jpg" alt="" style="width:100%;height:100%;object-fit:cover;filter:blur(30px) brightness(0.25);transform:scale(1.15);">
+  </div>
+  <div class="hero-content" style="position:relative;z-index:1;">
+    <div class="hero-badge">📊 YOUTUBE CHANNEL ANALYSIS ── 2026.04.12</div>
+    <h1>Rearlet の横動画は<br>なぜ<span class="highlight">伸びないのか</span></h1>
+    <p class="hero-sub">
+      スマブラSPクッパ使い「Rearlet」チャンネルの横動画が検索にもおすすめにも表示されない原因を、データ・アルゴリズム・デザインの3軸で分析し、他チャンネルとの比較を交えて改善戦略を提案します。
+    </p>
+
+    <!-- チャンネルの実際の最高再生ショートと最低再生横動画 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:32px auto 24px;max-width:640px;">
+      <div style="border-radius:12px;overflow:hidden;border:2px solid #00B894;">
+        <img src="https://img.youtube.com/vi/SklqqujVTTo/mqdefault.jpg" alt="ショート最高再生" style="width:100%;display:block;">
+        <div style="background:rgba(0,184,148,0.2);padding:8px 12px;text-align:center;">
+          <div style="font-size:11px;color:rgba(255,255,255,0.6);">ショート最高</div>
+          <div style="font-size:18px;font-weight:900;color:#00B894;">273,249 回</div>
+        </div>
+      </div>
+      <div style="border-radius:12px;overflow:hidden;border:2px solid #E17055;">
+        <img src="https://img.youtube.com/vi/pOTIkemgd7Q/mqdefault.jpg" alt="横動画最低再生" style="width:100%;display:block;">
+        <div style="background:rgba(225,112,85,0.2);padding:8px 12px;text-align:center;">
+          <div style="font-size:11px;color:rgba(255,255,255,0.6);">横動画（今日投稿）</div>
+          <div style="font-size:18px;font-weight:900;color:#E17055;">78 回</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="val">1,040</span>
+        <span class="lbl">登録者</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val">1.4M</span>
+        <span class="lbl">総再生回数</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val">57</span>
+        <span class="lbl">動画数</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val" style="color:#FDCB6E">C+</span>
+        <span class="lbl">SB GRADE</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║   SECTION 01 : 現状データ               ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<section>
+  <div class="sec-num">SECTION 01</div>
+  <h2>データが語る「ショート依存」の構造</h2>
+  <p class="sec-desc">直近14日間のSocial Bladeデータを可視化すると、横動画とショートの明暗がはっきり現れます。日次再生の振れ幅は約30倍 ── これが核心的な問題です。</p>
+
+  <div class="stat-grid">
+    <div class="stat-box success"><span class="v">148,568</span><span class="l">最高日次再生（4/3）</span></div>
+    <div class="stat-box danger"><span class="v">4,908</span><span class="l">最低日次再生（4/7）</span></div>
+    <div class="stat-box warning"><span class="v">×30</span><span class="l">日次再生の変動幅</span></div>
+    <div class="stat-box info"><span class="v">16ヶ月</span><span class="l">チャンネル運用期間</span></div>
+  </div>
+
+  <!-- Bar Chart -->
+  <div class="chart-card">
+    <h3>日次再生数の推移（直近14日間）</h3>
+    <div class="bar-row"><span class="bar-label">3/30</span><div class="bar-track"><div class="bar-fill red" style="width:7%"></div></div><span class="bar-val">10.5K</span></div>
+    <div class="bar-row"><span class="bar-label">3/31</span><div class="bar-track"><div class="bar-fill blue" style="width:43%"></div></div><span class="bar-val">63.8K</span></div>
+    <div class="bar-row"><span class="bar-label">4/01</span><div class="bar-track"><div class="bar-fill blue" style="width:47%"></div></div><span class="bar-val">70.5K</span></div>
+    <div class="bar-row"><span class="bar-label">4/02</span><div class="bar-track"><div class="bar-fill yellow" style="width:27%"></div></div><span class="bar-val">39.6K</span></div>
+    <div class="bar-row"><span class="bar-label">4/03</span><div class="bar-track"><div class="bar-fill green" style="width:100%"></div></div><span class="bar-val">148.6K</span></div>
+    <div class="bar-row"><span class="bar-label">4/04</span><div class="bar-track"><div class="bar-fill blue" style="width:31%"></div></div><span class="bar-val">46.2K</span></div>
+    <div class="bar-row"><span class="bar-label">4/05</span><div class="bar-track"><div class="bar-fill yellow" style="width:16%"></div></div><span class="bar-val">24.1K</span></div>
+    <div class="bar-row"><span class="bar-label">4/06</span><div class="bar-track"><div class="bar-fill blue" style="width:31%"></div></div><span class="bar-val">46.0K</span></div>
+    <div class="bar-row"><span class="bar-label">4/07</span><div class="bar-track"><div class="bar-fill red" style="width:3%"></div></div><span class="bar-val">4.9K ⚠</span></div>
+    <div class="bar-row"><span class="bar-label">4/08</span><div class="bar-track"><div class="bar-fill blue" style="width:28%"></div></div><span class="bar-val">41.1K</span></div>
+    <div class="bar-row"><span class="bar-label">4/09</span><div class="bar-track"><div class="bar-fill red" style="width:6%"></div></div><span class="bar-val">8.8K</span></div>
+    <div class="bar-row"><span class="bar-label">4/10</span><div class="bar-track"><div class="bar-fill blue" style="width:38%"></div></div><span class="bar-val">57.0K</span></div>
+    <div class="bar-row"><span class="bar-label">4/11</span><div class="bar-track"><div class="bar-fill blue" style="width:53%"></div></div><span class="bar-val">79.5K</span></div>
+    <div class="bar-row"><span class="bar-label">4/12</span><div class="bar-track"><div class="bar-fill yellow" style="width:15%"></div></div><span class="bar-val">22.0K</span></div>
+  </div>
+
+  <div class="callout callout-danger">
+    <strong>核心:</strong> 4/7は横動画を2本投稿したにもかかわらず<strong>日次再生4,908回</strong>と14日間の最低値。一方、4/3は新規投稿なしで<strong>148,568回</strong>（ショートの残存再生）。横動画の存在感がデータ上ほぼゼロです。
+  </div>
+
+  <!-- 実際の動画サムネイル＋再生数比較 -->
+  <div class="chart-card" style="margin-top:var(--space-32);">
+    <h3>Rearletの実際の動画：ショート vs 横動画（実データ）</h3>
+    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-24);">RSS フィードから取得した直近15本の動画。サムネイルと再生数の格差が一目瞭然です。</p>
+
+    <h4 style="color:var(--success);font-size:var(--font-base);margin-bottom:var(--space-16);">🟢 ショート動画（10,000〜273,000回再生）</h4>
+    <div class="thumb-grid">
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/SklqqujVTTo/mqdefault.jpg" alt="ゴブリンマリオ" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">ゴブリンマリオに200%ハンデで勝利しました！！！</div>
+          <span class="thumb-type shorts">Shorts</span>
+          <span class="thumb-views high">273,249 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/NRqiU0oGpAI/mqdefault.jpg" alt="カズヤ相手にビビらない" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">カズヤ相手にビビらないRearletクッパ！</div>
+          <span class="thumb-type shorts">Shorts</span>
+          <span class="thumb-views high">121,915 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/ARnm9wvAFfU/mqdefault.jpg" alt="カズヤは仕方ない" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">カズヤは仕方ない！！！次切り替えよう！！！</div>
+          <span class="thumb-type shorts">Shorts</span>
+          <span class="thumb-views high">34,795 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/LYBmQyeq76k/mqdefault.jpg" alt="メタモン" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">メタモンお前がナンバーワンだ！</div>
+          <span class="thumb-type shorts">Shorts</span>
+          <span class="thumb-views high">29,071 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/kUFJQSxv0CE/mqdefault.jpg" alt="へろーさん" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">へろーさん...???</div>
+          <span class="thumb-type shorts">Shorts</span>
+          <span class="thumb-views high">25,879 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/LHQ0Hf2pSZM/mqdefault.jpg" alt="リーサルヘディング" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">リーサルヘディングバースト最強！！</div>
+          <span class="thumb-type shorts">Shorts</span>
+          <span class="thumb-views high">25,436 回再生</span>
+        </div>
+      </div>
+    </div>
+
+    <h4 style="color:var(--danger);font-size:var(--font-base);margin:var(--space-32) 0 var(--space-16);">🔴 横動画・配信（78〜5,013回再生）</h4>
+    <div class="thumb-grid">
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/pOTIkemgd7Q/mqdefault.jpg" alt="桜梅桃李ハイライト" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">念願の大型TOP8！桜梅桃李第肆幕ハイライト【スマブラSP】</div>
+          <span class="thumb-type long">横動画</span>
+          <span class="thumb-views low">78 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/CWBQZDgUZAc/mqdefault.jpg" alt="チノスマリベンジ" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">全一クッパがチノスマリベンジ！</div>
+          <span class="thumb-type long">横動画</span>
+          <span class="thumb-views low">599 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/8TqdhcH6alk/mqdefault.jpg" alt="チノスマ優勝" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">チノスマ本気で優勝狙うで！！→メイト</div>
+          <span class="thumb-type long">横動画</span>
+          <span class="thumb-views low">595 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/JvHXRGOiYCk/mqdefault.jpg" alt="みんな相手するわ" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">かかってこい！みんな相手するわ！</div>
+          <span class="thumb-type long">横動画</span>
+          <span class="thumb-views low">3,954 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/mQb5MsOFDBs/mqdefault.jpg" alt="桜梅桃李振り返り" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">【激熱！】全一クッパが桜梅桃李の振り返りをやるよ！</div>
+          <span class="thumb-type long">横動画</span>
+          <span class="thumb-views low">4,912 回再生</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/BblXx3Wjncs/mqdefault.jpg" alt="VIP連勝" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">全一クッパが負けたら終わりVIP連勝をします</div>
+          <span class="thumb-type long">横動画</span>
+          <span class="thumb-views low">5,013 回再生</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-danger" style="margin-top:var(--space-24);">
+      <strong>再生数の格差: 最大 3,503倍</strong><br>
+      ショート最高 273,249回 vs 横動画最低 78回。同じチャンネル、同じプレイヤーなのにこの差が出るのは、横動画の「届ける技術」に根本的な課題があることを示しています。
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║   SECTION 02 : 他チャンネル比較          ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<section>
+  <div class="sec-num">SECTION 02</div>
+  <h2>スマブラ系チャンネルとの比較</h2>
+  <p class="sec-desc">同ジャンルの成功チャンネルと比較することで、Rearletが何をすべきかが明確になります。データは2026年4月時点の公開情報に基づきます。</p>
+
+  <div class="ch-compare">
+    <!-- VGBootCamp -->
+    <div class="ch-card">
+      <div class="ch-avatar" style="background:linear-gradient(135deg,#E17055,#D63031);">V</div>
+      <div class="ch-name">VGBootCamp</div>
+      <div class="ch-genre">大会アーカイブ・対戦ハイライト</div>
+      <div class="ch-stats">
+        <div class="ch-stat-row"><span class="k">登録者</span><span class="val">667K</span></div>
+        <div class="ch-stat-row"><span class="k">運用歴</span><span class="val">15年</span></div>
+        <div class="ch-stat-row"><span class="k">形式</span><span class="val">解説付き大会映像</span></div>
+        <div class="ch-stat-row"><span class="k">強み</span><span class="val">公式性・網羅性</span></div>
+      </div>
+    </div>
+    <!-- Rearlet -->
+    <div class="ch-card highlight">
+      <div class="ch-avatar" style="background:linear-gradient(135deg,#6C5CE7,#A29BFE);">R</div>
+      <div class="ch-name">Rearlet</div>
+      <div class="ch-genre">スマブラSP クッパ使い</div>
+      <div class="ch-stats">
+        <div class="ch-stat-row"><span class="k">登録者</span><span class="val">1.04K</span></div>
+        <div class="ch-stat-row"><span class="k">運用歴</span><span class="val">16ヶ月</span></div>
+        <div class="ch-stat-row"><span class="k">形式</span><span class="val">対戦動画+ショート</span></div>
+        <div class="ch-stat-row"><span class="k">課題</span><span class="val" style="color:var(--danger)">横動画の伸び</span></div>
+      </div>
+    </div>
+    <!-- 成功個人チャンネル -->
+    <div class="ch-card">
+      <div class="ch-avatar" style="background:linear-gradient(135deg,#00B894,#55EFC4);">K</div>
+      <div class="ch-name">クッパ解説系</div>
+      <div class="ch-genre">キャラ対策・コンボ解説</div>
+      <div class="ch-stats">
+        <div class="ch-stat-row"><span class="k">登録者</span><span class="val">5K〜30K</span></div>
+        <div class="ch-stat-row"><span class="k">運用歴</span><span class="val">2〜4年</span></div>
+        <div class="ch-stat-row"><span class="k">形式</span><span class="val">教材型・解説付き</span></div>
+        <div class="ch-stat-row"><span class="k">強み</span><span class="val">検索流入・教材価値</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table class="compare">
+      <thead>
+        <tr>
+          <th>比較軸</th>
+          <th>VGBootCamp</th>
+          <th>クッパ解説系</th>
+          <th>Rearlet（現状）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>コンテンツ形式</strong></td>
+          <td>実況・解説付き大会映像</td>
+          <td>教材型（コンボ、対策、立ち回り）</td>
+          <td>フル対戦の素材公開 <span class="badge badge-danger">弱</span></td>
+        </tr>
+        <tr>
+          <td><strong>サムネイル</strong></td>
+          <td>大会ロゴ+キャラ+VS構図+テキスト</td>
+          <td>キャラ素材+大きな文字+%表示</td>
+          <td>ゲーム画面スクショのみ <span class="badge badge-danger">弱</span></td>
+        </tr>
+        <tr>
+          <td><strong>タイトルSEO</strong></td>
+          <td>大会名+キャラ名+プレイヤー名</td>
+          <td>検索KW+キャラ名+具体的テーマ</td>
+          <td>汎用的タイトル <span class="badge badge-danger">弱</span></td>
+        </tr>
+        <tr>
+          <td><strong>説明文</strong></td>
+          <td>対戦カード+チャプター+リンク</td>
+          <td>KW含む解説文+目次+関連動画</td>
+          <td>短文 or ほぼ空 <span class="badge badge-danger">弱</span></td>
+        </tr>
+        <tr>
+          <td><strong>視聴維持の工夫</strong></td>
+          <td>解説で飽きさせない</td>
+          <td>テロップ+ズーム+チャプター</td>
+          <td>無編集 <span class="badge badge-danger">弱</span></td>
+        </tr>
+        <tr>
+          <td><strong>シリーズ化</strong></td>
+          <td>大会別プレイリスト</td>
+          <td>キャラ対策シリーズ</td>
+          <td>なし <span class="badge badge-warning">△</span></td>
+        </tr>
+        <tr>
+          <td><strong>Shorts→横動画導線</strong></td>
+          <td>ハイライトClip→フル試合</td>
+          <td>ショートで技紹介→フル解説</td>
+          <td>導線なし <span class="badge badge-danger">弱</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>比較から見えること:</strong> 成功チャンネルはすべて「素材の加工」をしています。大会チャンネルは実況解説を付け、解説系はテロップと構成で教材化しています。<strong>素材をそのまま出すだけでは、どのチャンネルも伸びていません。</strong>
+  </div>
+
+  <!-- 成功事例の実際の動画サムネイル -->
+  <div class="chart-card" style="margin-top:var(--space-32);">
+    <h3>成功している「クッパ解説系」動画のサムネイル実例</h3>
+    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-24);">いずれも検索上位に表示される動画。サムネイルの作り込みが Rearlet とは段違いです。</p>
+    <div class="thumb-grid">
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/dMu386nulrw/maxresdefault.jpg" alt="クッパのコンボ解説" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">クッパのコンボ解説！高火力コンボからお手軽コンボまで</div>
+          <span class="thumb-type compare">コンボ解説</span>
+          <span class="thumb-views high">検索「クッパ コンボ」上位</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/jfSLm_Yc2n8/maxresdefault.jpg" alt="VIP200連勝" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">【クッパでVIP200連勝をする】ワンタッチ高火力を練習してゆく</div>
+          <span class="thumb-type compare">実力系</span>
+          <span class="thumb-views high">検索「クッパ VIP」上位</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/HJ6IvN2c-hA/maxresdefault.jpg" alt="ゆっくり解説クッパ" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">【ゆっくり解説】初心者が最速でVIPを目指す為のクッパ</div>
+          <span class="thumb-type compare">教材型</span>
+          <span class="thumb-views high">検索「クッパ 初心者」上位</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/3RLBKZm8sBs/maxresdefault.jpg" alt="初心者必見クッパ" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">【初心者必見】クッパで即VIPいける為に重要なこと7つ</div>
+          <span class="thumb-type compare">リスト型</span>
+          <span class="thumb-views high">検索「クッパ VIP」上位</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/Zq04_4aDSbY/maxresdefault.jpg" alt="クッパ立ち回り解説" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">クッパ使い必見！クッパの立ち回り解説2【VIP】</div>
+          <span class="thumb-type compare">シリーズ型</span>
+          <span class="thumb-views high">検索「クッパ 立ち回り」上位</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/TBGzS_ceU-Q/maxresdefault.jpg" alt="世界戦闘力 神" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">世界戦闘力「神」のクッパ使い</div>
+          <span class="thumb-type compare">権威型</span>
+          <span class="thumb-views high">検索「クッパ 最強」上位</span>
+        </div>
+      </div>
+    </div>
+    <div class="callout callout-success" style="margin-top:var(--space-16);">
+      <strong>成功パターン:</strong> サムネイルに「数字」「キャラ画像」「わかりやすいテキスト」の3要素が入っている。タイトルに検索KWが含まれている。動画内容が「教材」「攻略」として機能している。
+    </div>
+  </div>
+
+  <!-- Rearletの横動画 vs 成功チャンネル：並列比較 -->
+  <div class="chart-card" style="margin-top:var(--space-32);">
+    <h3>サムネイル直接比較：同じ「クッパ」テーマの格差</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-24);margin-top:var(--space-16);">
+      <div>
+        <h4 style="text-align:center;color:var(--danger);font-size:var(--font-sm);margin-bottom:var(--space-12);">❌ Rearlet（78〜595回再生）</h4>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <img src="https://img.youtube.com/vi/pOTIkemgd7Q/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--danger);">
+          <img src="https://img.youtube.com/vi/CWBQZDgUZAc/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--danger);">
+          <img src="https://img.youtube.com/vi/8TqdhcH6alk/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--danger);">
+        </div>
+      </div>
+      <div>
+        <h4 style="text-align:center;color:var(--success);font-size:var(--font-sm);margin-bottom:var(--space-12);">✅ 成功チャンネル（数万〜数十万回再生）</h4>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <img src="https://img.youtube.com/vi/dMu386nulrw/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--success);">
+          <img src="https://img.youtube.com/vi/jfSLm_Yc2n8/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--success);">
+          <img src="https://img.youtube.com/vi/3RLBKZm8sBs/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--success);">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║   SECTION 03 : 原因分析                  ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<section>
+  <div class="sec-num">SECTION 03</div>
+  <h2>横動画が伸びない原因：アルゴリズムの仕組みから解析</h2>
+  <p class="sec-desc">YouTube のアルゴリズムに関する最新情報（2025年12月のブラウズフィード変更、Gemini AIによるコンテンツ解析、ショートと横動画の完全分離）を踏まえて、Rearletの横動画がなぜ検索にもおすすめにも出ないのかを特定しました。</p>
+
+  <!-- アルゴリズムの仕組み解説 -->
+  <div class="callout callout-info" style="padding:var(--space-32);">
+    <strong>前提: 2025年12月のYouTubeプラットフォーム変更</strong><br>
+    <span style="font-size:var(--font-sm);color:var(--gray-700);">（出典: Mario Joos / MrBeast等100M+登録チャンネル管理者の分析 / Dataslayer）</span>
+    <ul style="margin-top:var(--space-12);">
+      <li><strong>ホームフィードの長尺動画表示枠が12→2に削減（80%減）。</strong>空きスペースはショートに置換</li>
+      <li>デスクトップトラフィックが56%→39.3%に低下（モバイルシフト加速）</li>
+      <li>ショートと長尺の収益が同等に到達 → YouTube側にショートを優先するインセンティブ</li>
+      <li><strong>タグの影響は「最小限」</strong>とYouTube公式が確認。代わりにGemini AIが動画の音声・画像・トーンを直接解析</li>
+      <li>個別動画ではなく<strong>チャンネル全体</strong>を評価する方式に移行（投稿頻度・トピック一貫性・リピーター率）</li>
+    </ul>
+  </div>
+
+  <!-- 実データ比較テーブル -->
+  <div class="chart-card" style="margin-top:var(--space-32);">
+    <h3>実際の動画メタデータ比較（1本ずつ調査済み）</h3>
+    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-16);">YouTube の動画ページから直接取得した実データです。</p>
+    <div class="tbl-wrap">
+      <table class="compare">
+        <thead>
+          <tr><th>動画</th><th>尺</th><th>再生数</th><th>いいね</th><th>形式</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>チノスマリベンジ</strong><br><span style="font-size:11px;color:var(--gray-500)">CWBQZDgUZAc</span></td>
+            <td style="color:var(--danger);font-weight:700;">2:49:48</td>
+            <td>599</td>
+            <td>19</td>
+            <td><span class="badge badge-danger">配信アーカイブ</span></td>
+          </tr>
+          <tr>
+            <td><strong>チノスマ優勝狙う→メイト</strong><br><span style="font-size:11px;color:var(--gray-500)">8TqdhcH6alk</span></td>
+            <td style="color:var(--danger);font-weight:700;">2:58:30</td>
+            <td>595</td>
+            <td>—</td>
+            <td><span class="badge badge-danger">配信アーカイブ</span></td>
+          </tr>
+          <tr>
+            <td><strong>かかってこい！みんな相手するわ</strong><br><span style="font-size:11px;color:var(--gray-500)">JvHXRGOiYCk</span></td>
+            <td style="color:var(--danger);font-weight:700;">57:22</td>
+            <td>4,000</td>
+            <td>19</td>
+            <td><span class="badge badge-warning">参加型配信</span></td>
+          </tr>
+          <tr>
+            <td><strong>桜梅桃李ハイライト</strong><br><span style="font-size:11px;color:var(--gray-500)">pOTIkemgd7Q（本日投稿）</span></td>
+            <td>不明</td>
+            <td>78</td>
+            <td>7</td>
+            <td><span class="badge badge-info">ハイライト</span></td>
+          </tr>
+          <tr style="background:var(--success-light);">
+            <td><strong>こんが: クッパコンボ解説</strong><br><span style="font-size:11px;color:var(--gray-500)">dMu386nulrw（比較用）</span></td>
+            <td style="color:var(--success);font-weight:700;">3:33</td>
+            <td style="font-weight:700;">174,200</td>
+            <td>1,500</td>
+            <td><span class="badge badge-success">編集済み教材</span></td>
+          </tr>
+          <tr style="background:var(--success-light);">
+            <td><strong>無名ch: クッパでVIP 7つ</strong><br><span style="font-size:11px;color:var(--gray-500)">3RLBKZm8sBs（比較用）</span></td>
+            <td style="color:var(--success);font-weight:700;">8:34</td>
+            <td style="font-weight:700;">182,600</td>
+            <td>2,100</td>
+            <td><span class="badge badge-success">編集済み教材</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- メタデータ詳細比較 -->
+  <div class="chart-card" style="margin-top:var(--space-32);">
+    <h3>メタデータ比較（説明文・タグ・構成）</h3>
+    <div class="tbl-wrap">
+      <table class="compare">
+        <thead><tr><th>項目</th><th>Rearlet 全横動画</th><th>こんが（174K再生）</th><th>無名ch（182K再生）</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>説明文</strong></td>
+            <td>全動画<strong>同じテンプレ</strong>をコピペ<br>（活動紹介+ルール+Q&A）<br>動画固有の情報ゼロ <span class="badge badge-danger">NG</span></td>
+            <td>動画内容の要約<br>+関連動画リンク<br>+配信告知 <span class="badge badge-success">◎</span></td>
+            <td>関連動画3本リンク<br>+SNSリンク<br>+ファンレター先<br>+音楽クレジット <span class="badge badge-success">◎</span></td>
+          </tr>
+          <tr>
+            <td><strong>タグ数</strong></td>
+            <td><strong>0個</strong>（タグ未設定）<span class="badge badge-danger">NG</span></td>
+            <td>8個（スマブラ,クッパ,コンボ等）<span class="badge badge-success">◎</span></td>
+            <td><strong>50個以上</strong>（キャラ名,プレイヤー名,テクニック名等を網羅）<span class="badge badge-success">◎</span></td>
+          </tr>
+          <tr>
+            <td><strong>タイトル</strong></td>
+            <td>「チノスマリベンジ！」等<br>内輪向けの言葉<br>検索KWなし <span class="badge badge-danger">NG</span></td>
+            <td>「クッパのコンボ解説！<br>高火力コンボからお手軽まで」<br>検索KW入り <span class="badge badge-success">◎</span></td>
+            <td>「【初心者必見】クッパで<br>即VIPいける為に重要なこと7つ」<br>検索KW+数字 <span class="badge badge-success">◎</span></td>
+          </tr>
+          <tr>
+            <td><strong>動画の構成</strong></td>
+            <td>配信開始→雑談→対戦→雑談<br>→対戦→終了（構成なし）<span class="badge badge-danger">NG</span></td>
+            <td>コンボ①→②→③…→まとめ<br>（15種類を順番に解説）<span class="badge badge-success">◎</span></td>
+            <td>①コンボ→②立ち回り→③ガーキャン<br>→④崖ブレス→⑤崖狩り→⑥ぶっ壊し<br>→⑦道連れ（7ポイント構成）<span class="badge badge-success">◎</span></td>
+          </tr>
+          <tr>
+            <td><strong>テロップ/BGM</strong></td>
+            <td>なし <span class="badge badge-danger">NG</span></td>
+            <td>テロップあり <span class="badge badge-success">◎</span></td>
+            <td>テロップ+BGM+効果音 <span class="badge badge-success">◎</span></td>
+          </tr>
+          <tr>
+            <td><strong>致命的な問題</strong></td>
+            <td colspan="3" style="color:var(--danger);font-weight:700;">タイトルに「#shorts」が入った3時間の配信がある。YouTubeがショートと横動画を混同し、アルゴリズムが正しく分類できない可能性</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 埋もれた宝 -->
+  <div class="card card--problem" style="border-left:4px solid var(--warning);">
+    <div class="tags">
+      <span class="tag tag--warning">発見</span>
+      <span class="tag tag--success">宝の山</span>
+    </div>
+    <h3>配信の中に「万再生レベル」のコンテンツが埋もれている</h3>
+    <p>3時間配信「<strong>チノスマ本気で優勝狙うで！！</strong>」(8TqdhcH6alk) のトランスクリプトを全文分析した結果、配信の終盤にRearletが<strong>6時間の独自研究を解説するパート</strong>を発見しました。</p>
+    <div style="background:var(--warning-light);padding:var(--space-24);border-radius:var(--radius);margin:var(--space-16) 0;">
+      <h4 style="color:var(--gray-900);font-size:var(--font-base);margin-bottom:var(--space-8);">🔬 発見された埋もれコンテンツ</h4>
+      <ul style="margin:0;">
+        <li><strong>クッパの横スマッシュのベクトル変更研究</strong> — ステージの位置ごとに撃墜%が変わる仕組みを6時間研究し、小戦場・ポケスタでの最適なベクトル変更の方向を解説</li>
+        <li><strong>「みんなの9割以上がベク変を間違えている」</strong>というキャッチーな主張</li>
+        <li><strong>クエヌ（空中N攻撃）のロジック解説</strong> — なぜ自分のクエヌが通るのか、地上軸と空中軸の使い分けの理論を解説</li>
+        <li><strong>台の位置によって吹っ飛びが変わる</strong>という独自発見（トラップ：戦場の真ん中の台より端の方が飛ぶ）</li>
+      </ul>
+    </div>
+    <p>これらは独自性が高く、<strong>「クッパ ベクトル変更」「クッパ 撃墜 %帯」で検索する人に刺さるコンテンツ</strong>です。5〜10分の教材動画に切り出せば、こんが(174K再生)や無名ch(182K再生)と同じ土俵に乗れます。</p>
+    <p style="margin-top:var(--space-12);">しかし現状は<strong>3時間配信の2時間40分地点</strong>に埋もれており、誰の目にも触れていません。</p>
+  </div>
+
+  <!-- 原因カード群（アルゴリズムベース） -->
+  <div class="card card--problem">
+    <div class="tags">
+      <span class="tag tag--danger">原因 ①</span>
+      <span class="tag tag--danger">致命的</span>
+    </div>
+    <h3>ショート登録者と横動画視聴者の完全な乖離（アルゴリズム上の悪循環）</h3>
+    <p>YouTubeのショートと横動画は<strong>完全に別のアルゴリズム</strong>で運用されています。ショートフィードに横動画は表示されず、逆も同じです。</p>
+    <div style="background:var(--gray-50);padding:var(--space-24);border-radius:var(--radius);margin:var(--space-16) 0;border:1px solid var(--gray-200);">
+      <h4 style="font-size:var(--font-base);color:var(--gray-900);margin-bottom:var(--space-12);">アルゴリズム上の悪循環メカニズム</h4>
+      <ol style="margin:0;font-size:var(--font-sm);line-height:2;">
+        <li><strong>ショートで登録者を獲得</strong> — Rearletのショート（273K再生等）は「面白いクッパプレイの瞬間」に反応した視聴者を集めている</li>
+        <li><strong>この視聴者の視聴目的は「隙間時間の消費」</strong> — 受動的にスワイプして楽しむフロー型の視聴。チャンネルのテーマに深い関心があるわけではない</li>
+        <li><strong>横動画がホームフィードに表示される</strong> → しかしこの視聴者は「大会配信」「VIP連勝」等に興味がないのでクリックしない</li>
+        <li><strong>CTR（クリック率）が低い</strong> → YouTubeが「このチャンネルの横動画は需要がない」と学習</li>
+        <li><strong>既存の熱心な視聴者への推奨すら抑制される</strong> → インプレッション自体が減る悪循環</li>
+      </ol>
+    </div>
+    <p>これは<strong>配信アーカイブだから伸びないのではありません</strong>。ショートの視聴者層と横動画の内容がミスマッチしているために、CTRが構造的に低くなり、アルゴリズムがインプレッションを出さなくなるという問題です。</p>
+    <div class="callout callout-warning" style="margin-top:var(--space-16);">
+      <strong>ゲームジャンルの平均CTR: 8.5%</strong>。2〜3%を下回るとYouTubeは推奨を止める傾向があります。Rearletの横動画はインプレッション数自体が極端に少ないことから、CTRが閾値を大幅に下回っている可能性が高いです。
+    </div>
+  </div>
+
+  <div class="card card--problem">
+    <div class="tags">
+      <span class="tag tag--danger">原因 ②</span>
+      <span class="tag tag--danger">致命的</span>
+    </div>
+    <h3>YouTube検索に引っかからない — AI解析 × メタデータの二重の問題</h3>
+    <p>2026年のYouTubeはGemini AIが動画の<strong>音声・画像・トーン</strong>を直接解析してインデックスします。タグの影響は公式に「最小限」と確認済みです。ただし、タイトル・説明文・動画内の発話内容の<strong>一貫性</strong>がAIの理解精度を左右します。</p>
+    <div class="tbl-wrap">
+      <table class="compare">
+        <thead><tr><th>項目</th><th>Rearlet（実際の値）</th><th>無名ch（182K再生の実際の値）</th></tr></thead>
+        <tbody>
+          <tr><td><strong>タグ</strong></td><td><strong>0個</strong> <span class="badge badge-danger">NG</span></td><td><strong>50個以上</strong>: クッパ, へろー, acola, マリオ, etc.<br><span style="font-size:11px;color:var(--gray-500);">※YouTube公式は「タグの影響は最小限」としているが、AIが動画内容を正確に分類するための補助情報として機能する</span></td></tr>
+          <tr><td><strong>説明文の最初の行</strong></td><td>#スマブラ #スマブラSP ＃リアーレット #Rearlet #クッパ #Bowser #SSBU ＃shorts</td><td>オススメの動画↓ [関連動画3本のリンク]</td></tr>
+          <tr><td><strong>説明文の特徴</strong></td><td>全動画コピペ。「次の配信→X日後21時から」と「配信ルール」のみ</td><td>関連動画リンク+SNSリンク+音楽クレジット+著作権表記</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-danger" style="margin-top:var(--space-16);">
+      <strong>AI解析の観点から:</strong> Gemini AIは動画内の<strong>発話内容</strong>を自動文字起こしして解析します。Rearletの配信では「クッパのベクトル変更」「クエヌのロジック」「カズヤ対策」等の高度な知見が語られていますが、それが3時間の雑談・対戦の中に散在しているため、<strong>AIが「この動画は何についての動画か」を1つのテーマに絞れない</strong>。結果、特定の検索クエリに対する関連性スコアが低くなります。
+    </div>
+    <div class="callout callout-warning" style="margin-top:var(--space-8);">
+      <strong>補足:</strong> 説明文に「＃shorts」タグが入っている横動画がある。横動画に #shorts タグは不要であり、アルゴリズムの分類を混乱させるリスクがあります。
+    </div>
+  </div>
+
+  <div class="card card--problem">
+    <div class="tags">
+      <span class="tag tag--danger">原因 ③</span>
+      <span class="tag tag--warning">高</span>
+    </div>
+    <h3>サムネイルの訴求力不足 → CTRの直接的な低下要因</h3>
+    <p>CTR（クリック率）はアルゴリズムが最初に評価するゲートです。配信アーカイブのサムネイルは配信画面のスクリーンショットが自動設定されただけで、「この動画を見たら何が得られるか」が一瞬で伝わりません。ゲームジャンルの平均CTRは8.5%ですが、この種のサムネイルでは2〜3%すら難しい可能性があります。</p>
+
+    <!-- Rearletの実際のサムネイル（横動画） -->
+    <h4 style="margin:var(--space-24) 0 var(--space-16);color:var(--danger);">Rearlet の横動画サムネイル（実際の画像）</h4>
+    <div class="thumb-grid">
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/pOTIkemgd7Q/maxresdefault.jpg" alt="桜梅桃李ハイライト" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">念願の大型TOP8！桜梅桃李第肆幕ハイライト</div>
+          <span class="thumb-views low">78 回再生 ❌</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/CWBQZDgUZAc/maxresdefault.jpg" alt="チノスマリベンジ" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">全一クッパがチノスマリベンジ！</div>
+          <span class="thumb-views low">599 回再生 ❌</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/8TqdhcH6alk/maxresdefault.jpg" alt="チノスマ優勝" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">チノスマ本気で優勝狙うで！！</div>
+          <span class="thumb-views low">595 回再生 ❌</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 成功チャンネルのサムネイル比較 -->
+    <h4 style="margin:var(--space-32) 0 var(--space-16);color:var(--success);">成功チャンネルのサムネイル（同じクッパ系テーマ）</h4>
+    <div class="thumb-grid">
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/dMu386nulrw/maxresdefault.jpg" alt="クッパコンボ解説" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">クッパのコンボ解説！高火力コンボからお手軽コンボまで</div>
+          <span class="thumb-type compare">他CH</span>
+          <span class="thumb-views high">高再生数 ✅</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/jfSLm_Yc2n8/maxresdefault.jpg" alt="VIP200連勝" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">クッパでVIP200連勝をする ワンタッチ高火力</div>
+          <span class="thumb-type compare">他CH</span>
+          <span class="thumb-views high">高再生数 ✅</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/3RLBKZm8sBs/maxresdefault.jpg" alt="初心者必見クッパ" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">【初心者必見】クッパで即VIPいける為に重要なこと7つ</div>
+          <span class="thumb-type compare">他CH</span>
+          <span class="thumb-views high">高再生数 ✅</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 大会チャンネルのサムネイル -->
+    <h4 style="margin:var(--space-32) 0 var(--space-16);color:var(--info);">大会チャンネルのサムネイル（Rearlet出場試合）</h4>
+    <div class="thumb-grid">
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/ndjtF6g36fk/maxresdefault.jpg" alt="Maesuma Acola VS Rearlet" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">Maesuma's HIT #147 Acola (Steve) VS Rearlet (Bowser)</div>
+          <span class="thumb-type compare">大会CH</span>
+          <span class="thumb-views mid">大会チャンネル配信</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/mJLXzRUy4c8/maxresdefault.jpg" alt="スマバト Kome VS リアーレット" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">スマバトSP Revo | Kome(シュルク) VS リアーレット(クッパ)</div>
+          <span class="thumb-type compare">大会CH</span>
+          <span class="thumb-views mid">大会チャンネル配信</span>
+        </div>
+      </div>
+      <div class="thumb-item">
+        <img src="https://img.youtube.com/vi/ZU6Y_41Krso/maxresdefault.jpg" alt="大阪大会 Rearlet vs Te-sHi" loading="lazy">
+        <div class="thumb-meta">
+          <div class="thumb-title">Rearlet(クッパ) vs Te-sHi(サムス) - スマブラSP大阪大会</div>
+          <span class="thumb-type compare">大会CH</span>
+          <span class="thumb-views mid">大会チャンネル配信</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>デザイン原則から見たサムネイル:</strong> フィードバックチェックリストの「アイキャッチ・バナー」観点を適用すると ── ①1秒で伝えたいメッセージが読めるか ②情報が3要素以内に絞られているか ③文字と背景のコントラストが十分か。現状のサムネイルはいずれも満たしていません。
+    </div>
+  </div>
+
+  <div class="card card--problem">
+    <div class="tags">
+      <span class="tag tag--danger">原因 ④</span>
+      <span class="tag tag--warning">高</span>
+    </div>
+    <h3>最初の30秒問題 — アルゴリズムが最重視する「フック」がない</h3>
+    <p>2026年のYouTubeアルゴリズムは<strong>最初の30秒間の視聴維持率</strong>を特に重視します。<strong>高CTR × 低維持率 = 「釣り」と判断され、動画の評価が制限される</strong>仕組みです。配信アーカイブ自体がアルゴリズム上不利になることはありませんが、Rearletの配信は冒頭が「挨拶→雑談→セットアップ」で始まるため、新規視聴者が最初の30秒で価値を感じられず離脱する構造になっています。対策としてはアーカイブ公開後に<strong>冒頭の不要部分をカット</strong>するか、<strong>チャプター（タイムスタンプ）</strong>を設定して視聴者が目的のパートに直接飛べるようにします。</p>
+    <div class="grid-2">
+      <div style="background:var(--danger-light);padding:var(--space-24);border-radius:var(--radius);">
+        <h4 style="font-size:var(--font-base);color:var(--danger);margin-bottom:var(--space-8);">❌ Rearlet: 2時間58分の配信</h4>
+        <ul style="margin:0;font-size:var(--font-sm);">
+          <li>配信開始→挨拶→対戦→雑談→対戦</li>
+          <li>トロッコの話→レイアウトの話→対戦</li>
+          <li>カズヤきつい→VIP対戦→雑談</li>
+          <li><strong>2時間40分目</strong>: ベクトル変更の研究解説（金コンテンツ）</li>
+          <li>推定視聴維持率: <strong>1〜3%</strong></li>
+        </ul>
+      </div>
+      <div style="background:var(--success-light);padding:var(--space-24);border-radius:var(--radius);">
+        <h4 style="font-size:var(--font-base);color:var(--success);margin-bottom:var(--space-8);">✅ 無名ch: 8分34秒の教材動画</h4>
+        <ul style="margin:0;font-size:var(--font-sm);">
+          <li>① 基本コンボ（上投げ空前）</li>
+          <li>② 透かし掴み＋透かし横B</li>
+          <li>③ ガーキャン上B</li>
+          <li>④ 崖ブレス → ⑤ 崖狩り</li>
+          <li>⑥ シールドブレイク → ⑦ 道連れ</li>
+          <li>推定視聴維持率: <strong>40〜60%</strong></li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:var(--space-16);">同じ「クッパの解説」でも、3時間の配信 vs 8分の教材動画では視聴維持率に<strong>10〜30倍の差</strong>が出ます。</p>
+  </div>
+
+  <div class="card card--problem">
+    <div class="tags">
+      <span class="tag tag--warning">原因 ⑤</span>
+      <span class="tag tag--info">中</span>
+    </div>
+    <h3>独自知見が配信内に埋もれている → チャンネルの専門性シグナルに繋がっていない</h3>
+    <p>配信のトランスクリプトを分析すると、Rearletは<strong>「全一クッパ」を名乗れるレベルの独自知見</strong>を持っています。しかし配信で喋るだけで動画として切り出していないため、YouTubeのAIが「このチャンネルはクッパの専門チャンネルである」と学習できず、<strong>Topical Authority（専門性スコア）</strong>が蓄積されません。テーマ特化型の動画を定期投稿することで、関連検索で優遇される「専門チャンネル」としてアルゴリズムに認識させることができます。</p>
+    <div style="background:var(--warning-light);padding:var(--space-24);border-radius:var(--radius);margin:var(--space-16) 0;">
+      <h4 style="color:var(--gray-900);font-size:var(--font-base);margin-bottom:var(--space-8);">📝 配信トランスクリプトから発見した「動画化すべきネタ」</h4>
+      <ol style="margin:0;font-size:var(--font-sm);">
+        <li>ベクトル変更の位置別研究（小戦場・ポケスタ・戦場での撃墜%帯の違い）</li>
+        <li>クエヌ（空N）のロジック — 登りクエヌと急降下クエヌの使い分け理論</li>
+        <li>着地狩りの思考法 — 「回避と暴れの2択しか見ていない」</li>
+        <li>上投げコンボの精度を上げるコツ</li>
+        <li>カズヤ対策 — 「もう最初から勝てない」と思うレベルのきつさ、それでも何をするか</li>
+        <li>対スティーブ — トロッコを撃ってこない相手への対処法</li>
+        <li>道連れの心理戦 — 「1回見せて2回目以降降りされたくない恐怖を植える」</li>
+      </ol>
+    </div>
+    <p>これらは全て<strong>配信でしか語られていない</strong>ため、YouTube検索では一切発見されません。</p>
+    <div style="margin-top:var(--space-16);">
+      <h4 style="font-size:var(--font-sm);color:var(--gray-600);margin-bottom:var(--space-8);">大会チャンネルがRearletの試合を配信している例：</h4>
+      <div class="thumb-grid">
+        <div class="thumb-item">
+          <img src="https://img.youtube.com/vi/ndjtF6g36fk/maxresdefault.jpg" alt="Maesuma" loading="lazy">
+          <div class="thumb-meta">
+            <div class="thumb-title">Maesuma's HIT Acola VS Rearlet</div>
+            <span class="thumb-views mid">大会CH → 視聴者はこっちで見る</span>
+          </div>
+        </div>
+        <div class="thumb-item">
+          <img src="https://img.youtube.com/vi/AwZIzGZ2D6M/maxresdefault.jpg" alt="桜梅桃李" loading="lazy">
+          <div class="thumb-meta">
+            <div class="thumb-title">桜梅桃李 第肆幕 Rearlet vs Nao</div>
+            <span class="thumb-views mid">大会CH → 解説付きで有利</span>
+          </div>
+        </div>
+        <div class="thumb-item">
+          <img src="https://img.youtube.com/vi/WloqodX1ybM/maxresdefault.jpg" alt="大阪大会" loading="lazy">
+          <div class="thumb-meta">
+            <div class="thumb-title">ラリックス(ファルコ) vs Rearlet(クッパ)</div>
+            <span class="thumb-views mid">大会CH → 公式感で勝る</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card--problem">
+    <div class="tags">
+      <span class="tag tag--warning">原因 ⑥</span>
+      <span class="tag tag--info">中</span>
+    </div>
+    <h3>チャンネル全体評価で「一貫性シグナル」が弱い</h3>
+    <p>2026年のYouTubeは個別動画ではなく<strong>チャンネル全体</strong>を評価する方式に移行しています。評価される要素は ①投稿頻度の一貫性 ②トピックの一貫性 ③視聴者のリピート率 ④コミュニティ活動（コメント返信等）です。</p>
+    <p>Rearletの場合、ショートは「面白クッパプレイ」で一貫していますが、横動画は「大会配信」「参加型配信」「VIP連勝」「大会ハイライト」とテーマが散らばっています。<strong>YouTubeのAIが「このチャンネルの横動画は何について語るチャンネルか」を学習できない</strong>ため、関連する検索クエリで推奨される可能性が低くなります。</p>
+    <div class="callout callout-info" style="margin-top:var(--space-16);">
+      <strong>データ:</strong> ショートと横動画の両フォーマットを使うチャンネルは、横動画のみのチャンネルより<strong>40〜60%速く成長</strong>するというデータがあります。ただしこれは<strong>テーマの一貫性が前提</strong>です。ショートで「面白クッパクリップ」→ 横動画で「クッパ解説・攻略」という導線が成立すれば、Rearletもこの成長率を享受できる可能性があります。
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║   SECTION 04 : 検索アルゴリズム深掘り    ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<section>
+  <div class="sec-num">SECTION 04</div>
+  <h2>検索・おすすめに出ないメカニズム（2026年版）</h2>
+  <p class="sec-desc">YouTubeの3つの露出経路（①ホームフィード ②検索 ③関連動画）それぞれで、Rearletの横動画がどう評価されているかを分析します。</p>
+
+  <div class="flow-step">
+    <div class="flow-num fail">1</div>
+    <div class="flow-body">
+      <h4>ホームフィード（ブラウズ機能）<span class="badge badge-danger">ここで脱落</span></h4>
+      <p><strong>2025年12月の変更で長尺枠が80%削減</strong>。残り2枠は「CTR × 視聴維持率」が高い動画が優先。Rearletの横動画はショート登録者のCTRが構造的に低いため、フィードに載らない。さらに、ショートでのエンゲージメントが横動画のテスト配信に繋がる仕組みだが、ショートと横動画のテーマが乖離しているため連携が機能していない。</p>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num fail">2</div>
+    <div class="flow-body">
+      <h4>YouTube検索 <span class="badge badge-danger">ここで脱落</span></h4>
+      <p>Gemini AIがタイトル・説明文・<strong>動画内の発話</strong>をマルチモーダル解析。しかしRearletの配信は1本の中に複数テーマ（大会、VIP、キャラ対策、雑談）が混在し、特定の検索クエリへの関連性スコアが分散。加えてタイトルが「チノスマリベンジ」等の内輪ワードで、検索KW（「クッパ コンボ」「クッパ 対策」等）と一致しない。</p>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num fail">3</div>
+    <div class="flow-body">
+      <h4>関連動画（次の動画） <span class="badge badge-warning">部分的に脱落</span></h4>
+      <p>関連動画は「この動画を見た人が次に見る動画」を予測するシステム。Rearletのショートの関連には出る可能性があるが、ショート→横動画への導線（固定コメント、エンドスクリーン、説明文リンク）が一切設定されていないため、アルゴリズムが連携を学習できない。</p>
+    </div>
+  </div>
+  <div class="flow-step">
+    <div class="flow-num">4</div>
+    <div class="flow-body">
+      <h4>チャンネル全体評価 <span class="badge badge-warning">弱い</span></h4>
+      <p>2026年のYouTubeは個別動画よりチャンネル全体の「一貫性・専門性・リピーター率」を評価。横動画のテーマが散在しているため、AIが「クッパ専門チャンネル」と認識しにくい。ショートと横動画の両方を使うチャンネルは40〜60%速く成長するというデータがあるが、テーマの一貫性が前提条件。</p>
+    </div>
+  </div>
+
+  <div class="callout callout-danger" style="margin-top:var(--space-32);">
+    <strong>結論:</strong> 3つの露出経路すべてで構造的な問題がある。<strong>①ホーム: ショート登録者のCTR低下 → ②検索: テーマ分散でAI関連性スコア低下 → ③関連: ショートからの導線なし</strong>。これらは「配信だから伸びない」ではなく、コンテンツ設計とメタデータ設計の問題です。
+  </div>
+
+  <!-- 実際の動画を視聴して比較 -->
+  <div class="chart-card" style="margin-top:var(--space-32);">
+    <h3>動画を実際に見比べてみる</h3>
+    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-24);">Rearletの最新横動画と成功チャンネルの動画を埋め込みで比較。内容の「加工度」の差がわかります。</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-24);">
+      <div>
+        <h4 style="color:var(--danger);font-size:var(--font-sm);margin-bottom:var(--space-8);">❌ Rearlet 横動画（78回再生）</h4>
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);">
+          <iframe src="https://www.youtube.com/embed/pOTIkemgd7Q" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <p style="font-size:var(--font-xs);color:var(--gray-500);margin-top:var(--space-8);">念願の大型TOP8！桜梅桃李第肆幕ハイライト</p>
+      </div>
+      <div>
+        <h4 style="color:var(--success);font-size:var(--font-sm);margin-bottom:var(--space-8);">✅ 成功チャンネル（コンボ解説）</h4>
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);">
+          <iframe src="https://www.youtube.com/embed/dMu386nulrw" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <p style="font-size:var(--font-xs);color:var(--gray-500);margin-top:var(--space-8);">クッパのコンボ解説！高火力コンボからお手軽コンボまで</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-24);margin-top:var(--space-24);">
+      <div>
+        <h4 style="color:var(--danger);font-size:var(--font-sm);margin-bottom:var(--space-8);">❌ Rearlet 横動画（599回再生）</h4>
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);">
+          <iframe src="https://www.youtube.com/embed/CWBQZDgUZAc" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <p style="font-size:var(--font-xs);color:var(--gray-500);margin-top:var(--space-8);">全一クッパがチノスマリベンジ！</p>
+      </div>
+      <div>
+        <h4 style="color:var(--success);font-size:var(--font-sm);margin-bottom:var(--space-8);">✅ 成功チャンネル（立ち回り解説）</h4>
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);">
+          <iframe src="https://www.youtube.com/embed/3RLBKZm8sBs" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <p style="font-size:var(--font-xs);color:var(--gray-500);margin-top:var(--space-8);">【初心者必見】クッパで即VIPいける為に重要なこと7つ</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rearletのショート：なぜ伸びるのかの実例 -->
+  <div class="chart-card" style="margin-top:var(--space-32);">
+    <h3>一方、Rearletのショートは伸びている（実際の動画）</h3>
+    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-24);">ショートは短くインパクトある構成で、アルゴリズムに好まれるフォーマット。この「伸びる力」を横動画に転用するのが鍵です。</p>
+    <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:var(--space-16);">
+      <div>
+        <div style="position:relative;padding-bottom:177.78%;height:0;overflow:hidden;border-radius:var(--radius);">
+          <iframe src="https://www.youtube.com/embed/SklqqujVTTo" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <p style="font-size:var(--font-xs);color:var(--success);font-weight:700;margin-top:6px;text-align:center;">273,249 回</p>
+      </div>
+      <div>
+        <div style="position:relative;padding-bottom:177.78%;height:0;overflow:hidden;border-radius:var(--radius);">
+          <iframe src="https://www.youtube.com/embed/NRqiU0oGpAI" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <p style="font-size:var(--font-xs);color:var(--success);font-weight:700;margin-top:6px;text-align:center;">121,915 回</p>
+      </div>
+      <div>
+        <div style="position:relative;padding-bottom:177.78%;height:0;overflow:hidden;border-radius:var(--radius);">
+          <iframe src="https://www.youtube.com/embed/ARnm9wvAFfU" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <p style="font-size:var(--font-xs);color:var(--success);font-weight:700;margin-top:6px;text-align:center;">34,795 回</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║   SECTION 05 : 改善アクション            ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<section>
+  <div class="sec-num">SECTION 05</div>
+  <h2>改善アクション 7選 ── 「ガチ × エンタメ融合」路線</h2>
+  <p class="sec-desc">Rearletの方向性は<strong>「ガチ × エンタメ融合」</strong>。解説系チャンネルのコピーではなく、ガチプレイの面白さをパッケージングして届ける方針で改善策を設計しています。</p>
+
+  <div class="callout callout-info" style="margin-bottom:var(--space-32);">
+    <strong>大原則: 中身は変えない。パッケージングを変える。</strong><br>
+    配信はそのまま続ける。配信の中の面白いパートを切り出して「横動画」として別途投稿する。解説トーンではなくエンタメトーンで。「こんなヤバいこと見つけた」「全一クッパが本気出した」── これがRearletの横動画。
+  </div>
+
+  <div class="card card--solution">
+    <div class="tags">
+      <span class="tag tag--danger">最優先</span>
+      <span class="tag">工数: 低</span>
+      <span class="tag tag--success">効果: 大</span>
+    </div>
+    <h3>① 配信ハイライトを「横動画」として切り出す</h3>
+    <p>配信アーカイブはそのまま残す。その中から<strong>エンタメ性の高い面白パート</strong>を5〜15分に切り出して横動画として投稿。YouTubeのAIが「何の動画か」を特定でき、ショート視聴者とは別のルートで新規に届くようになります。</p>
+    <div class="callout callout-success" style="margin-top:var(--space-16);">
+      <strong>切り出し候補（ガチ × エンタメ路線）:</strong><br>
+      ① 「<strong>全一クッパ、チノスマでリベンジしたら会場沸いた</strong>」← 大会のベストバウト10分ハイライト<br>
+      ② 「<strong>優勝狙って本気で暴れてみた【チノスマ】</strong>」← 大会ダイジェスト + リアクション<br>
+      ③ 「<strong>視聴者全員ぶっ飛ばすクッパ配信【参加型ハイライト】</strong>」← 参加型の面白シーン集<br>
+      ④ 「<strong>6時間研究してヤバいこと見つけた【クッパ ベクトル変更】</strong>」← 発見のエンタメ化
+    </div>
+    <div style="background:var(--gray-50);padding:var(--space-16);border-radius:var(--radius);margin-top:var(--space-16);font-size:var(--font-sm);border:1px solid var(--gray-200);">
+      <strong>解説系との違い:</strong> こんが・無名chの「コンボガイド」「VIP攻略法」とは土俵が違う。Rearletは「ガチ勢が本気でやるとこうなる」「研究したらヤバいこと見つけた」という体験・ストーリーを見せる。教える側ではなく、やる側の視点。
+    </div>
+  </div>
+
+  <div class="card card--solution">
+    <div class="tags">
+      <span class="tag tag--danger">最優先</span>
+      <span class="tag">工数: 中</span>
+      <span class="tag tag--success">効果: 大</span>
+    </div>
+    <h3>② サムネイルのブランド構築</h3>
+    <p>CTR（クリック率）はアルゴリズムの最初のゲート。「ガチ × エンタメ」の世界観が一瞬で伝わるサムネイルを統一デザインで。</p>
+    <ul>
+      <li><strong>テキスト 2〜5語:</strong> 「会場沸いた」「ヤバいの見つけた」「全員ぶっ飛ばす」── 感情が動く言葉</li>
+      <li><strong>キャラ素材 + プレイ画面:</strong> ガチ感を出す。配信スクショそのままはNG</li>
+      <li><strong>数字の活用:</strong> 「273K再生のクッパ」「TOP8」「VIP200連勝」── 実績で引く</li>
+      <li><strong>統一フォーマット:</strong> フォント・配色・レイアウトを固定。「これRearletの動画だ」と一目でわかるように</li>
+    </ul>
+  </div>
+
+  <div class="card card--solution">
+    <div class="tags">
+      <span class="tag tag--warning">高優先</span>
+      <span class="tag">工数: 低</span>
+      <span class="tag tag--success">効果: 大</span>
+    </div>
+    <h3>③ 動画構成の「エンタメ型フック」</h3>
+    <p>解説系の「結論→説明→まとめ」ではなく、<strong>エンタメ系の「ヤバいシーン先出し→ストーリー→クライマックス」</strong>構成に。</p>
+    <div class="callout callout-info">
+      <strong>ガチ × エンタメの動画構成:</strong><br>
+      ① <strong>フック（0〜10秒）:</strong> 一番盛り上がるシーンを先出し。「この後とんでもないことが起きます」<br>
+      ② <strong>ストーリー:</strong> そこに至るまでの流れ。配信の面白いやり取り、ピンチ、逆転の過程を編集<br>
+      ③ <strong>クライマックス:</strong> フックで見せたシーンの本編。リアクション込み<br>
+      ④ <strong>締め（ラスト10秒）:</strong> 次の動画・チャンネル登録への自然な誘導
+    </div>
+  </div>
+
+  <div class="card card--solution">
+    <div class="tags">
+      <span class="tag tag--warning">高優先</span>
+      <span class="tag">工数: 低</span>
+      <span class="tag tag--info">効果: 中〜大</span>
+    </div>
+    <h3>④ ショート ↔ 横動画の双方向導線</h3>
+    <p>2026年のYouTubeでは<strong>ショートが横動画の「テストの場」として機能</strong>します。ショートでエンゲージメントが高いチャンネルは、横動画もおすすめされやすくなる。ただし導線がなければアルゴリズムは連携を学習できません。</p>
+    <ul>
+      <li><strong>ショート → 横動画:</strong> 固定コメントに「フルver.はこちら →（横動画URL）」</li>
+      <li><strong>横動画 → ショート:</strong> 横動画のベストシーンをショートに切り出し（逆導線）</li>
+      <li><strong>テーマの一致:</strong> 同じ配信からショート（面白瞬間）+ 横動画（ハイライト集）をセットで投稿</li>
+    </ul>
+  </div>
+
+  <div class="card card--solution">
+    <div class="tags">
+      <span class="tag tag--primary">中優先</span>
+      <span class="tag">工数: 低</span>
+      <span class="tag tag--success">効果: 大（長期）</span>
+    </div>
+    <h3>⑤ 配信アーカイブの最適化（今のまま改善）</h3>
+    <p>配信アーカイブ自体もアルゴリズム上不利ではない。少しの調整で配信単体のパフォーマンスも改善できます。</p>
+    <ul>
+      <li><strong>タイトル修正:</strong> 配信後に検索KWを含むタイトルに変更（「チノスマリベンジ」→「【チノスマ】全一クッパのリベンジ配信」）</li>
+      <li><strong>説明文:</strong> 配信ごとに内容を1〜2行で記載（テンプレートコピペだけはやめる）</li>
+      <li><strong>チャプター:</strong> 「0:00 配信開始 / 15:30 第1試合 / 1:20:00 決勝」等のタイムスタンプ</li>
+      <li><strong>サムネイル:</strong> 配信スクショではなく、デザインしたサムネイルに差し替え</li>
+      <li><strong>冒頭カット:</strong> 配信開始前の待機時間・雑談をカットして本編から始める</li>
+    </ul>
+  </div>
+
+  <div class="card card--solution">
+    <div class="tags">
+      <span class="tag tag--primary">中優先</span>
+      <span class="tag">工数: 低</span>
+      <span class="tag tag--info">効果: 中</span>
+    </div>
+    <h3>⑥ シリーズ化 × プレイリスト戦略</h3>
+    <p>セッション時間（連続視聴）を伸ばし、アルゴリズムの評価を上げます。</p>
+    <ul>
+      <li>「大会ハイライト」「VIPチャレンジ」「視聴者参加型」「研究・発見」等のシリーズ化</li>
+      <li>各シリーズをプレイリストにまとめ、終了画面で次の動画へ誘導</li>
+      <li>タイトルに統一感を出す（「【チノスマ】」「【参加型】」「【研究】」等のタグ）</li>
+    </ul>
+  </div>
+
+  <div class="card card--solution">
+    <div class="tags">
+      <span class="tag tag--info">長期</span>
+      <span class="tag">工数: 低</span>
+      <span class="tag tag--success">効果: 大（ブランド）</span>
+    </div>
+    <h3>⑦ 「ガチ × エンタメ クッパ使い」のポジショニング</h3>
+    <p>チャンネルの概要欄・バナー・セクション構成で「何のチャンネルか」を明確にします。解説系でも実況系でもない、<strong>「ガチ勢がガチで楽しんでる」</strong>という独自ポジション。「クッパの面白さといえばRearlet」を確立します。</p>
+    <div style="background:var(--gray-50);padding:var(--space-16);border-radius:var(--radius);margin-top:var(--space-12);font-size:var(--font-sm);border:1px solid var(--gray-200);">
+      <strong>ポジションマップ:</strong><br>
+      こんが = クッパ解説のプロ（教材型）<br>
+      無名ch = クッパ攻略の先生（講座型）<br>
+      大会ch = 公式記録（アーカイブ型）<br>
+      <strong>Rearlet = ガチクッパの面白さを伝える人（エンタメ × ガチ）</strong> ← ここが空いている
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║   SECTION 06 : ロードマップ              ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<section>
+  <div class="sec-num">SECTION 06</div>
+  <h2>実行ロードマップ</h2>
+  <p class="sec-desc">3フェーズに分け、今すぐできる施策から段階的に実行します。</p>
+
+  <div class="roadmap">
+    <div class="rm-item active">
+      <div class="rm-dot"></div>
+      <div class="rm-phase">PHASE 1 ── 今すぐ（1〜2週間）</div>
+      <h4>配信ハイライトから「初の横動画」を1本投稿する</h4>
+      <p>直近の配信で一番盛り上がったパートを10〜15分のハイライト動画に切り出す。エンタメトーンのタイトル（「〇〇したらヤバいことになった」等）、デザインしたサムネイル、説明文を設定して投稿。ショートの固定コメントからリンク。<strong>「ガチ × エンタメの横動画はこういうものだ」を1本で体験するフェーズ。</strong></p>
+    </div>
+    <div class="rm-item">
+      <div class="rm-dot"></div>
+      <div class="rm-phase">PHASE 2 ── 1〜2ヶ月</div>
+      <h4>配信ごとにハイライト横動画をセットで投稿</h4>
+      <p>配信→ハイライト横動画→ショートの3点セット運用を確立。ショート↔横動画の双方向導線を設計。「大会ハイライト」「参加型」「研究・発見」等のシリーズをプレイリスト化。配信アーカイブのタイトル・説明文・チャプターも最適化。</p>
+    </div>
+    <div class="rm-item">
+      <div class="rm-dot"></div>
+      <div class="rm-phase">PHASE 3 ── 3ヶ月〜</div>
+      <h4>「ガチ × エンタメ クッパ」のポジション確立</h4>
+      <p>横動画が定期的に投稿される状態を維持。YouTube Studioでデータ分析（CTR・視聴維持率の離脱ポイント改善）。チャンネル概要欄・バナーのブランディング。「クッパの面白さといえばRearlet」のポジションを確立し、解説系とは別の検索・おすすめ経路を開拓。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════╗ -->
+<!-- ║   CONCLUSION                            ║ -->
+<!-- ╚══════════════════════════════════════════╝ -->
+<div class="conclusion">
+  <h2>結論</h2>
+  <!-- ショートの実績を視覚的に示す -->
+  <div style="display:flex;gap:12px;justify-content:center;margin-bottom:32px;flex-wrap:wrap;">
+    <img src="https://img.youtube.com/vi/SklqqujVTTo/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
+    <img src="https://img.youtube.com/vi/NRqiU0oGpAI/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
+    <img src="https://img.youtube.com/vi/ARnm9wvAFfU/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
+    <img src="https://img.youtube.com/vi/LYBmQyeq76k/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
+    <img src="https://img.youtube.com/vi/kUFJQSxv0CE/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
+  </div>
+  <p>横動画が伸びない原因は、大きく<strong>3つのアルゴリズム上の構造問題</strong>に集約されます。</p>
+  <ol style="text-align:left;max-width:600px;margin:0 auto var(--space-24);line-height:1.8;">
+    <li><strong>ショート登録者と横動画のテーマ乖離</strong> → CTR構造的低下 → インプレッション停止の悪循環</li>
+    <li><strong>メタデータ不在 + 1本の中にテーマが散在</strong> → AIが「何の動画か」特定できず検索に出ない</li>
+    <li><strong>2025年12月のブラウズフィード改変</strong>（長尺枠80%削減）で、CTRの低い横動画はさらに不利に</li>
+  </ol>
+  <p>配信アーカイブを投稿すること自体は問題ではありません。解決策は<strong>「解説系に転向する」ことではなく、「ガチ × エンタメの面白さをパッケージングする」</strong>こと。配信ハイライトの切り出し、サムネイル設計、メタデータ最適化 ── <strong>中身は変えず、届け方だけ変える</strong>。これで「こんが」「無名ch」とは別の土俵で、「クッパの面白さといえばRearlet」のポジションを確立できます。</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:480px;margin:32px auto;">
+    <div style="text-align:center;">
+      <div style="font-size:32px;">🔍</div>
+      <div style="font-size:12px;opacity:0.8;margin-top:4px;">SEO最適化</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-size:32px;">🎨</div>
+      <div style="font-size:12px;opacity:0.8;margin-top:4px;">サムネイル設計</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-size:32px;">✂️</div>
+      <div style="font-size:12px;opacity:0.8;margin-top:4px;">コンテンツ加工</div>
+    </div>
+  </div>
+  <p class="cta-text">まずは Phase 1 ── 直近の配信から一番面白いパートを切り出して1本投稿。<br>中身は変えない。届け方だけ変える。</p>
+</div>
+
+</div>
+
+<footer>
+  <p>Rearlet チャンネル分析レポート v6 ── 2026年4月12日作成</p>
+  <p style="margin-top:var(--space-4)">データ出典: Social Blade / YouTube RSS Feed / YouTube動画ページ（メタデータ直接取得） / トランスクリプト全文分析</p>
+  <p style="margin-top:var(--space-4)">アルゴリズム分析出典: Mario Joos (MrBeast等100M+チャンネル管理) / Dataslayer / YouTube公式ヘルプ / TubeBuddy / WordStream / アドネスラボ</p>
+  <p style="margin-top:var(--space-4)">2025年12月ブラウズフィード変更: <a href="https://www.dataslayer.ai/blog/youtubes-december-2025-algorithm-update-browse-feed-cut-long-videos-by-80" style="color:var(--accent);">Dataslayer記事</a> / ショート vs 横動画アルゴリズム分離: <a href="https://ytbs.jp/book2026/" style="color:var(--accent);">YTBS 2026</a></p>
+  <p style="margin-top:var(--space-4)">サムネイル画像: YouTube Data API (img.youtube.com) / 動画埋め込み: YouTube IFrame API</p>
+  <p style="margin-top:var(--space-4)">比較対象: こんが ch (174K再生) / 無名ちゃんねる (182K再生) / VGBootCamp (667K登録)</p>
+</footer>
+
+</body>
+</html>

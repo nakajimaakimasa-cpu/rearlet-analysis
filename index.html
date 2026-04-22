@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>横動画が伸びない原因と改善戦略 ── Rearlet チャンネル分析</title>
+<title>Rearlet Shorts戦略 完全レポート ── エンタ×ガチで半年5万人</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap');
 
@@ -757,1126 +757,1908 @@
   }
 </style>
 </head>
+<style>
+  /* ===== ショート分析サイト 追加スタイル ===== */
+  .shot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    margin: var(--space-24) 0;
+  }
+  @media (max-width: 768px) { .shot-grid { grid-template-columns: 1fr; } }
+  .shot {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+  }
+  .shot img {
+    width: 100%;
+    display: block;
+    background: #111;
+  }
+  .shot-cap {
+    padding: var(--space-12) var(--space-16);
+    font-size: var(--font-xs);
+    color: var(--gray-600);
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .big-num {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.03em;
+  }
+  .big-num.ok {
+    background: linear-gradient(135deg, var(--success), #55EFC4);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .big-num.bad {
+    background: linear-gradient(135deg, var(--danger), #FF9F43);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .flow-chain { margin: var(--space-32) 0; }
+  .flow-step {
+    background: var(--white);
+    border-left: 6px solid var(--primary);
+    border-radius: var(--radius);
+    padding: var(--space-20, 20px) var(--space-24);
+    margin-bottom: var(--space-16);
+    box-shadow: var(--shadow-sm);
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: var(--space-16);
+    align-items: center;
+    position: relative;
+  }
+  .flow-step.warn { border-left-color: var(--warning); background: #FFFDF5; }
+  .flow-step.bad { border-left-color: var(--danger); background: #FFF7F5; }
+  .flow-step .fs-date {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    color: var(--primary);
+  }
+  .flow-step.warn .fs-date { color: #E67E22; }
+  .flow-step.bad .fs-date { color: var(--danger); }
+  .flow-step .fs-body { font-size: var(--font-base); font-weight: 700; color: var(--gray-900); }
+  .flow-step .fs-sub { font-size: var(--font-sm); color: var(--gray-600); margin-top: 4px; font-weight: 400; }
+  .flow-step::after {
+    content: '↓';
+    position: absolute;
+    left: 30px;
+    bottom: -22px;
+    color: var(--gray-400);
+    font-size: 18px;
+    font-weight: 900;
+    z-index: 1;
+  }
+  .flow-step:last-child::after { display: none; }
+
+  .ngok-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    margin: var(--space-24) 0;
+  }
+  @media (max-width: 640px) { .ngok-grid { grid-template-columns: 1fr; } }
+  .ngok-item {
+    padding: var(--space-16) var(--space-20, 20px);
+    border-radius: var(--radius);
+    font-size: var(--font-sm);
+    line-height: 1.7;
+  }
+  .ngok-item.ng {
+    background: var(--danger-light);
+    border-left: 4px solid var(--danger);
+  }
+  .ngok-item.ok {
+    background: var(--success-light);
+    border-left: 4px solid var(--success);
+  }
+  .ngok-item .lbl {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .ngok-item.ng .lbl { color: var(--danger); }
+  .ngok-item.ok .lbl { color: var(--success); }
+
+  .video-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    margin-bottom: var(--space-32);
+    border-top: 6px solid var(--primary);
+  }
+  .video-card.ok-top { border-top-color: var(--success); }
+  .video-card.warn-top { border-top-color: #E67E22; }
+  .video-card.bad-top { border-top-color: var(--danger); }
+  .video-card .vc-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-12);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-16);
+  }
+  .video-card .vc-date {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    color: var(--primary);
+  }
+  .video-card.ok-top .vc-date { color: var(--success); }
+  .video-card.warn-top .vc-date { color: #E67E22; }
+  .video-card.bad-top .vc-date { color: var(--danger); }
+  .video-card h3 {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--gray-900);
+    flex: 1;
+  }
+
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  .insight-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: var(--space-24);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .insight-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .insight-card .letter {
+    position: absolute;
+    top: -12px;
+    left: var(--space-24);
+    background: var(--primary);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+  }
+  .insight-card.pos .letter { background: var(--success); }
+  .insight-card.neg .letter { background: var(--danger); }
+  .insight-card.neu .letter { background: #E67E22; }
+  .insight-card h3 {
+    font-size: var(--font-base);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: var(--space-12) 0 var(--space-8);
+    line-height: 1.4;
+  }
+  .insight-card p {
+    font-size: var(--font-sm);
+    color: var(--gray-600);
+    line-height: 1.7;
+  }
+
+  .anchor-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--gray-200);
+    padding: var(--space-12) 0;
+  }
+  .anchor-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--space-24);
+    display: flex;
+    gap: var(--space-16);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .anchor-nav-inner::-webkit-scrollbar { display: none; }
+  .anchor-nav a {
+    font-size: var(--font-xs);
+    font-weight: 600;
+    color: var(--gray-600);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 100px;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .anchor-nav a:hover { background: var(--gray-100); color: var(--gray-900); }
+
+  footer.site-footer {
+    background: var(--gray-900);
+    color: var(--gray-400);
+    padding: var(--space-64) var(--space-24);
+    text-align: center;
+    font-size: var(--font-sm);
+  }
+  footer.site-footer strong { color: white; }
+  footer.site-footer code {
+    background: rgba(255,255,255,0.08);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #F0EDFF;
+  }
+</style>
+
+<style>
+  /* ===== v3 追加スタイル ===== */
+  .report-meta {
+    background: var(--gray-900);
+    color: rgba(255,255,255,0.6);
+    padding: var(--space-12) 0;
+    font-size: var(--font-xs);
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .report-meta strong { color: #FFD580; }
+
+  .metric-hero {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  .metric-hero .box {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    position: relative;
+    overflow: hidden;
+  }
+  .metric-hero .box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+  }
+  .metric-hero .num {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-3xl);
+    font-weight: 900;
+    color: var(--gray-900);
+    line-height: 1.1;
+  }
+  .metric-hero .lbl {
+    font-size: var(--font-xs);
+    color: var(--gray-500);
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+  .metric-hero .sub {
+    font-size: var(--font-sm);
+    color: var(--gray-700);
+    margin-top: var(--space-8);
+    line-height: 1.5;
+  }
+
+  .triage-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  @media (max-width: 900px) { .triage-grid { grid-template-columns: 1fr; } }
+  .triage-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    border-top: 6px solid;
+    position: relative;
+  }
+  .triage-card.akakikus { border-top-color: var(--info); }
+  .triage-card.shuton { border-top-color: var(--success); }
+  .triage-card.buri { border-top-color: #E67E22; }
+  .triage-card .trophy {
+    position: absolute;
+    top: -12px; right: 16px;
+    background: var(--success);
+    color: white;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+    font-weight: 700;
+  }
+  .triage-card h3 {
+    font-size: var(--font-xl);
+    font-weight: 900;
+    color: var(--gray-900);
+    margin-bottom: var(--space-8);
+  }
+  .triage-card .subtitle {
+    color: var(--gray-500);
+    font-size: var(--font-xs);
+    margin-bottom: var(--space-16);
+    letter-spacing: 1px;
+  }
+  .triage-card .big-metric {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-4xl);
+    font-weight: 900;
+    line-height: 1;
+    margin: var(--space-16) 0 var(--space-8);
+  }
+  .triage-card.akakikus .big-metric { color: var(--info); }
+  .triage-card.shuton .big-metric { color: var(--success); }
+  .triage-card.buri .big-metric { color: #E67E22; }
+  .triage-card .metric-label {
+    font-size: var(--font-xs);
+    color: var(--gray-500);
+    letter-spacing: 1px;
+  }
+  .triage-card ul {
+    list-style: none;
+    margin-top: var(--space-16);
+    padding: 0;
+    font-size: var(--font-sm);
+    line-height: 1.8;
+    color: var(--gray-700);
+  }
+  .triage-card ul li { padding: 4px 0; }
+  .triage-card ul li::before {
+    content: '■ ';
+    color: var(--primary);
+    margin-right: 6px;
+  }
+  .triage-card.shuton ul li::before { color: var(--success); }
+  .triage-card.buri ul li::before { color: #E67E22; }
+  .triage-card .verdict {
+    margin-top: var(--space-24);
+    padding: var(--space-12);
+    border-radius: 8px;
+    font-size: var(--font-sm);
+    font-weight: 700;
+    text-align: center;
+  }
+  .triage-card.akakikus .verdict {
+    background: var(--info-light); color: var(--info);
+  }
+  .triage-card.shuton .verdict {
+    background: var(--success-light); color: var(--success);
+  }
+  .triage-card.buri .verdict {
+    background: var(--warning-light); color: #E67E22;
+  }
+
+  /* 11チャンネル大比較テーブル */
+  .mega-table-wrap {
+    overflow-x: auto;
+    margin: var(--space-24) 0;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+  }
+  .mega-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-xs);
+    font-variant-numeric: tabular-nums;
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    min-width: 880px;
+  }
+  .mega-table th {
+    background: var(--gray-900);
+    color: white;
+    padding: var(--space-12) var(--space-8);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .mega-table th:first-child,
+  .mega-table td:first-child { text-align: left; }
+  .mega-table td {
+    padding: var(--space-8);
+    border-bottom: 1px solid var(--gray-100);
+    background: var(--white);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .mega-table tr.rearlet td {
+    background: linear-gradient(90deg, #FFF4C4, #F0EDFF);
+    font-weight: 700;
+  }
+  .mega-table tr:hover td { background: var(--gray-50); }
+  .mega-table tr.rearlet:hover td { background: linear-gradient(90deg, #FFE8A3, #E4DCFF); }
+  .mega-table .ch-name { font-weight: 700; }
+  .mega-table .good { color: var(--success); font-weight: 700; }
+  .mega-table .bad { color: var(--danger); }
+
+  .viral-list-v3 {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 0;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+    margin: var(--space-24) 0;
+  }
+  .viral-row {
+    display: grid;
+    grid-template-columns: 48px 100px 52px 1fr;
+    gap: var(--space-12);
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--gray-100);
+    align-items: center;
+  }
+  .viral-row:hover { background: var(--gray-50); }
+  .viral-row .rank {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    color: var(--gray-300);
+    font-size: var(--font-lg);
+    text-align: center;
+  }
+  .viral-row .views {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-base);
+    text-align: right;
+    color: var(--accent);
+  }
+  .viral-row .dur {
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    border-radius: 100px;
+    padding: 3px 6px;
+    text-align: center;
+  }
+  .viral-row .dur.x1 { background: var(--success); }
+  .viral-row .dur.x2 { background: var(--info); }
+  .viral-row .dur.x3 { background: #E67E22; }
+  .viral-row .dur.x4 { background: var(--danger); }
+  .viral-row .info .t {
+    font-size: var(--font-sm);
+    color: var(--gray-800);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .viral-row .info .m {
+    font-size: 10px;
+    color: var(--gray-500);
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .title30-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    margin: var(--space-24) 0;
+  }
+  @media (max-width: 768px) { .title30-grid { grid-template-columns: 1fr; } }
+  .title30-item {
+    background: var(--white);
+    border-left: 4px solid var(--primary);
+    padding: var(--space-12) var(--space-16);
+    border-radius: 0 8px 8px 0;
+    font-size: var(--font-sm);
+    line-height: 1.6;
+    box-shadow: var(--shadow-sm);
+  }
+  .title30-item.t-a { border-left-color: var(--info); }
+  .title30-item.t-b { border-left-color: var(--success); }
+  .title30-item.t-c { border-left-color: #E67E22; }
+  .title30-item .ix {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    color: var(--gray-400);
+    font-size: 11px;
+    display: inline-block;
+    margin-right: 8px;
+  }
+  .title30-item .type-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--info-light);
+    color: var(--info);
+    margin-left: 4px;
+    letter-spacing: 0.5px;
+  }
+  .title30-item.t-b .type-tag {
+    background: var(--success-light); color: var(--success);
+  }
+  .title30-item.t-c .type-tag {
+    background: var(--warning-light); color: #E67E22;
+  }
+
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin: var(--space-32) 0;
+  }
+  .cal-day {
+    background: var(--white);
+    border-radius: 8px;
+    padding: var(--space-12) var(--space-8);
+    border: 1px solid var(--gray-200);
+    min-height: 110px;
+    font-size: 11px;
+  }
+  .cal-day.post {
+    background: linear-gradient(145deg, #F0EDFF, #FFF);
+    border-color: var(--primary-light);
+  }
+  .cal-day .dow {
+    font-weight: 900;
+    color: var(--gray-500);
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+  .cal-day .task {
+    font-size: 10px;
+    color: var(--primary);
+    font-weight: 700;
+    margin-top: 6px;
+    line-height: 1.3;
+  }
+  .cal-day.post .task { color: var(--primary); }
+  .cal-day .type {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 100px;
+    margin-top: 4px;
+    font-weight: 700;
+  }
+  .cal-day .type.b { background: var(--success); }
+  .cal-day .type.c { background: #E67E22; }
+
+  .revenue-chart {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    margin: var(--space-32) 0;
+  }
+  .rev-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 110px;
+    gap: var(--space-16);
+    align-items: center;
+    padding: var(--space-12) 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .rev-row:last-child { border-bottom: none; }
+  .rev-row .milestone {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    color: var(--gray-900);
+    font-size: var(--font-lg);
+  }
+  .rev-row .bar-container {
+    background: var(--gray-100);
+    border-radius: 100px;
+    height: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .rev-row .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    padding-left: var(--space-12);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .rev-row .revenue {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    color: var(--success);
+    font-size: var(--font-base);
+    text-align: right;
+  }
+
+  .pattern-card-v3 {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    border: 2px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+  }
+  .pattern-card-v3:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
+  }
+  .pattern-card-v3 .type-badge {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: var(--space-12);
+  }
+  .pattern-card-v3.shuton-t .type-badge { background: var(--success); }
+  .pattern-card-v3.akakikus-t .type-badge { background: var(--info); }
+  .pattern-card-v3.proto-t .type-badge { background: #E67E22; }
+  .pattern-card-v3 h3 {
+    font-size: var(--font-lg);
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: var(--space-8);
+  }
+  .pattern-card-v3 .metric {
+    color: var(--gray-600);
+    font-size: var(--font-sm);
+    margin-bottom: var(--space-16);
+  }
+  .pattern-card-v3 .metric strong { color: var(--gray-900); }
+  .pattern-card-v3 .ex {
+    background: var(--gray-100);
+    border-radius: 8px;
+    padding: var(--space-12);
+    font-size: var(--font-sm);
+    color: var(--gray-700);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .pattern-card-v3 .rearlet-ex {
+    background: #F0EDFF;
+    color: var(--primary);
+    font-weight: 700;
+    border: 1px solid var(--primary-light);
+  }
+
+  .sec-hero-bg {
+    background: linear-gradient(160deg, #FFF5E8 0%, #FFF 50%);
+  }
+
+  .toc-block {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    margin: var(--space-48) 0;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-12);
+    margin-top: var(--space-16);
+  }
+  .toc-item {
+    padding: var(--space-12) var(--space-16);
+    border-radius: 8px;
+    background: var(--gray-100);
+    text-decoration: none;
+    color: var(--gray-800);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    transition: background 0.2s;
+  }
+  .toc-item:hover { background: var(--primary); color: white; }
+  .toc-item .toc-num {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-base);
+    color: var(--primary);
+    width: 24px;
+    flex-shrink: 0;
+  }
+  .toc-item:hover .toc-num { color: white; }
+
+  /* 投稿頻度チャート */
+  .freq-chart {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    margin: var(--space-24) 0;
+  }
+  .freq-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 80px;
+    gap: var(--space-16);
+    align-items: center;
+    padding: var(--space-8) 0;
+  }
+  .freq-row .ch {
+    font-size: var(--font-sm);
+    font-weight: 700;
+    color: var(--gray-800);
+  }
+  .freq-row .bar {
+    background: var(--gray-100);
+    border-radius: 100px;
+    height: 20px;
+    overflow: hidden;
+  }
+  .freq-row .fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), #55EFC4);
+    border-radius: 100px;
+  }
+  .freq-row .fill.low { background: linear-gradient(90deg, var(--danger), #FAB1A0); }
+  .freq-row .fill.mid { background: linear-gradient(90deg, #E67E22, #FDCB6E); }
+  .freq-row .val {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-sm);
+    color: var(--gray-800);
+    text-align: right;
+  }
+</style>
+
+
 <body>
 
-<nav aria-label="関連HTML" style="background:#1e1b4b;color:#e0e7ff;padding:10px 16px;font-size:13px;text-align:center;line-height:1.6;border-bottom:1px solid rgba(255,255,255,.12);">
-  <span style="opacity:.85">GitHub Pages のパスは </span><code style="background:rgba(255,255,255,.12);padding:2px 8px;border-radius:4px;color:#fff;">rearlet-analysis</code><span style="opacity:.85">（ハイフン）。</span>
-  <a href="./" style="color:#c4b5fd;margin-left:10px;">分析</a>
-  <a href="roadmap_10k_subscribers.html" style="color:#c4b5fd;margin-left:10px;">1万人ロードマップ</a>
-  <a href="roadmap-10k.html" style="color:#c4b5fd;margin-left:10px;">1万人（短いURL）</a>
-  <a href="roadmap.html" style="color:#c4b5fd;margin-left:10px;">月30万</a>
-  <a href="thumbnail_guide.html" style="color:#c4b5fd;margin-left:10px;">サムネガイド</a>
-</nav>
+<div class="report-meta">
+  🎮 REARLET SHORTS 完全戦略レポート v3 · データ取得 2026-04-22 · 日本スマブラSP 11ch <strong>406本</strong>解析
+</div>
 
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║              HERO SECTION                ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<div class="hero" style="position:relative;">
-  <div style="position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;z-index:0;">
-    <img src="https://img.youtube.com/vi/SklqqujVTTo/maxresdefault.jpg" alt="" style="width:100%;height:100%;object-fit:cover;filter:blur(30px) brightness(0.25);transform:scale(1.15);">
-  </div>
-  <div class="hero-content" style="position:relative;z-index:1;">
-    <div class="hero-badge">📊 YOUTUBE CHANNEL ANALYSIS ── 2026.04.12</div>
-    <h1>Rearlet の横動画は<br>なぜ<span class="highlight">伸びないのか</span></h1>
-    <p class="hero-sub">
-      スマブラSPクッパ使い「Rearlet」チャンネルの横動画が検索にもおすすめにも表示されない原因を、データ・アルゴリズム・デザインの3軸で分析し、他チャンネルとの比較を交えて改善戦略を提案します。
-    </p>
-
-    <!-- チャンネルの実際の最高再生ショートと最低再生横動画 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:32px auto 24px;max-width:640px;">
-      <div style="border-radius:12px;overflow:hidden;border:2px solid #00B894;">
-        <img src="https://img.youtube.com/vi/SklqqujVTTo/mqdefault.jpg" alt="ショート最高再生" style="width:100%;display:block;">
-        <div style="background:rgba(0,184,148,0.2);padding:8px 12px;text-align:center;">
-          <div style="font-size:11px;color:rgba(255,255,255,0.6);">ショート最高</div>
-          <div style="font-size:18px;font-weight:900;color:#00B894;">273,249 回</div>
-        </div>
-      </div>
-      <div style="border-radius:12px;overflow:hidden;border:2px solid #E17055;">
-        <img src="https://img.youtube.com/vi/pOTIkemgd7Q/mqdefault.jpg" alt="横動画最低再生" style="width:100%;display:block;">
-        <div style="background:rgba(225,112,85,0.2);padding:8px 12px;text-align:center;">
-          <div style="font-size:11px;color:rgba(255,255,255,0.6);">横動画（今日投稿）</div>
-          <div style="font-size:18px;font-weight:900;color:#E17055;">78 回</div>
-        </div>
-      </div>
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>●</span> COMPLETE REPORT · DATA DRIVEN · JAPAN ONLY
     </div>
+    <h1>
+      Rearlet Shorts 完全戦略<br>
+      <span class="highlight">エンタ × ガチ</span>で半年5万人
+    </h1>
+    <p class="hero-sub">
+      日本スマブラSP系 <strong style="color:#FFD580">11チャンネル</strong>・
+      計 <strong style="color:#FFD580">406本のShorts実データ</strong>を <code>yt-dlp</code> で全件取得し、
+      タイトル構造・尺分布・投稿頻度・バイラル形態までを徹底分析。<br>
+      結論：<strong style="color:#FFD580">Shuton型（プロ実力×エンタ×短尺）こそ Rearletさんの最速路線</strong>です。
+    </p>
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="val">1,040</span>
-        <span class="lbl">登録者</span>
+        <span class="val" style="color:#55EFC4">17.27</span>
+        <span class="lbl">med/foll 1位(全11ch中)</span>
       </div>
       <div class="hero-stat">
-        <span class="val">1.4M</span>
-        <span class="lbl">総再生回数</span>
+        <span class="val" style="color:#A29BFE">274万</span>
+        <span class="lbl">エンタ×ガチ系最高再生(ブリカワ)</span>
       </div>
       <div class="hero-stat">
-        <span class="val">57</span>
-        <span class="lbl">動画数</span>
+        <span class="val" style="color:#FDCB6E">週4-5本</span>
+        <span class="lbl">推奨投稿頻度(Phase1〜3共通)</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#FDCB6E">C+</span>
-        <span class="lbl">SB GRADE</span>
+        <span class="val" style="color:#FAB1A0">+48,860</span>
+        <span class="lbl">6ヶ月の純増ノルマ</span>
       </div>
     </div>
   </div>
-</div>
+</header>
 
-<div class="container">
-
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║   SECTION 01 : 現状データ               ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<section>
-  <div class="sec-num">SECTION 01</div>
-  <h2>データが語る「ショート依存」の構造</h2>
-  <p class="sec-desc">直近14日間のSocial Bladeデータを可視化すると、横動画とショートの明暗がはっきり現れます。日次再生の振れ幅は約30倍 ── これが核心的な問題です。</p>
-
-  <div class="stat-grid">
-    <div class="stat-box success"><span class="v">148,568</span><span class="l">最高日次再生（4/3）</span></div>
-    <div class="stat-box danger"><span class="v">4,908</span><span class="l">最低日次再生（4/7）</span></div>
-    <div class="stat-box warning"><span class="v">×30</span><span class="l">日次再生の変動幅</span></div>
-    <div class="stat-box info"><span class="v">16ヶ月</span><span class="l">チャンネル運用期間</span></div>
+<!-- ============ ANCHOR NAV ============ -->
+<nav class="anchor-nav">
+  <div class="anchor-nav-inner">
+    <a href="#exec">結論</a>
+    <a href="#triage">3型比較</a>
+    <a href="#bench">11ch実データ</a>
+    <a href="#viral">Top20バイラル</a>
+    <a href="#pattern">勝ちパターン</a>
+    <a href="#freq">投稿頻度分析</a>
+    <a href="#gap">Rearletギャップ</a>
+    <a href="#titles">30本タイトル案</a>
+    <a href="#calendar">4週間カレンダー</a>
+    <a href="#roadmap">半年ロードマップ</a>
+    <a href="#revenue">収益化マイル</a>
+    <a href="#action">今週やる事</a>
   </div>
+</nav>
 
-  <!-- Bar Chart -->
-  <div class="chart-card">
-    <h3>日次再生数の推移（直近14日間）</h3>
-    <div class="bar-row"><span class="bar-label">3/30</span><div class="bar-track"><div class="bar-fill red" style="width:7%"></div></div><span class="bar-val">10.5K</span></div>
-    <div class="bar-row"><span class="bar-label">3/31</span><div class="bar-track"><div class="bar-fill blue" style="width:43%"></div></div><span class="bar-val">63.8K</span></div>
-    <div class="bar-row"><span class="bar-label">4/01</span><div class="bar-track"><div class="bar-fill blue" style="width:47%"></div></div><span class="bar-val">70.5K</span></div>
-    <div class="bar-row"><span class="bar-label">4/02</span><div class="bar-track"><div class="bar-fill yellow" style="width:27%"></div></div><span class="bar-val">39.6K</span></div>
-    <div class="bar-row"><span class="bar-label">4/03</span><div class="bar-track"><div class="bar-fill green" style="width:100%"></div></div><span class="bar-val">148.6K</span></div>
-    <div class="bar-row"><span class="bar-label">4/04</span><div class="bar-track"><div class="bar-fill blue" style="width:31%"></div></div><span class="bar-val">46.2K</span></div>
-    <div class="bar-row"><span class="bar-label">4/05</span><div class="bar-track"><div class="bar-fill yellow" style="width:16%"></div></div><span class="bar-val">24.1K</span></div>
-    <div class="bar-row"><span class="bar-label">4/06</span><div class="bar-track"><div class="bar-fill blue" style="width:31%"></div></div><span class="bar-val">46.0K</span></div>
-    <div class="bar-row"><span class="bar-label">4/07</span><div class="bar-track"><div class="bar-fill red" style="width:3%"></div></div><span class="bar-val">4.9K ⚠</span></div>
-    <div class="bar-row"><span class="bar-label">4/08</span><div class="bar-track"><div class="bar-fill blue" style="width:28%"></div></div><span class="bar-val">41.1K</span></div>
-    <div class="bar-row"><span class="bar-label">4/09</span><div class="bar-track"><div class="bar-fill red" style="width:6%"></div></div><span class="bar-val">8.8K</span></div>
-    <div class="bar-row"><span class="bar-label">4/10</span><div class="bar-track"><div class="bar-fill blue" style="width:38%"></div></div><span class="bar-val">57.0K</span></div>
-    <div class="bar-row"><span class="bar-label">4/11</span><div class="bar-track"><div class="bar-fill blue" style="width:53%"></div></div><span class="bar-val">79.5K</span></div>
-    <div class="bar-row"><span class="bar-label">4/12</span><div class="bar-track"><div class="bar-fill yellow" style="width:15%"></div></div><span class="bar-val">22.0K</span></div>
-  </div>
+<!-- ============ 01 EXEC SUMMARY ============ -->
+<section id="exec">
+  <div class="container">
+    <div class="sec-num">01 · EXECUTIVE SUMMARY</div>
+    <h2>このレポートで分かったこと</h2>
+    <p class="sec-desc">
+      「J!さん路線（エンタ×ガチ混合）を真似したい」という仮説を、日本スマブラSP系11チャンネル406本の
+      実データで徹底検証した結果です。<strong>仮説はYES、ただし採用すべきは「Shuton型」</strong>。
+    </p>
 
-  <div class="callout callout-danger">
-    <strong>核心:</strong> 4/7は横動画を2本投稿したにもかかわらず<strong>日次再生4,908回</strong>と14日間の最低値。一方、4/3は新規投稿なしで<strong>148,568回</strong>（ショートの残存再生）。横動画の存在感がデータ上ほぼゼロです。
-  </div>
-
-  <!-- 実際の動画サムネイル＋再生数比較 -->
-  <div class="chart-card" style="margin-top:var(--space-32);">
-    <h3>Rearletの実際の動画：ショート vs 横動画（実データ）</h3>
-    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-24);">RSS フィードから取得した直近15本の動画。サムネイルと再生数の格差が一目瞭然です。</p>
-
-    <h4 style="color:var(--success);font-size:var(--font-base);margin-bottom:var(--space-16);">🟢 ショート動画（10,000〜273,000回再生）</h4>
-    <div class="thumb-grid">
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/SklqqujVTTo/mqdefault.jpg" alt="ゴブリンマリオ" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">ゴブリンマリオに200%ハンデで勝利しました！！！</div>
-          <span class="thumb-type shorts">Shorts</span>
-          <span class="thumb-views high">273,249 回再生</span>
-        </div>
+    <div class="metric-hero">
+      <div class="box">
+        <div class="num">17.27</div>
+        <div class="lbl">REARLET med/foll</div>
+        <div class="sub">登録者1人あたり平均再生数。<br>全11chで最高値。動画の力は最強水準。</div>
       </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/NRqiU0oGpAI/mqdefault.jpg" alt="カズヤ相手にビビらない" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">カズヤ相手にビビらないRearletクッパ！</div>
-          <span class="thumb-type shorts">Shorts</span>
-          <span class="thumb-views high">121,915 回再生</span>
-        </div>
+      <div class="box">
+        <div class="num">40秒→16秒</div>
+        <div class="lbl">DURATION GAP</div>
+        <div class="sub">バイラル上位は13-25秒が主流。<br>Rearletは現在40秒で明確に長すぎ。</div>
       </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/ARnm9wvAFfU/mqdefault.jpg" alt="カズヤは仕方ない" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">カズヤは仕方ない！！！次切り替えよう！！！</div>
-          <span class="thumb-type shorts">Shorts</span>
-          <span class="thumb-views high">34,795 回再生</span>
-        </div>
+      <div class="box">
+        <div class="num">週2.65→4.5</div>
+        <div class="lbl">POSTING FREQUENCY</div>
+        <div class="sub">ブリカワは週4.88、智念4.79。<br>伸びるチャンネルは週4-5が基準。</div>
       </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/LYBmQyeq76k/mqdefault.jpg" alt="メタモン" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">メタモンお前がナンバーワンだ！</div>
-          <span class="thumb-type shorts">Shorts</span>
-          <span class="thumb-views high">29,071 回再生</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/kUFJQSxv0CE/mqdefault.jpg" alt="へろーさん" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">へろーさん...???</div>
-          <span class="thumb-type shorts">Shorts</span>
-          <span class="thumb-views high">25,879 回再生</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/LHQ0Hf2pSZM/mqdefault.jpg" alt="リーサルヘディング" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">リーサルヘディングバースト最強！！</div>
-          <span class="thumb-type shorts">Shorts</span>
-          <span class="thumb-views high">25,436 回再生</span>
-        </div>
+      <div class="box">
+        <div class="num">100万再生</div>
+        <div class="lbl">SHUTON型ヒット</div>
+        <div class="sub">ガチ×疑問形×視聴者参加<br>「〜できますか？」型は個人でも射程内。</div>
       </div>
     </div>
 
-    <h4 style="color:var(--danger);font-size:var(--font-base);margin:var(--space-32) 0 var(--space-16);">🔴 横動画・配信（78〜5,013回再生）</h4>
-    <div class="thumb-grid">
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/pOTIkemgd7Q/mqdefault.jpg" alt="桜梅桃李ハイライト" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">念願の大型TOP8！桜梅桃李第肆幕ハイライト【スマブラSP】</div>
-          <span class="thumb-type long">横動画</span>
-          <span class="thumb-views low">78 回再生</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/CWBQZDgUZAc/mqdefault.jpg" alt="チノスマリベンジ" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">全一クッパがチノスマリベンジ！</div>
-          <span class="thumb-type long">横動画</span>
-          <span class="thumb-views low">599 回再生</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/8TqdhcH6alk/mqdefault.jpg" alt="チノスマ優勝" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">チノスマ本気で優勝狙うで！！→メイト</div>
-          <span class="thumb-type long">横動画</span>
-          <span class="thumb-views low">595 回再生</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/JvHXRGOiYCk/mqdefault.jpg" alt="みんな相手するわ" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">かかってこい！みんな相手するわ！</div>
-          <span class="thumb-type long">横動画</span>
-          <span class="thumb-views low">3,954 回再生</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/mQb5MsOFDBs/mqdefault.jpg" alt="桜梅桃李振り返り" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">【激熱！】全一クッパが桜梅桃李の振り返りをやるよ！</div>
-          <span class="thumb-type long">横動画</span>
-          <span class="thumb-views low">4,912 回再生</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/BblXx3Wjncs/mqdefault.jpg" alt="VIP連勝" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">全一クッパが負けたら終わりVIP連勝をします</div>
-          <span class="thumb-type long">横動画</span>
-          <span class="thumb-views low">5,013 回再生</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="callout callout-danger" style="margin-top:var(--space-24);">
-      <strong>再生数の格差: 最大 3,503倍</strong><br>
-      ショート最高 273,249回 vs 横動画最低 78回。同じチャンネル、同じプレイヤーなのにこの差が出るのは、横動画の「届ける技術」に根本的な課題があることを示しています。
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║   SECTION 02 : 他チャンネル比較          ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<section>
-  <div class="sec-num">SECTION 02</div>
-  <h2>スマブラ系チャンネルとの比較</h2>
-  <p class="sec-desc">同ジャンルの成功チャンネルと比較することで、Rearletが何をすべきかが明確になります。データは2026年4月時点の公開情報に基づきます。</p>
-
-  <div class="ch-compare">
-    <!-- VGBootCamp -->
-    <div class="ch-card">
-      <div class="ch-avatar" style="background:linear-gradient(135deg,#E17055,#D63031);">V</div>
-      <div class="ch-name">VGBootCamp</div>
-      <div class="ch-genre">大会アーカイブ・対戦ハイライト</div>
-      <div class="ch-stats">
-        <div class="ch-stat-row"><span class="k">登録者</span><span class="val">667K</span></div>
-        <div class="ch-stat-row"><span class="k">運用歴</span><span class="val">15年</span></div>
-        <div class="ch-stat-row"><span class="k">形式</span><span class="val">解説付き大会映像</span></div>
-        <div class="ch-stat-row"><span class="k">強み</span><span class="val">公式性・網羅性</span></div>
-      </div>
-    </div>
-    <!-- Rearlet -->
-    <div class="ch-card highlight">
-      <div class="ch-avatar" style="background:linear-gradient(135deg,#6C5CE7,#A29BFE);">R</div>
-      <div class="ch-name">Rearlet</div>
-      <div class="ch-genre">スマブラSP クッパ使い</div>
-      <div class="ch-stats">
-        <div class="ch-stat-row"><span class="k">登録者</span><span class="val">1.04K</span></div>
-        <div class="ch-stat-row"><span class="k">運用歴</span><span class="val">16ヶ月</span></div>
-        <div class="ch-stat-row"><span class="k">形式</span><span class="val">対戦動画+ショート</span></div>
-        <div class="ch-stat-row"><span class="k">課題</span><span class="val" style="color:var(--danger)">横動画の伸び</span></div>
-      </div>
-    </div>
-    <!-- 成功個人チャンネル -->
-    <div class="ch-card">
-      <div class="ch-avatar" style="background:linear-gradient(135deg,#00B894,#55EFC4);">K</div>
-      <div class="ch-name">クッパ解説系</div>
-      <div class="ch-genre">キャラ対策・コンボ解説</div>
-      <div class="ch-stats">
-        <div class="ch-stat-row"><span class="k">登録者</span><span class="val">5K〜30K</span></div>
-        <div class="ch-stat-row"><span class="k">運用歴</span><span class="val">2〜4年</span></div>
-        <div class="ch-stat-row"><span class="k">形式</span><span class="val">教材型・解説付き</span></div>
-        <div class="ch-stat-row"><span class="k">強み</span><span class="val">検索流入・教材価値</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="tbl-wrap">
-    <table class="compare">
-      <thead>
-        <tr>
-          <th>比較軸</th>
-          <th>VGBootCamp</th>
-          <th>クッパ解説系</th>
-          <th>Rearlet（現状）</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>コンテンツ形式</strong></td>
-          <td>実況・解説付き大会映像</td>
-          <td>教材型（コンボ、対策、立ち回り）</td>
-          <td>フル対戦の素材公開 <span class="badge badge-danger">弱</span></td>
-        </tr>
-        <tr>
-          <td><strong>サムネイル</strong></td>
-          <td>大会ロゴ+キャラ+VS構図+テキスト</td>
-          <td>キャラ素材+大きな文字+%表示</td>
-          <td>ゲーム画面スクショのみ <span class="badge badge-danger">弱</span></td>
-        </tr>
-        <tr>
-          <td><strong>タイトルSEO</strong></td>
-          <td>大会名+キャラ名+プレイヤー名</td>
-          <td>検索KW+キャラ名+具体的テーマ</td>
-          <td>汎用的タイトル <span class="badge badge-danger">弱</span></td>
-        </tr>
-        <tr>
-          <td><strong>説明文</strong></td>
-          <td>対戦カード+チャプター+リンク</td>
-          <td>KW含む解説文+目次+関連動画</td>
-          <td>短文 or ほぼ空 <span class="badge badge-danger">弱</span></td>
-        </tr>
-        <tr>
-          <td><strong>視聴維持の工夫</strong></td>
-          <td>解説で飽きさせない</td>
-          <td>テロップ+ズーム+チャプター</td>
-          <td>無編集 <span class="badge badge-danger">弱</span></td>
-        </tr>
-        <tr>
-          <td><strong>シリーズ化</strong></td>
-          <td>大会別プレイリスト</td>
-          <td>キャラ対策シリーズ</td>
-          <td>なし <span class="badge badge-warning">△</span></td>
-        </tr>
-        <tr>
-          <td><strong>Shorts→横動画導線</strong></td>
-          <td>ハイライトClip→フル試合</td>
-          <td>ショートで技紹介→フル解説</td>
-          <td>導線なし <span class="badge badge-danger">弱</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="callout callout-info">
-    <strong>比較から見えること:</strong> 成功チャンネルはすべて「素材の加工」をしています。大会チャンネルは実況解説を付け、解説系はテロップと構成で教材化しています。<strong>素材をそのまま出すだけでは、どのチャンネルも伸びていません。</strong>
-  </div>
-
-  <!-- 成功事例の実際の動画サムネイル -->
-  <div class="chart-card" style="margin-top:var(--space-32);">
-    <h3>成功している「クッパ解説系」動画のサムネイル実例</h3>
-    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-24);">いずれも検索上位に表示される動画。サムネイルの作り込みが Rearlet とは段違いです。</p>
-    <div class="thumb-grid">
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/dMu386nulrw/maxresdefault.jpg" alt="クッパのコンボ解説" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">クッパのコンボ解説！高火力コンボからお手軽コンボまで</div>
-          <span class="thumb-type compare">コンボ解説</span>
-          <span class="thumb-views high">検索「クッパ コンボ」上位</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/jfSLm_Yc2n8/maxresdefault.jpg" alt="VIP200連勝" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">【クッパでVIP200連勝をする】ワンタッチ高火力を練習してゆく</div>
-          <span class="thumb-type compare">実力系</span>
-          <span class="thumb-views high">検索「クッパ VIP」上位</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/HJ6IvN2c-hA/maxresdefault.jpg" alt="ゆっくり解説クッパ" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">【ゆっくり解説】初心者が最速でVIPを目指す為のクッパ</div>
-          <span class="thumb-type compare">教材型</span>
-          <span class="thumb-views high">検索「クッパ 初心者」上位</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/3RLBKZm8sBs/maxresdefault.jpg" alt="初心者必見クッパ" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">【初心者必見】クッパで即VIPいける為に重要なこと7つ</div>
-          <span class="thumb-type compare">リスト型</span>
-          <span class="thumb-views high">検索「クッパ VIP」上位</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/Zq04_4aDSbY/maxresdefault.jpg" alt="クッパ立ち回り解説" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">クッパ使い必見！クッパの立ち回り解説2【VIP】</div>
-          <span class="thumb-type compare">シリーズ型</span>
-          <span class="thumb-views high">検索「クッパ 立ち回り」上位</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/TBGzS_ceU-Q/maxresdefault.jpg" alt="世界戦闘力 神" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">世界戦闘力「神」のクッパ使い</div>
-          <span class="thumb-type compare">権威型</span>
-          <span class="thumb-views high">検索「クッパ 最強」上位</span>
-        </div>
-      </div>
-    </div>
-    <div class="callout callout-success" style="margin-top:var(--space-16);">
-      <strong>成功パターン:</strong> サムネイルに「数字」「キャラ画像」「わかりやすいテキスト」の3要素が入っている。タイトルに検索KWが含まれている。動画内容が「教材」「攻略」として機能している。
-    </div>
-  </div>
-
-  <!-- Rearletの横動画 vs 成功チャンネル：並列比較 -->
-  <div class="chart-card" style="margin-top:var(--space-32);">
-    <h3>サムネイル直接比較：同じ「クッパ」テーマの格差</h3>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-24);margin-top:var(--space-16);">
-      <div>
-        <h4 style="text-align:center;color:var(--danger);font-size:var(--font-sm);margin-bottom:var(--space-12);">❌ Rearlet（78〜595回再生）</h4>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <img src="https://img.youtube.com/vi/pOTIkemgd7Q/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--danger);">
-          <img src="https://img.youtube.com/vi/CWBQZDgUZAc/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--danger);">
-          <img src="https://img.youtube.com/vi/8TqdhcH6alk/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--danger);">
-        </div>
-      </div>
-      <div>
-        <h4 style="text-align:center;color:var(--success);font-size:var(--font-sm);margin-bottom:var(--space-12);">✅ 成功チャンネル（数万〜数十万回再生）</h4>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <img src="https://img.youtube.com/vi/dMu386nulrw/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--success);">
-          <img src="https://img.youtube.com/vi/jfSLm_Yc2n8/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--success);">
-          <img src="https://img.youtube.com/vi/3RLBKZm8sBs/hqdefault.jpg" alt="" style="width:100%;border-radius:8px;border:2px solid var(--success);">
-        </div>
+    <div class="toc-block">
+      <h3 style="font-size:var(--font-lg);margin-bottom:var(--space-8);">📖 目次</h3>
+      <p style="color:var(--gray-600);font-size:var(--font-sm);">全12章。気になるところから読めます。</p>
+      <div class="toc-grid">
+        <a href="#triage" class="toc-item"><span class="toc-num">02</span> 3型比較（アカ/Shu/ブリ）</a>
+        <a href="#bench" class="toc-item"><span class="toc-num">03</span> 11ch実データ大表</a>
+        <a href="#viral" class="toc-item"><span class="toc-num">04</span> Top20バイラル一覧</a>
+        <a href="#pattern" class="toc-item"><span class="toc-num">05</span> 6つの勝ちパターン</a>
+        <a href="#freq" class="toc-item"><span class="toc-num">06</span> 投稿頻度ランキング</a>
+        <a href="#gap" class="toc-item"><span class="toc-num">07</span> Rearletギャップ分析</a>
+        <a href="#titles" class="toc-item"><span class="toc-num">08</span> 30本タイトル案</a>
+        <a href="#calendar" class="toc-item"><span class="toc-num">09</span> 4週投稿カレンダー</a>
+        <a href="#roadmap" class="toc-item"><span class="toc-num">10</span> 半年ロードマップ</a>
+        <a href="#revenue" class="toc-item"><span class="toc-num">11</span> 収益マイルストーン</a>
+        <a href="#action" class="toc-item"><span class="toc-num">12</span> 今週やる3タスク</a>
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<!-- ============ 02 3TYPE TRIAGE ============ -->
+<section id="triage" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">02 · TRIAGE</div>
+    <h2>エンタ×ガチ系の3つの型</h2>
+    <p class="sec-desc">
+      「J!さん路線」の実体をデータで分解すると、3つの完全に異なる成功モデルが存在していました。
+      どれを選ぶかで、やるべきこと・必要なリソースが180度違います。
+    </p>
 
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║   SECTION 03 : 原因分析                  ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<section>
-  <div class="sec-num">SECTION 03</div>
-  <h2>横動画が伸びない原因：アルゴリズムの仕組みから解析</h2>
-  <p class="sec-desc">YouTube のアルゴリズムに関する最新情報（2025年12月のブラウズフィード変更、Gemini AIによるコンテンツ解析、ショートと横動画の完全分離）を踏まえて、Rearletの横動画がなぜ検索にもおすすめにも出ないのかを特定しました。</p>
+    <div class="triage-grid">
+      <div class="triage-card akakikus">
+        <h3>アカキクス型</h3>
+        <div class="subtitle">GACHI SHORT · 短尺ガチ特化</div>
+        <div class="big-metric">14s</div>
+        <div class="metric-label">中央尺 · 登録21,300人</div>
+        <ul>
+          <li>尺13-20秒に徹底圧縮</li>
+          <li>【スマブラSP】#shorts 定型必須</li>
+          <li>自称名ブランディング「アカキクス勇者」</li>
+          <li>数字（再生数・秒数）提示</li>
+          <li>週1.5本の中頻度</li>
+        </ul>
+        <div class="verdict">💡 現状Rearletのmed/follに最も合う</div>
+      </div>
 
-  <!-- アルゴリズムの仕組み解説 -->
-  <div class="callout callout-info" style="padding:var(--space-32);">
-    <strong>前提: 2025年12月のYouTubeプラットフォーム変更</strong><br>
-    <span style="font-size:var(--font-sm);color:var(--gray-700);">（出典: Mario Joos / MrBeast等100M+登録チャンネル管理者の分析 / Dataslayer）</span>
-    <ul style="margin-top:var(--space-12);">
-      <li><strong>ホームフィードの長尺動画表示枠が12→2に削減（80%減）。</strong>空きスペースはショートに置換</li>
-      <li>デスクトップトラフィックが56%→39.3%に低下（モバイルシフト加速）</li>
-      <li>ショートと長尺の収益が同等に到達 → YouTube側にショートを優先するインセンティブ</li>
-      <li><strong>タグの影響は「最小限」</strong>とYouTube公式が確認。代わりにGemini AIが動画の音声・画像・トーンを直接解析</li>
-      <li>個別動画ではなく<strong>チャンネル全体</strong>を評価する方式に移行（投稿頻度・トピック一貫性・リピーター率）</li>
-    </ul>
+      <div class="triage-card shuton">
+        <span class="trophy">👑 推奨</span>
+        <h3>Shuton型</h3>
+        <div class="subtitle">PRO ENTER · プロ実力×エンタ</div>
+        <div class="big-metric">55s</div>
+        <div class="metric-label">中央尺 · 登録95,800人</div>
+        <ul>
+          <li>疑問形タイトル「〜できますか？」</li>
+          <li>視聴者参加型「視聴者が魅せた〜」</li>
+          <li>プロ名を混ぜる（相手プレイヤー）</li>
+          <li>1本100万再生の当たり大きい</li>
+          <li>週0.75本の希少価値型</li>
+        </ul>
+        <div class="verdict">🎯 Rearletの実力を最大活かせる本命</div>
+      </div>
+
+      <div class="triage-card buri">
+        <h3>ブリカワ型</h3>
+        <div class="subtitle">DRAMA ENTER · ドラマ×長尺</div>
+        <div class="big-metric">109s</div>
+        <div class="metric-label">中央尺 · 登録686,000人</div>
+        <ul>
+          <li>尺50-135秒の長尺</li>
+          <li>「ヤバいな…」「最低だな…」型</li>
+          <li>カップル×脚本×ドラマ演出</li>
+          <li>1本270万再生の上限が桁違い</li>
+          <li>週4.88本の高頻度投稿</li>
+        </ul>
+        <div class="verdict">⚠️ 個人プレイヤーでは物理的に無理</div>
+      </div>
+    </div>
+
+    <div class="callout callout-success">
+      <strong>🎯 結論：Rearletさんは「Shuton型 × アカキクス型」のハイブリッド。</strong><br>
+      日本9位の実力（= Shuton型の中核）があり、med/foll 17.27（= 効率武器）がある。
+      この2つを活かしつつ、ブリカワ型の「高頻度投稿（週4-5本）」だけを借用する、
+      というのが406本のデータから導き出された最適解でした。
+    </div>
   </div>
+</section>
 
-  <!-- 実データ比較テーブル -->
-  <div class="chart-card" style="margin-top:var(--space-32);">
-    <h3>実際の動画メタデータ比較（1本ずつ調査済み）</h3>
-    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-16);">YouTube の動画ページから直接取得した実データです。</p>
-    <div class="tbl-wrap">
-      <table class="compare">
+<!-- ============ 03 11ch実データ ============ -->
+<section id="bench">
+  <div class="container">
+    <div class="sec-num">03 · FULL DATA</div>
+    <h2>日本スマブラSP 11チャンネル 完全データ</h2>
+    <p class="sec-desc">
+      2026-04-22 取得・計406本のShorts実データ。
+      登録者・中央再生数・最高再生・med/foll・中央尺・週間投稿数までを一覧化。
+    </p>
+
+    <div class="mega-table-wrap">
+      <table class="mega-table">
         <thead>
-          <tr><th>動画</th><th>尺</th><th>再生数</th><th>いいね</th><th>形式</th></tr>
+          <tr>
+            <th>チャンネル</th>
+            <th>登録者</th>
+            <th>本数</th>
+            <th>中央再生</th>
+            <th>最高再生</th>
+            <th>med/foll</th>
+            <th>中央尺</th>
+            <th>週投稿</th>
+            <th>型</th>
+          </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><strong>チノスマリベンジ</strong><br><span style="font-size:11px;color:var(--gray-500)">CWBQZDgUZAc</span></td>
-            <td style="color:var(--danger);font-weight:700;">2:49:48</td>
-            <td>599</td>
-            <td>19</td>
-            <td><span class="badge badge-danger">配信アーカイブ</span></td>
+          <tr class="rearlet">
+            <td class="ch-name">Rearlet（本人）</td>
+            <td>1,140</td>
+            <td>31</td>
+            <td>19,691</td>
+            <td>312,199</td>
+            <td class="good">17.27</td>
+            <td>40s</td>
+            <td>2.65</td>
+            <td>本命</td>
           </tr>
-          <tr>
-            <td><strong>チノスマ優勝狙う→メイト</strong><br><span style="font-size:11px;color:var(--gray-500)">8TqdhcH6alk</span></td>
-            <td style="color:var(--danger);font-weight:700;">2:58:30</td>
-            <td>595</td>
-            <td>—</td>
-            <td><span class="badge badge-danger">配信アーカイブ</span></td>
+          <tr class="">
+            <td class="ch-name">アカキクス</td>
+            <td>21,300</td>
+            <td>50</td>
+            <td>205,262</td>
+            <td>1,331,287</td>
+            <td class="good">9.64</td>
+            <td>14s</td>
+            <td>1.5</td>
+            <td>A型模範</td>
           </tr>
-          <tr>
-            <td><strong>かかってこい！みんな相手するわ</strong><br><span style="font-size:11px;color:var(--gray-500)">JvHXRGOiYCk</span></td>
-            <td style="color:var(--danger);font-weight:700;">57:22</td>
-            <td>4,000</td>
-            <td>19</td>
-            <td><span class="badge badge-warning">参加型配信</span></td>
+          <tr class="">
+            <td class="ch-name">KEN</td>
+            <td>46,900</td>
+            <td>50</td>
+            <td>206,965</td>
+            <td>625,834</td>
+            <td class="">4.41</td>
+            <td>28s</td>
+            <td>2.57</td>
+            <td>K型模範</td>
           </tr>
-          <tr>
-            <td><strong>桜梅桃李ハイライト</strong><br><span style="font-size:11px;color:var(--gray-500)">pOTIkemgd7Q（本日投稿）</span></td>
-            <td>不明</td>
-            <td>78</td>
-            <td>7</td>
-            <td><span class="badge badge-info">ハイライト</span></td>
+          <tr class="">
+            <td class="ch-name">Shuton</td>
+            <td>95,800</td>
+            <td>40</td>
+            <td>178,886</td>
+            <td>1,100,467</td>
+            <td class="">1.87</td>
+            <td>54s</td>
+            <td>0.75</td>
+            <td>S型模範</td>
           </tr>
-          <tr style="background:var(--success-light);">
-            <td><strong>こんが: クッパコンボ解説</strong><br><span style="font-size:11px;color:var(--gray-500)">dMu386nulrw（比較用）</span></td>
-            <td style="color:var(--success);font-weight:700;">3:33</td>
-            <td style="font-weight:700;">174,200</td>
-            <td>1,500</td>
-            <td><span class="badge badge-success">編集済み教材</span></td>
+          <tr class="">
+            <td class="ch-name">プロトバナム</td>
+            <td>56,400</td>
+            <td>39</td>
+            <td>19,415</td>
+            <td>897,362</td>
+            <td class="bad">0.34</td>
+            <td>43s</td>
+            <td>0.91</td>
+            <td>P型模範</td>
           </tr>
-          <tr style="background:var(--success-light);">
-            <td><strong>無名ch: クッパでVIP 7つ</strong><br><span style="font-size:11px;color:var(--gray-500)">3RLBKZm8sBs（比較用）</span></td>
-            <td style="color:var(--success);font-weight:700;">8:34</td>
-            <td style="font-weight:700;">182,600</td>
-            <td>2,100</td>
-            <td><span class="badge badge-success">編集済み教材</span></td>
+          <tr class="">
+            <td class="ch-name">ブリとカワウソ</td>
+            <td>686,000</td>
+            <td>39</td>
+            <td>478,072</td>
+            <td>2,744,364</td>
+            <td class="bad">0.7</td>
+            <td>70s</td>
+            <td>4.88</td>
+            <td>特殊・B型</td>
           </tr>
+          <tr class="">
+            <td class="ch-name">ザクレイ</td>
+            <td>392,000</td>
+            <td>24</td>
+            <td>188,827</td>
+            <td>683,693</td>
+            <td class="bad">0.48</td>
+            <td>55s</td>
+            <td>0.11</td>
+            <td>巨人</td>
+          </tr>
+          <tr class="">
+            <td class="ch-name">Raito</td>
+            <td>106,000</td>
+            <td>26</td>
+            <td>38,609</td>
+            <td>580,548</td>
+            <td class="bad">0.36</td>
+            <td>32s</td>
+            <td>0.18</td>
+            <td>ベテラン</td>
+          </tr>
+          <tr class="">
+            <td class="ch-name">マエスマ</td>
+            <td>112,000</td>
+            <td>50</td>
+            <td>55,353</td>
+            <td>322,154</td>
+            <td class="bad">0.49</td>
+            <td>52s</td>
+            <td>1.58</td>
+            <td>公式</td>
+          </tr>
+          <tr class="">
+            <td class="ch-name">智念せいら</td>
+            <td>56,200</td>
+            <td>50</td>
+            <td>47,916</td>
+            <td>129,506</td>
+            <td class="bad">0.85</td>
+            <td>56s</td>
+            <td>4.79</td>
+            <td>多ゲーム</td>
+          </tr>
+
         </tbody>
       </table>
     </div>
-  </div>
 
-  <!-- メタデータ詳細比較 -->
-  <div class="chart-card" style="margin-top:var(--space-32);">
-    <h3>メタデータ比較（説明文・タグ・構成）</h3>
-    <div class="tbl-wrap">
-      <table class="compare">
-        <thead><tr><th>項目</th><th>Rearlet 全横動画</th><th>こんが（174K再生）</th><th>無名ch（182K再生）</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><strong>説明文</strong></td>
-            <td>全動画<strong>同じテンプレ</strong>をコピペ<br>（活動紹介+ルール+Q&A）<br>動画固有の情報ゼロ <span class="badge badge-danger">NG</span></td>
-            <td>動画内容の要約<br>+関連動画リンク<br>+配信告知 <span class="badge badge-success">◎</span></td>
-            <td>関連動画3本リンク<br>+SNSリンク<br>+ファンレター先<br>+音楽クレジット <span class="badge badge-success">◎</span></td>
-          </tr>
-          <tr>
-            <td><strong>タグ数</strong></td>
-            <td><strong>0個</strong>（タグ未設定）<span class="badge badge-danger">NG</span></td>
-            <td>8個（スマブラ,クッパ,コンボ等）<span class="badge badge-success">◎</span></td>
-            <td><strong>50個以上</strong>（キャラ名,プレイヤー名,テクニック名等を網羅）<span class="badge badge-success">◎</span></td>
-          </tr>
-          <tr>
-            <td><strong>タイトル</strong></td>
-            <td>「チノスマリベンジ！」等<br>内輪向けの言葉<br>検索KWなし <span class="badge badge-danger">NG</span></td>
-            <td>「クッパのコンボ解説！<br>高火力コンボからお手軽まで」<br>検索KW入り <span class="badge badge-success">◎</span></td>
-            <td>「【初心者必見】クッパで<br>即VIPいける為に重要なこと7つ」<br>検索KW+数字 <span class="badge badge-success">◎</span></td>
-          </tr>
-          <tr>
-            <td><strong>動画の構成</strong></td>
-            <td>配信開始→雑談→対戦→雑談<br>→対戦→終了（構成なし）<span class="badge badge-danger">NG</span></td>
-            <td>コンボ①→②→③…→まとめ<br>（15種類を順番に解説）<span class="badge badge-success">◎</span></td>
-            <td>①コンボ→②立ち回り→③ガーキャン<br>→④崖ブレス→⑤崖狩り→⑥ぶっ壊し<br>→⑦道連れ（7ポイント構成）<span class="badge badge-success">◎</span></td>
-          </tr>
-          <tr>
-            <td><strong>テロップ/BGM</strong></td>
-            <td>なし <span class="badge badge-danger">NG</span></td>
-            <td>テロップあり <span class="badge badge-success">◎</span></td>
-            <td>テロップ+BGM+効果音 <span class="badge badge-success">◎</span></td>
-          </tr>
-          <tr>
-            <td><strong>致命的な問題</strong></td>
-            <td colspan="3" style="color:var(--danger);font-weight:700;">タイトルに「#shorts」が入った3時間の配信がある。YouTubeがショートと横動画を混同し、アルゴリズムが正しく分類できない可能性</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="callout callout-info">
+      <strong>📊 読み取れる3つの事実：</strong><br>
+      ① med/follトップ3は Rearlet(17.27) / アカキクス(9.64) / KEN(4.41) → <strong>ガチ寄りが効率で勝つ</strong><br>
+      ② 最高再生トップ3は ブリカワ(274万) / アカキクス(133万) / Shuton(110万) → <strong>エンタ要素が上限を伸ばす</strong><br>
+      ③ 週投稿数トップ3は ブリカワ(4.88) / 智念(4.79) / Rearlet(2.65) → <strong>高頻度はバズの必要条件</strong>
     </div>
   </div>
+</section>
 
-  <!-- 埋もれた宝 -->
-  <div class="card card--problem" style="border-left:4px solid var(--warning);">
-    <div class="tags">
-      <span class="tag tag--warning">発見</span>
-      <span class="tag tag--success">宝の山</span>
+<!-- ============ 04 Top20バイラル ============ -->
+<section id="viral" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">04 · VIRAL TOP 20</div>
+    <h2>日本スマブラSP系 Shorts 上位20本</h2>
+    <p class="sec-desc">
+      406本中、直近1-2年のバイラル上位。このラインナップから「勝ちパターン」が抽出されます。
+    </p>
+
+    <div class="viral-list-v3">
+      <div class="viral-row">
+        <div class="rank">01</div>
+        <div class="views">2,744,364</div>
+        <div class="dur x4">135s</div>
+        <div class="info">
+          <div class="t">こんな人達だったの…？ #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-04</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">02</div>
+        <div class="views">2,067,545</div>
+        <div class="dur x4">98s</div>
+        <div class="info">
+          <div class="t">そんな裏側が… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">03</div>
+        <div class="views">1,831,728</div>
+        <div class="dur x4">109s</div>
+        <div class="info">
+          <div class="t">そんな裏の顔が… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">04</div>
+        <div class="views">1,816,481</div>
+        <div class="dur x4">117s</div>
+        <div class="info">
+          <div class="t">そんな人達だったんだ… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">05</div>
+        <div class="views">1,763,475</div>
+        <div class="dur x4">109s</div>
+        <div class="info">
+          <div class="t">こんな人達だったの… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">06</div>
+        <div class="views">1,725,439</div>
+        <div class="dur x4">109s</div>
+        <div class="info">
+          <div class="t">ヤバいな… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">07</div>
+        <div class="views">1,695,574</div>
+        <div class="dur x4">104s</div>
+        <div class="info">
+          <div class="t">最低だな… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-02</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">08</div>
+        <div class="views">1,487,667</div>
+        <div class="dur x3">55s</div>
+        <div class="info">
+          <div class="t">爆裂ウザすぎる #ブリカワ #ブリとカワウソ #爆裂愛してる #スマブラsp</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">09</div>
+        <div class="views">1,331,287</div>
+        <div class="dur x1">13s</div>
+        <div class="info">
+          <div class="t">Xで50万再生されたアカキクスのソラ即死コンボ撃墜【スマブラSP】#shorts</div>
+          <div class="m">AKAKIKUS · 2025-12</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">10</div>
+        <div class="views">1,331,171</div>
+        <div class="dur x3">75s</div>
+        <div class="info">
+          <div class="t">裏の顔が… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-04</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">11</div>
+        <div class="views">1,289,412</div>
+        <div class="dur x4">118s</div>
+        <div class="info">
+          <div class="t">大ヤラセじゃん… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">12</div>
+        <div class="views">1,258,311</div>
+        <div class="dur x3">51s</div>
+        <div class="info">
+          <div class="t">大ヤラセチャンネルじゃん… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">13</div>
+        <div class="views">1,226,792</div>
+        <div class="dur x3">52s</div>
+        <div class="info">
+          <div class="t">ヤッバ…この人達… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">14</div>
+        <div class="views">1,124,780</div>
+        <div class="dur x3">65s</div>
+        <div class="info">
+          <div class="t">ヤバいなこの人達… #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">15</div>
+        <div class="views">1,100,467</div>
+        <div class="dur x3">58s</div>
+        <div class="info">
+          <div class="t">ルキナのマベコンに最大反撃を取れますか？おかずゼルダ戦【スマブラSP】#shorts</div>
+          <div class="m">SHUTON · 2025-05</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">16</div>
+        <div class="views">1,013,006</div>
+        <div class="dur x4">104s</div>
+        <div class="info">
+          <div class="t">怖すぎる #ブリカワ #ブリとカワウソ</div>
+          <div class="m">BURI · 2026-02</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">17</div>
+        <div class="views">967,356</div>
+        <div class="dur x3">55s</div>
+        <div class="info">
+          <div class="t">爆裂ウザすぎる #ブリカワ #ブリとカワウソ #爆裂愛してる #スマブラsp</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">18</div>
+        <div class="views">923,889</div>
+        <div class="dur x3">55s</div>
+        <div class="info">
+          <div class="t">爆裂ウザすぎる #ブリカワ #ブリとカワウソ #爆裂愛してる #スマブラsp</div>
+          <div class="m">BURI · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">19</div>
+        <div class="views">897,362</div>
+        <div class="dur x1">19s</div>
+        <div class="info">
+          <div class="t">マルスの弱いとこが全部出たキンクル戦ｗ【スマブラSP】</div>
+          <div class="m">PROTO · 2026-03</div>
+        </div>
+      </div>
+      <div class="viral-row">
+        <div class="rank">20</div>
+        <div class="views">784,890</div>
+        <div class="dur x2">32s</div>
+        <div class="info">
+          <div class="t">視聴者が魅せてくれた煽りテクニックが難易度高すぎた【スマブラSP】</div>
+          <div class="m">SHUTON · 2025-09</div>
+        </div>
+      </div>
+
     </div>
-    <h3>配信の中に「万再生レベル」のコンテンツが埋もれている</h3>
-    <p>3時間配信「<strong>チノスマ本気で優勝狙うで！！</strong>」(8TqdhcH6alk) のトランスクリプトを全文分析した結果、配信の終盤にRearletが<strong>6時間の独自研究を解説するパート</strong>を発見しました。</p>
-    <div style="background:var(--warning-light);padding:var(--space-24);border-radius:var(--radius);margin:var(--space-16) 0;">
-      <h4 style="color:var(--gray-900);font-size:var(--font-base);margin-bottom:var(--space-8);">🔬 発見された埋もれコンテンツ</h4>
-      <ul style="margin:0;">
-        <li><strong>クッパの横スマッシュのベクトル変更研究</strong> — ステージの位置ごとに撃墜%が変わる仕組みを6時間研究し、小戦場・ポケスタでの最適なベクトル変更の方向を解説</li>
-        <li><strong>「みんなの9割以上がベク変を間違えている」</strong>というキャッチーな主張</li>
-        <li><strong>クエヌ（空中N攻撃）のロジック解説</strong> — なぜ自分のクエヌが通るのか、地上軸と空中軸の使い分けの理論を解説</li>
-        <li><strong>台の位置によって吹っ飛びが変わる</strong>という独自発見（トラップ：戦場の真ん中の台より端の方が飛ぶ）</li>
+  </div>
+</section>
+
+<!-- ============ 05 勝ちパターン ============ -->
+<section id="pattern">
+  <div class="container">
+    <div class="sec-num">05 · WINNING PATTERNS</div>
+    <h2>バイラル6つの勝ちパターン</h2>
+    <p class="sec-desc">
+      上記Top20から抽出した、日本スマブラSPで実証済みのタイトル構造。
+      各型にRearletさん用の変換案も添えています。
+    </p>
+
+    <div class="pattern-grid" style="margin-top: var(--space-32);">
+      <div class="pattern-card-v3 shuton-t">
+        <span class="type-badge">TYPE S-1</span>
+        <h3>疑問形「〜できますか？」</h3>
+        <div class="metric">Shuton型 / <strong>110万再生</strong>の実績 / 尺55s前後</div>
+        <div class="ex">例：ルキナのマベコンに最大反撃を取れますか？おかずゼルダ戦【スマブラSP】#shorts</div>
+        <div class="ex rearlet-ex">Rearlet版：最強カズヤの即死コンボ、クッパで耐えられますか？【スマブラSP】#shorts</div>
+      </div>
+
+      <div class="pattern-card-v3 shuton-t">
+        <span class="type-badge">TYPE S-2</span>
+        <h3>視聴者参加「視聴者が魅せた〜」</h3>
+        <div class="metric">Shuton型 / 78万再生 / エンタ×ガチの中核</div>
+        <div class="ex">例：視聴者が魅せてくれた煽りテクニックが難易度高すぎた【スマブラSP】</div>
+        <div class="ex rearlet-ex">Rearlet版：視聴者が送ってくれたクッパ最強コンボを全部試した結果【スマブラSP】</div>
+      </div>
+
+      <div class="pattern-card-v3 akakikus-t">
+        <span class="type-badge">TYPE A-1</span>
+        <h3>自己実績引用「〇万再生された〜を再び」</h3>
+        <div class="metric">アカキクス型 / <strong>133万再生</strong>の実績 / 尺12-14s</div>
+        <div class="ex">例：120万再生されたソラの即死コンボを再び【スマブラSP】#shorts</div>
+        <div class="ex rearlet-ex">Rearlet版：30万再生されたクッパの即死コンボを最強スティーブ相手に再現【スマブラSP】#shorts</div>
+      </div>
+
+      <div class="pattern-card-v3 akakikus-t">
+        <span class="type-badge">TYPE A-2</span>
+        <h3>大会×場面×神撃墜</h3>
+        <div class="metric">アカキクス型 / 67万再生 / 自称名ブランディング</div>
+        <div class="ex">例：大型大会の決勝で開始10秒で神撃墜を決めるアカキクス勇者【スマブラSP】#shorts</div>
+        <div class="ex rearlet-ex">Rearlet版：チノスマ決勝で開幕10秒で逆転撃墜を決めた日本9位クッパ【スマブラSP】#shorts</div>
+      </div>
+
+      <div class="pattern-card-v3 proto-t">
+        <span class="type-badge">TYPE P</span>
+        <h3>対戦相手×形容詞×ｗ</h3>
+        <div class="metric">プロトバナム型 / <strong>89万再生</strong> / 尺19s</div>
+        <div class="ex">例：マルスの弱いとこが全部出たキンクル戦ｗ【スマブラSP】</div>
+        <div class="ex rearlet-ex">Rearlet版：クッパの弱いとこが全部出たザクレイ戦ｗ【スマブラSP】</div>
+      </div>
+
+      <div class="pattern-card-v3">
+        <span class="type-badge">TYPE K</span>
+        <h3>共感ぼやき一言</h3>
+        <div class="metric">KEN型 / 51万再生 / 映像＝シンプル試合</div>
+        <div class="ex">例：それはそれとして、気持ちはわかる／厳しい世界だ／未来が明る過ぎる</div>
+        <div class="ex rearlet-ex">Rearlet版：クッパ使いにしか分からない瞬間／それでもクッパで勝ちたい</div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>🔑 共通の文法：</strong>
+      <code>【キャラor場面】＋【疑問or形容詞or数字】＋【結果】＋【スマブラSP】#shorts</code><br>
+      <strong>Rearletさんの現状タイトル問題：</strong> 感嘆符「！」が31本中25本(80%)で多すぎ、疑問形が55%、数字と相手プロ名がほぼ無い。
+      この3点を変えるだけで、勝ちパターン型に寄ります。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 投稿頻度 ============ -->
+<section id="freq" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">06 · POSTING FREQUENCY</div>
+    <h2>投稿頻度ランキング</h2>
+    <p class="sec-desc">
+      投稿頻度＝アルゴリズムからの継続露出量。ブリカワが週4.88本で急成長しているのは、
+      「高頻度投稿で学習データを送り続ける」戦略の結果です。
+    </p>
+
+    <div class="freq-chart">
+      <div class="freq-row">
+        <div class="ch">ブリとカワウソ</div>
+        <div class="bar"><div class="fill " style="width:100%"></div></div>
+        <div class="val">4.88本/週</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">智念せいら</div>
+        <div class="bar"><div class="fill " style="width:98%"></div></div>
+        <div class="val">4.79本/週</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">Rearlet（本人）</div>
+        <div class="bar"><div class="fill mid" style="width:54%"></div></div>
+        <div class="val">2.65本/週</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">KEN</div>
+        <div class="bar"><div class="fill mid" style="width:52%"></div></div>
+        <div class="val">2.57本/週</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">マエスマ</div>
+        <div class="bar"><div class="fill mid" style="width:32%"></div></div>
+        <div class="val">1.58本/週</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">アカキクス</div>
+        <div class="bar"><div class="fill mid" style="width:30%"></div></div>
+        <div class="val">1.50本/週</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">プロトバナム</div>
+        <div class="bar"><div class="fill low" style="width:18%"></div></div>
+        <div class="val">0.91本/週</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">Shuton</div>
+        <div class="bar"><div class="fill low" style="width:15%"></div></div>
+        <div class="val">0.75本/週</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">Raito</div>
+        <div class="bar"><div class="fill low" style="width:3%"></div></div>
+        <div class="val">0.18本/週</div>
+      </div>
+      <div class="freq-row">
+        <div class="ch">ザクレイ</div>
+        <div class="bar"><div class="fill low" style="width:2%"></div></div>
+        <div class="val">0.11本/週</div>
+      </div>
+
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Rearletさんは現在週2.65本。</strong>
+      ブリカワ（4.88）・智念せいら（4.79）には及ばず、KEN（2.57）・アカキクス（1.5）と似た頻度。
+      登録者0→5万フェーズでは <strong>週4-5本を目標</strong>にすることで、アルゴリズム露出×バイラル確率が倍以上になります。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 Rearletギャップ ============ -->
+<section id="gap">
+  <div class="container">
+    <div class="sec-num">07 · GAP ANALYSIS</div>
+    <h2>Rearlet現状 vs Shuton+アカキクス模範</h2>
+    <p class="sec-desc">
+      「今変えるべき項目」を定量で並べました。全て編集・運用で対応可能なものだけです。
+    </p>
+
+    <div style="background:var(--white);border-radius:var(--radius-lg);padding:0 var(--space-24);box-shadow:var(--shadow);border:1px solid var(--gray-200);margin:var(--space-32) 0;">
+      <div class="gap-row">
+        <div class="label">項目</div>
+        <div>現状（Rearlet 1,140人）</div>
+        <div>Shuton×アカキクス基準</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">尺 中央値</div>
+        <div class="now">40秒</div>
+        <div class="target">14-25秒 (-15〜25秒)</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">週投稿数</div>
+        <div class="now">2.65本</div>
+        <div class="target">4-5本 (+1.5〜2本)</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">感嘆符「！」使用</div>
+        <div class="now">80%（25/31）</div>
+        <div class="target">Shuton 7.5%, KEN 12%（-60pt）</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">【スマブラSP】末尾</div>
+        <div class="now">0本（形式バラバラ）</div>
+        <div class="target">アカキクス100%, Shuton95%で統一</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">#shorts末尾</div>
+        <div class="now">58%（18/31）</div>
+        <div class="target">100%で固定</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">相手プロ名明記</div>
+        <div class="now">ルナマド等一部のみ</div>
+        <div class="target">ザクレイ/あcola/ミーヤー等大物ベース</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">数字提示</div>
+        <div class="now">1本のみ（200%ハンデ）</div>
+        <div class="target">再生数・秒数・ランキング順位を毎回</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">疑問形タイトル</div>
+        <div class="now">55%（17本）</div>
+        <div class="target">Shuton型「できますか？」中心</div>
+      </div>
+      <div class="gap-row">
+        <div class="label">チャンネル概要</div>
+        <div class="now">詳細未確認</div>
+        <div class="target">「日本9位クッパ・最強を目指す試合集」</div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>🎯 最優先で変える3項目：</strong>
+      <ol style="margin-top:var(--space-8);padding-left:var(--space-24);color:var(--gray-800);">
+        <li><strong>尺40秒→16秒</strong>（編集で切るだけ、撮り直し不要）</li>
+        <li><strong>感嘆符「！」を疑問符「？」に置換</strong>（Shuton型のフック化）</li>
+        <li><strong>タイトル末尾を【スマブラSP】#shorts で固定</strong>（アルゴリズム分類強化）</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 30本タイトル案 ============ -->
+<section id="titles" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">08 · 30 TITLE PROPOSALS</div>
+    <h2>次の30本 タイトル案</h2>
+    <p class="sec-desc">
+      Shuton型（S）/ アカキクス型（A）/ プロトバナム型（P）で分類。
+      既存動画の再編集でも新規撮影でもそのまま使えます。
+    </p>
+
+    <div class="title30-grid">
+      <div class="title30-item t-b">
+        <span class="ix">#01</span> 最強カズヤの即死コンボ、クッパで耐えられますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#02</span> ザクレイのロボット、クッパで撃墜できますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#03</span> あcolaのホムヒカに、日本9位クッパは通用しますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#04</span> VIPマッチの最強テリー、3ストック奪えますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#05</span> ミーヤーのカズヤ、クッパで止められますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#06</span> Shutonさんのピクオリに、クッパで勝負できますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#07</span> 視聴者が送ってくれたクッパ最強コンボを全部試した【スマブラSP】#shorts <span class="type-tag">S-2</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#08</span> 視聴者が魅せたクッパ即死ルート、再現に1時間かかった【スマブラSP】#shorts <span class="type-tag">S-2</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#09</span> 視聴者リクエストで200%ハンデ開始した結果【スマブラSP】#shorts <span class="type-tag">S-2</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#10</span> 視聴者のおすすめVIP対戦相手、全員に挑んだ結果【スマブラSP】#shorts <span class="type-tag">S-2</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#11</span> 30万再生されたクッパの即死コンボを最強スティーブ相手に再現【スマブラSP】#shorts <span class="type-tag">A-1</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#12</span> 27万再生されたゴブリンマリオ戦の続編・300%ハンデ編【スマブラSP】#shorts <span class="type-tag">A-1</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#13</span> 18万再生された令和クッパの新即死コンボを更に進化させた【スマブラSP】#shorts <span class="type-tag">A-1</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#14</span> 50万再生された撃墜シーンが、まだ超えられない理由【スマブラSP】#shorts <span class="type-tag">A-1</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#15</span> チノスマ決勝で開幕10秒で逆転撃墜した日本9位クッパ【スマブラSP】#shorts <span class="type-tag">A-2</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#16</span> Sumabato9位の試合で見せたクッパの神復帰阻止【スマブラSP】#shorts <span class="type-tag">A-2</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#17</span> Koryu Festivalのベスト8で決めたクッパ即死コンボ【スマブラSP】#shorts <span class="type-tag">A-2</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#18</span> 大型大会の敗者復活戦で見せたクッパの粘り勝ち【スマブラSP】#shorts <span class="type-tag">A-2</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#19</span> 2026年最強クッパ使いRearletの撃墜集・4月版【スマブラSP】#shorts <span class="type-tag">A-2</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#20</span> スマメイトのトップ層をクッパで倒したベストシーン集【スマブラSP】#shorts <span class="type-tag">A-2</span>
+      </div>
+      <div class="title30-item t-c">
+        <span class="ix">#21</span> クッパの弱いとこが全部出たザクレイ戦ｗ【スマブラSP】 <span class="type-tag">P</span>
+      </div>
+      <div class="title30-item t-c">
+        <span class="ix">#22</span> クッパの強いとこ全部出たあcola戦ｗ【スマブラSP】 <span class="type-tag">P</span>
+      </div>
+      <div class="title30-item t-c">
+        <span class="ix">#23</span> カズヤ相手にクッパの限界を見たｗ【スマブラSP】 <span class="type-tag">P</span>
+      </div>
+      <div class="title30-item t-c">
+        <span class="ix">#24</span> スティーブ戦でクッパが完全に機能停止したｗ【スマブラSP】 <span class="type-tag">P</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#25</span> クッパ使いにしか分からない瞬間【スマブラSP】 <span class="type-tag">K</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#26</span> それでもクッパで勝ちたいんです【スマブラSP】 <span class="type-tag">K</span>
+      </div>
+      <div class="title30-item t-a">
+        <span class="ix">#27</span> クッパ選ぶと画面越しに応援されがち【スマブラSP】 <span class="type-tag">K</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#28</span> 200%ハンデでも勝てる日本9位クッパの新フォーマット【スマブラSP】#shorts <span class="type-tag">Sp</span>
+      </div>
+      <div class="title30-item t-c">
+        <span class="ix">#29</span> 開幕1秒でスワイプ止める、クッパ撃墜集の新作【スマブラSP】#shorts <span class="type-tag">Sp</span>
+      </div>
+      <div class="title30-item t-b">
+        <span class="ix">#30</span> 日本9位クッパがVIPマッチを縦断した結果【スマブラSP】#shorts <span class="type-tag">Sp</span>
+      </div>
+
+    </div>
+
+    <div class="callout callout-info">
+      <strong>使い方：</strong>
+      Phase 1の4週間で、S型12本 / A型12本 / P型6本 を目処にローテーション。
+      反応が良かった型を週3、次点を週2に調整していけばOKです。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 4週間カレンダー ============ -->
+<section id="calendar">
+  <div class="container">
+    <div class="sec-num">09 · 4-WEEK CALENDAR</div>
+    <h2>4週間 投稿カレンダー（週4-5本）</h2>
+    <p class="sec-desc">
+      各週、S型（Shuton）・A型（アカキクス）・P型（プロトバナム）をバランスよく投下。
+      Week1で型の相性を見て、Week2以降で微調整。
+    </p>
+
+    <h3 style="margin: var(--space-32) 0 var(--space-16);font-size:var(--font-lg);">Week 1 (4/22-4/28)</h3>
+    <div class="calendar">
+      <div class="cal-day"><div class="dow">TUE</div></div>
+      <div class="cal-day post"><div class="dow">WED 4/23</div><div class="task">既存312K動画を13秒版に再編集投稿</div><span class="type">A-1</span></div>
+      <div class="cal-day"><div class="dow">THU</div></div>
+      <div class="cal-day post"><div class="dow">FRI 4/25</div><div class="task">「最強カズヤに耐えられますか？」</div><span class="type b">S-1</span></div>
+      <div class="cal-day"><div class="dow">SAT</div></div>
+      <div class="cal-day post"><div class="dow">SUN 4/27</div><div class="task">「クッパの弱いとこ全部出たザクレイ戦ｗ」</div><span class="type c">P</span></div>
+      <div class="cal-day post"><div class="dow">MON 4/28</div><div class="task">「日本9位クッパ・チノスマ決勝の逆転撃墜」</div><span class="type">A-2</span></div>
+    </div>
+
+    <h3 style="margin: var(--space-32) 0 var(--space-16);font-size:var(--font-lg);">Week 2 (4/29-5/5)</h3>
+    <div class="calendar">
+      <div class="cal-day post"><div class="dow">TUE 4/29</div><div class="task">「視聴者コンボ全部試した」</div><span class="type b">S-2</span></div>
+      <div class="cal-day"><div class="dow">WED</div></div>
+      <div class="cal-day post"><div class="dow">THU 5/1</div><div class="task">「278K再生されたコンボをスネーク相手に」</div><span class="type">A-1</span></div>
+      <div class="cal-day"><div class="dow">FRI</div></div>
+      <div class="cal-day post"><div class="dow">SAT 5/3</div><div class="task">「あcolaにクッパは通用しますか？」</div><span class="type b">S-1</span></div>
+      <div class="cal-day"><div class="dow">SUN</div></div>
+      <div class="cal-day post"><div class="dow">MON 5/5</div><div class="task">「クッパ使いにしか分からない瞬間」</div><span class="type c">K</span></div>
+    </div>
+
+    <h3 style="margin: var(--space-32) 0 var(--space-16);font-size:var(--font-lg);">Week 3 (5/6-5/12)</h3>
+    <div class="calendar">
+      <div class="cal-day post"><div class="dow">TUE 5/6</div><div class="task">「181K再生コンボをスティーブに」</div><span class="type">A-1</span></div>
+      <div class="cal-day"><div class="dow">WED</div></div>
+      <div class="cal-day post"><div class="dow">THU 5/8</div><div class="task">「200%ハンデ・最強マリオ編」</div><span class="type">A-2</span></div>
+      <div class="cal-day"><div class="dow">FRI</div></div>
+      <div class="cal-day post"><div class="dow">SAT 5/10</div><div class="task">「ミーヤーのカズヤに勝てますか？」</div><span class="type b">S-1</span></div>
+      <div class="cal-day post"><div class="dow">SUN 5/11</div><div class="task">「クッパの上B最強ルート発見した」</div><span class="type c">K</span></div>
+      <div class="cal-day"><div class="dow">MON</div></div>
+    </div>
+
+    <h3 style="margin: var(--space-32) 0 var(--space-16);font-size:var(--font-lg);">Week 4 (5/13-5/19)</h3>
+    <div class="calendar">
+      <div class="cal-day post"><div class="dow">TUE 5/13</div><div class="task">「ゴブマリ戦・続編200%ハンデ」</div><span class="type">A-2</span></div>
+      <div class="cal-day"><div class="dow">WED</div></div>
+      <div class="cal-day post"><div class="dow">THU 5/15</div><div class="task">「視聴者の嫌がらせ技、全部潰した」</div><span class="type b">S-2</span></div>
+      <div class="cal-day"><div class="dow">FRI</div></div>
+      <div class="cal-day post"><div class="dow">SAT 5/17</div><div class="task">「日本9位クッパの神撃墜集・4月版」</div><span class="type">A-2</span></div>
+      <div class="cal-day"><div class="dow">SUN</div></div>
+      <div class="cal-day post"><div class="dow">MON 5/19</div><div class="task">「クッパの弱点・カズヤ戦ｗ」</div><span class="type c">P</span></div>
+    </div>
+
+    <div class="callout callout-success" style="margin-top:var(--space-32)">
+      <strong>📆 4週間合計：20本投稿（週5本ペース）</strong><br>
+      A型（アカキクス）8本 / S型（Shuton）6本 / P型（プロトバナム）3本 / K型（KEN共感）3本。
+      全てタイトル末尾は<code>【スマブラSP】#shorts</code>、尺14-25秒、投稿時刻 21:00-22:00。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 半年ロードマップ ============ -->
+<section id="roadmap" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">10 · 6-MONTH ROADMAP</div>
+    <h2>半年で5万人 ロードマップ</h2>
+    <p class="sec-desc">
+      Phase 1→3 で段階的に型を切り替え。Rearletさんの現状武器（med/foll 17.27）を活かしつつ、
+      エンタ要素を徐々に増やして上限を引き上げる設計です。
+    </p>
+
+    <div class="phase-card p1">
+      <div class="phase-head">
+        <span class="phase-num">PHASE 1</span>
+        <h3>月1-2：土台構築（アカキクス型×短尺量産）</h3>
+        <div class="phase-target">→ 8,000人</div>
+      </div>
+      <p style="color:var(--gray-700);">尺14-20秒に全面移行、週4-5本投稿、タイトル末尾定型化。med/foll 17.27を最大化する形。</p>
+      <div class="kpi-row">
+        <div class="kpi-pill"><span class="k">月目標</span><span class="v">+6,860</span></div>
+        <div class="kpi-pill"><span class="k">週投稿</span><span class="v">4-5本</span></div>
+        <div class="kpi-pill"><span class="k">尺目標</span><span class="v">14-20s</span></div>
+        <div class="kpi-pill"><span class="k">バイラル</span><span class="v">月1本100K+</span></div>
+      </div>
+      <ul class="action-list">
+        <li>過去バイラル3本（312K/278K/181K）を13秒版に再編集→シリーズ化で再投稿</li>
+        <li>タイトル末尾【スマブラSP】#shorts 完全統一、「！」を「？」に置換</li>
+        <li>概要欄1行目「日本9位クッパ使いRearlet。最強クッパを目指す試合集」</li>
+        <li>動画末尾1秒に登録テロップ固定化</li>
       </ul>
     </div>
-    <p>これらは独自性が高く、<strong>「クッパ ベクトル変更」「クッパ 撃墜 %帯」で検索する人に刺さるコンテンツ</strong>です。5〜10分の教材動画に切り出せば、こんが(174K再生)や無名ch(182K再生)と同じ土俵に乗れます。</p>
-    <p style="margin-top:var(--space-12);">しかし現状は<strong>3時間配信の2時間40分地点</strong>に埋もれており、誰の目にも触れていません。</p>
-  </div>
 
-  <!-- 原因カード群（アルゴリズムベース） -->
-  <div class="card card--problem">
-    <div class="tags">
-      <span class="tag tag--danger">原因 ①</span>
-      <span class="tag tag--danger">致命的</span>
+    <div class="phase-card p2">
+      <div class="phase-head">
+        <span class="phase-num">PHASE 2</span>
+        <h3>月3-4：Shuton型エンタ要素を注入</h3>
+        <div class="phase-target">→ 25,000人</div>
+      </div>
+      <p style="color:var(--gray-700);">疑問形・視聴者参加型Shortsを週2本組み込み、月1本は1分超の長尺（1試合解説）も投入。</p>
+      <div class="kpi-row">
+        <div class="kpi-pill"><span class="k">月目標</span><span class="v">+8,500</span></div>
+        <div class="kpi-pill"><span class="k">週投稿</span><span class="v">4-5本</span></div>
+        <div class="kpi-pill"><span class="k">S型比率</span><span class="v">週2本</span></div>
+        <div class="kpi-pill"><span class="k">バイラル</span><span class="v">月2本100K+</span></div>
+      </div>
+      <ul class="action-list">
+        <li>視聴者参加企画「クッパで試すコンボ送って」をXで募集→Shorts化</li>
+        <li>疑問形タイトル「〇〇にクッパで勝てますか？」を週2本投下</li>
+        <li>長尺5-10分「日本9位クッパの試合解説」月1本で固定ファン化</li>
+        <li>Sumabato/Koryu大会実績を毎動画のサムネ or 冒頭1秒に表示</li>
+      </ul>
     </div>
-    <h3>ショート登録者と横動画視聴者の完全な乖離（アルゴリズム上の悪循環）</h3>
-    <p>YouTubeのショートと横動画は<strong>完全に別のアルゴリズム</strong>で運用されています。ショートフィードに横動画は表示されず、逆も同じです。</p>
-    <div style="background:var(--gray-50);padding:var(--space-24);border-radius:var(--radius);margin:var(--space-16) 0;border:1px solid var(--gray-200);">
-      <h4 style="font-size:var(--font-base);color:var(--gray-900);margin-bottom:var(--space-12);">アルゴリズム上の悪循環メカニズム</h4>
-      <ol style="margin:0;font-size:var(--font-sm);line-height:2;">
-        <li><strong>ショートで登録者を獲得</strong> — Rearletのショート（273K再生等）は「面白いクッパプレイの瞬間」に反応した視聴者を集めている</li>
-        <li><strong>この視聴者の視聴目的は「隙間時間の消費」</strong> — 受動的にスワイプして楽しむフロー型の視聴。チャンネルのテーマに深い関心があるわけではない</li>
-        <li><strong>横動画がホームフィードに表示される</strong> → しかしこの視聴者は「大会配信」「VIP連勝」等に興味がないのでクリックしない</li>
-        <li><strong>CTR（クリック率）が低い</strong> → YouTubeが「このチャンネルの横動画は需要がない」と学習</li>
-        <li><strong>既存の熱心な視聴者への推奨すら抑制される</strong> → インプレッション自体が減る悪循環</li>
-      </ol>
-    </div>
-    <p>これは<strong>配信アーカイブだから伸びないのではありません</strong>。ショートの視聴者層と横動画の内容がミスマッチしているために、CTRが構造的に低くなり、アルゴリズムがインプレッションを出さなくなるという問題です。</p>
-    <div class="callout callout-warning" style="margin-top:var(--space-16);">
-      <strong>ゲームジャンルの平均CTR: 8.5%</strong>。2〜3%を下回るとYouTubeは推奨を止める傾向があります。Rearletの横動画はインプレッション数自体が極端に少ないことから、CTRが閾値を大幅に下回っている可能性が高いです。
-    </div>
-  </div>
 
-  <div class="card card--problem">
-    <div class="tags">
-      <span class="tag tag--danger">原因 ②</span>
-      <span class="tag tag--danger">致命的</span>
-    </div>
-    <h3>YouTube検索に引っかからない — AI解析 × メタデータの二重の問題</h3>
-    <p>2026年のYouTubeはGemini AIが動画の<strong>音声・画像・トーン</strong>を直接解析してインデックスします。タグの影響は公式に「最小限」と確認済みです。ただし、タイトル・説明文・動画内の発話内容の<strong>一貫性</strong>がAIの理解精度を左右します。</p>
-    <div class="tbl-wrap">
-      <table class="compare">
-        <thead><tr><th>項目</th><th>Rearlet（実際の値）</th><th>無名ch（182K再生の実際の値）</th></tr></thead>
-        <tbody>
-          <tr><td><strong>タグ</strong></td><td><strong>0個</strong> <span class="badge badge-danger">NG</span></td><td><strong>50個以上</strong>: クッパ, へろー, acola, マリオ, etc.<br><span style="font-size:11px;color:var(--gray-500);">※YouTube公式は「タグの影響は最小限」としているが、AIが動画内容を正確に分類するための補助情報として機能する</span></td></tr>
-          <tr><td><strong>説明文の最初の行</strong></td><td>#スマブラ #スマブラSP ＃リアーレット #Rearlet #クッパ #Bowser #SSBU ＃shorts</td><td>オススメの動画↓ [関連動画3本のリンク]</td></tr>
-          <tr><td><strong>説明文の特徴</strong></td><td>全動画コピペ。「次の配信→X日後21時から」と「配信ルール」のみ</td><td>関連動画リンク+SNSリンク+音楽クレジット+著作権表記</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="callout callout-danger" style="margin-top:var(--space-16);">
-      <strong>AI解析の観点から:</strong> Gemini AIは動画内の<strong>発話内容</strong>を自動文字起こしして解析します。Rearletの配信では「クッパのベクトル変更」「クエヌのロジック」「カズヤ対策」等の高度な知見が語られていますが、それが3時間の雑談・対戦の中に散在しているため、<strong>AIが「この動画は何についての動画か」を1つのテーマに絞れない</strong>。結果、特定の検索クエリに対する関連性スコアが低くなります。
-    </div>
-    <div class="callout callout-warning" style="margin-top:var(--space-8);">
-      <strong>補足:</strong> 説明文に「＃shorts」タグが入っている横動画がある。横動画に #shorts タグは不要であり、アルゴリズムの分類を混乱させるリスクがあります。
+    <div class="phase-card p3">
+      <div class="phase-head">
+        <span class="phase-num">PHASE 3</span>
+        <h3>月5-6：コラボ・シリーズ化で加速</h3>
+        <div class="phase-target">→ 50,000人</div>
+      </div>
+      <p style="color:var(--gray-700);">2.5万登録者の実績でコラボ依頼が通りやすくなる。有名プレイヤーとの対戦Shortsで一気にスケール。</p>
+      <div class="kpi-row">
+        <div class="kpi-pill"><span class="k">月目標</span><span class="v">+12,500</span></div>
+        <div class="kpi-pill"><span class="k">週投稿</span><span class="v">5本</span></div>
+        <div class="kpi-pill"><span class="k">コラボ</span><span class="v">月1-2</span></div>
+        <div class="kpi-pill"><span class="k">バイラル</span><span class="v">月3-4本100K+</span></div>
+      </div>
+      <ul class="action-list">
+        <li>あcola・ザクレイ・ミーヤー級との対戦動画を「対◯◯シリーズ」化</li>
+        <li>へろー（クッパ使い同士）とのコラボShorts or 長尺1on1</li>
+        <li>「100万再生された〇〇」自己引用シリーズで複利的にバズ誘発</li>
+        <li>長尺「チノスマ優勝への道」ドキュメンタリー型で固定ファン基盤</li>
+      </ul>
     </div>
   </div>
+</section>
 
-  <div class="card card--problem">
-    <div class="tags">
-      <span class="tag tag--danger">原因 ③</span>
-      <span class="tag tag--warning">高</span>
-    </div>
-    <h3>サムネイルの訴求力不足 → CTRの直接的な低下要因</h3>
-    <p>CTR（クリック率）はアルゴリズムが最初に評価するゲートです。配信アーカイブのサムネイルは配信画面のスクリーンショットが自動設定されただけで、「この動画を見たら何が得られるか」が一瞬で伝わりません。ゲームジャンルの平均CTRは8.5%ですが、この種のサムネイルでは2〜3%すら難しい可能性があります。</p>
+<!-- ============ 11 収益マイル ============ -->
+<section id="revenue">
+  <div class="container">
+    <div class="sec-num">11 · REVENUE MILESTONES</div>
+    <h2>収益化マイルストーン</h2>
+    <p class="sec-desc">
+      Shorts中心チャンネルでの月間収益の目安。スマブラSP系は日本向けRPMが比較的低めですが、
+      案件・スポンサーで大きく跳ねます。
+    </p>
 
-    <!-- Rearletの実際のサムネイル（横動画） -->
-    <h4 style="margin:var(--space-24) 0 var(--space-16);color:var(--danger);">Rearlet の横動画サムネイル（実際の画像）</h4>
-    <div class="thumb-grid">
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/pOTIkemgd7Q/maxresdefault.jpg" alt="桜梅桃李ハイライト" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">念願の大型TOP8！桜梅桃李第肆幕ハイライト</div>
-          <span class="thumb-views low">78 回再生 ❌</span>
-        </div>
+    <div class="revenue-chart">
+      <div class="rev-row">
+        <div class="milestone">1,140</div>
+        <div class="bar-container"><div class="bar-fill" style="width:2%;">現状</div></div>
+        <div class="revenue">¥0〜</div>
       </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/CWBQZDgUZAc/maxresdefault.jpg" alt="チノスマリベンジ" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">全一クッパがチノスマリベンジ！</div>
-          <span class="thumb-views low">599 回再生 ❌</span>
-        </div>
+      <div class="rev-row">
+        <div class="milestone">5,000</div>
+        <div class="bar-container"><div class="bar-fill" style="width:10%;">Phase1前半</div></div>
+        <div class="revenue">¥5,000〜</div>
       </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/8TqdhcH6alk/maxresdefault.jpg" alt="チノスマ優勝" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">チノスマ本気で優勝狙うで！！</div>
-          <span class="thumb-views low">595 回再生 ❌</span>
-        </div>
+      <div class="rev-row">
+        <div class="milestone">10,000</div>
+        <div class="bar-container"><div class="bar-fill" style="width:20%;">Phase1完了</div></div>
+        <div class="revenue">¥30,000〜</div>
       </div>
-    </div>
-
-    <!-- 成功チャンネルのサムネイル比較 -->
-    <h4 style="margin:var(--space-32) 0 var(--space-16);color:var(--success);">成功チャンネルのサムネイル（同じクッパ系テーマ）</h4>
-    <div class="thumb-grid">
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/dMu386nulrw/maxresdefault.jpg" alt="クッパコンボ解説" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">クッパのコンボ解説！高火力コンボからお手軽コンボまで</div>
-          <span class="thumb-type compare">他CH</span>
-          <span class="thumb-views high">高再生数 ✅</span>
-        </div>
+      <div class="rev-row">
+        <div class="milestone">25,000</div>
+        <div class="bar-container"><div class="bar-fill" style="width:50%;">Phase2完了</div></div>
+        <div class="revenue">¥150,000〜</div>
       </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/jfSLm_Yc2n8/maxresdefault.jpg" alt="VIP200連勝" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">クッパでVIP200連勝をする ワンタッチ高火力</div>
-          <span class="thumb-type compare">他CH</span>
-          <span class="thumb-views high">高再生数 ✅</span>
-        </div>
+      <div class="rev-row">
+        <div class="milestone">50,000</div>
+        <div class="bar-container"><div class="bar-fill" style="width:100%;">Phase3完了・目標</div></div>
+        <div class="revenue">¥300,000〜</div>
       </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/3RLBKZm8sBs/maxresdefault.jpg" alt="初心者必見クッパ" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">【初心者必見】クッパで即VIPいける為に重要なこと7つ</div>
-          <span class="thumb-type compare">他CH</span>
-          <span class="thumb-views high">高再生数 ✅</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 大会チャンネルのサムネイル -->
-    <h4 style="margin:var(--space-32) 0 var(--space-16);color:var(--info);">大会チャンネルのサムネイル（Rearlet出場試合）</h4>
-    <div class="thumb-grid">
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/ndjtF6g36fk/maxresdefault.jpg" alt="Maesuma Acola VS Rearlet" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">Maesuma's HIT #147 Acola (Steve) VS Rearlet (Bowser)</div>
-          <span class="thumb-type compare">大会CH</span>
-          <span class="thumb-views mid">大会チャンネル配信</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/mJLXzRUy4c8/maxresdefault.jpg" alt="スマバト Kome VS リアーレット" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">スマバトSP Revo | Kome(シュルク) VS リアーレット(クッパ)</div>
-          <span class="thumb-type compare">大会CH</span>
-          <span class="thumb-views mid">大会チャンネル配信</span>
-        </div>
-      </div>
-      <div class="thumb-item">
-        <img src="https://img.youtube.com/vi/ZU6Y_41Krso/maxresdefault.jpg" alt="大阪大会 Rearlet vs Te-sHi" loading="lazy">
-        <div class="thumb-meta">
-          <div class="thumb-title">Rearlet(クッパ) vs Te-sHi(サムス) - スマブラSP大阪大会</div>
-          <span class="thumb-type compare">大会CH</span>
-          <span class="thumb-views mid">大会チャンネル配信</span>
-        </div>
+      <div class="rev-row">
+        <div class="milestone">95,800</div>
+        <div class="bar-container"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#E67E22,#FDCB6E);color:#333;">Shuton基準</div></div>
+        <div class="revenue">¥600,000〜</div>
       </div>
     </div>
 
     <div class="callout callout-info">
-      <strong>デザイン原則から見たサムネイル:</strong> フィードバックチェックリストの「アイキャッチ・バナー」観点を適用すると ── ①1秒で伝えたいメッセージが読めるか ②情報が3要素以内に絞られているか ③文字と背景のコントラストが十分か。現状のサムネイルはいずれも満たしていません。
-    </div>
-  </div>
-
-  <div class="card card--problem">
-    <div class="tags">
-      <span class="tag tag--danger">原因 ④</span>
-      <span class="tag tag--warning">高</span>
-    </div>
-    <h3>最初の30秒問題 — アルゴリズムが最重視する「フック」がない</h3>
-    <p>2026年のYouTubeアルゴリズムは<strong>最初の30秒間の視聴維持率</strong>を特に重視します。<strong>高CTR × 低維持率 = 「釣り」と判断され、動画の評価が制限される</strong>仕組みです。配信アーカイブ自体がアルゴリズム上不利になることはありませんが、Rearletの配信は冒頭が「挨拶→雑談→セットアップ」で始まるため、新規視聴者が最初の30秒で価値を感じられず離脱する構造になっています。対策としてはアーカイブ公開後に<strong>冒頭の不要部分をカット</strong>するか、<strong>チャプター（タイムスタンプ）</strong>を設定して視聴者が目的のパートに直接飛べるようにします。</p>
-    <div class="grid-2">
-      <div style="background:var(--danger-light);padding:var(--space-24);border-radius:var(--radius);">
-        <h4 style="font-size:var(--font-base);color:var(--danger);margin-bottom:var(--space-8);">❌ Rearlet: 2時間58分の配信</h4>
-        <ul style="margin:0;font-size:var(--font-sm);">
-          <li>配信開始→挨拶→対戦→雑談→対戦</li>
-          <li>トロッコの話→レイアウトの話→対戦</li>
-          <li>カズヤきつい→VIP対戦→雑談</li>
-          <li><strong>2時間40分目</strong>: ベクトル変更の研究解説（金コンテンツ）</li>
-          <li>推定視聴維持率: <strong>1〜3%</strong></li>
-        </ul>
-      </div>
-      <div style="background:var(--success-light);padding:var(--space-24);border-radius:var(--radius);">
-        <h4 style="font-size:var(--font-base);color:var(--success);margin-bottom:var(--space-8);">✅ 無名ch: 8分34秒の教材動画</h4>
-        <ul style="margin:0;font-size:var(--font-sm);">
-          <li>① 基本コンボ（上投げ空前）</li>
-          <li>② 透かし掴み＋透かし横B</li>
-          <li>③ ガーキャン上B</li>
-          <li>④ 崖ブレス → ⑤ 崖狩り</li>
-          <li>⑥ シールドブレイク → ⑦ 道連れ</li>
-          <li>推定視聴維持率: <strong>40〜60%</strong></li>
-        </ul>
-      </div>
-    </div>
-    <p style="margin-top:var(--space-16);">同じ「クッパの解説」でも、3時間の配信 vs 8分の教材動画では視聴維持率に<strong>10〜30倍の差</strong>が出ます。</p>
-  </div>
-
-  <div class="card card--problem">
-    <div class="tags">
-      <span class="tag tag--warning">原因 ⑤</span>
-      <span class="tag tag--info">中</span>
-    </div>
-    <h3>独自知見が配信内に埋もれている → チャンネルの専門性シグナルに繋がっていない</h3>
-    <p>配信のトランスクリプトを分析すると、Rearletは<strong>「全一クッパ」を名乗れるレベルの独自知見</strong>を持っています。しかし配信で喋るだけで動画として切り出していないため、YouTubeのAIが「このチャンネルはクッパの専門チャンネルである」と学習できず、<strong>Topical Authority（専門性スコア）</strong>が蓄積されません。テーマ特化型の動画を定期投稿することで、関連検索で優遇される「専門チャンネル」としてアルゴリズムに認識させることができます。</p>
-    <div style="background:var(--warning-light);padding:var(--space-24);border-radius:var(--radius);margin:var(--space-16) 0;">
-      <h4 style="color:var(--gray-900);font-size:var(--font-base);margin-bottom:var(--space-8);">📝 配信トランスクリプトから発見した「動画化すべきネタ」</h4>
-      <ol style="margin:0;font-size:var(--font-sm);">
-        <li>ベクトル変更の位置別研究（小戦場・ポケスタ・戦場での撃墜%帯の違い）</li>
-        <li>クエヌ（空N）のロジック — 登りクエヌと急降下クエヌの使い分け理論</li>
-        <li>着地狩りの思考法 — 「回避と暴れの2択しか見ていない」</li>
-        <li>上投げコンボの精度を上げるコツ</li>
-        <li>カズヤ対策 — 「もう最初から勝てない」と思うレベルのきつさ、それでも何をするか</li>
-        <li>対スティーブ — トロッコを撃ってこない相手への対処法</li>
-        <li>道連れの心理戦 — 「1回見せて2回目以降降りされたくない恐怖を植える」</li>
-      </ol>
-    </div>
-    <p>これらは全て<strong>配信でしか語られていない</strong>ため、YouTube検索では一切発見されません。</p>
-    <div style="margin-top:var(--space-16);">
-      <h4 style="font-size:var(--font-sm);color:var(--gray-600);margin-bottom:var(--space-8);">大会チャンネルがRearletの試合を配信している例：</h4>
-      <div class="thumb-grid">
-        <div class="thumb-item">
-          <img src="https://img.youtube.com/vi/ndjtF6g36fk/maxresdefault.jpg" alt="Maesuma" loading="lazy">
-          <div class="thumb-meta">
-            <div class="thumb-title">Maesuma's HIT Acola VS Rearlet</div>
-            <span class="thumb-views mid">大会CH → 視聴者はこっちで見る</span>
-          </div>
-        </div>
-        <div class="thumb-item">
-          <img src="https://img.youtube.com/vi/AwZIzGZ2D6M/maxresdefault.jpg" alt="桜梅桃李" loading="lazy">
-          <div class="thumb-meta">
-            <div class="thumb-title">桜梅桃李 第肆幕 Rearlet vs Nao</div>
-            <span class="thumb-views mid">大会CH → 解説付きで有利</span>
-          </div>
-        </div>
-        <div class="thumb-item">
-          <img src="https://img.youtube.com/vi/WloqodX1ybM/maxresdefault.jpg" alt="大阪大会" loading="lazy">
-          <div class="thumb-meta">
-            <div class="thumb-title">ラリックス(ファルコ) vs Rearlet(クッパ)</div>
-            <span class="thumb-views mid">大会CH → 公式感で勝る</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card card--problem">
-    <div class="tags">
-      <span class="tag tag--warning">原因 ⑥</span>
-      <span class="tag tag--info">中</span>
-    </div>
-    <h3>チャンネル全体評価で「一貫性シグナル」が弱い</h3>
-    <p>2026年のYouTubeは個別動画ではなく<strong>チャンネル全体</strong>を評価する方式に移行しています。評価される要素は ①投稿頻度の一貫性 ②トピックの一貫性 ③視聴者のリピート率 ④コミュニティ活動（コメント返信等）です。</p>
-    <p>Rearletの場合、ショートは「面白クッパプレイ」で一貫していますが、横動画は「大会配信」「参加型配信」「VIP連勝」「大会ハイライト」とテーマが散らばっています。<strong>YouTubeのAIが「このチャンネルの横動画は何について語るチャンネルか」を学習できない</strong>ため、関連する検索クエリで推奨される可能性が低くなります。</p>
-    <div class="callout callout-info" style="margin-top:var(--space-16);">
-      <strong>データ:</strong> ショートと横動画の両フォーマットを使うチャンネルは、横動画のみのチャンネルより<strong>40〜60%速く成長</strong>するというデータがあります。ただしこれは<strong>テーマの一貫性が前提</strong>です。ショートで「面白クッパクリップ」→ 横動画で「クッパ解説・攻略」という導線が成立すれば、Rearletもこの成長率を享受できる可能性があります。
+      <strong>💰 収益の内訳目安：</strong><br>
+      ① Shortsファンド（〜1万登録）： 1万再生あたり$0.02-0.05の低額RPM<br>
+      ② 長尺動画広告（1万登録〜）： 1万再生あたり¥200-500（日本向け）<br>
+      ③ メンバーシップ・投げ銭（5千登録〜）： 月1-5万円<br>
+      ④ スポンサー案件（3万登録〜）： 1案件10-30万円（スマブラSP × ゲーミングデバイス系）<br>
+      ⑤ プロチーム所属打診（5万登録〜）： 月額固定の契約料
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<!-- ============ 12 今週やる事 ============ -->
+<section id="action" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">12 · THIS WEEK</div>
+    <h2>今週やる3タスク</h2>
+    <p class="sec-desc">
+      このレポートを読んで、今日〜1週間で着手すべき最優先アクション。
+    </p>
 
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║   SECTION 04 : 検索アルゴリズム深掘り    ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
+    <div class="phase-card p1" style="border-left-color:var(--primary);">
+      <div class="phase-head">
+        <span class="phase-num" style="background:var(--primary)">TASK 01 · 今日</span>
+        <h3>次の1本をShuton型で投稿</h3>
+      </div>
+      <p style="color:var(--gray-700);">直近の試合映像から、撃墜・逆転の瞬間だけを14-20秒に圧縮。
+      タイトルはS-1型「〇〇にクッパで耐えられますか？」で。</p>
+      <ul class="action-list">
+        <li>30本タイトル案（第8章）から1つを選んで即編集・投稿</li>
+        <li>尺14-20秒・タイトル末尾【スマブラSP】#shorts固定</li>
+        <li>投稿時刻21:00-22:00</li>
+        <li>固定コメントに「次回：〇〇（予告）」を書く</li>
+      </ul>
+    </div>
+
+    <div class="phase-card p2" style="border-left-color:#E67E22;">
+      <div class="phase-head">
+        <span class="phase-num" style="background:#E67E22">TASK 02 · 3日以内</span>
+        <h3>チャンネル導線の全面リニューアル</h3>
+      </div>
+      <ul class="action-list">
+        <li>チャンネル概要「日本9位クッパ使いRearlet／最強クッパを目指す試合集」に書き換え</li>
+        <li>トップ動画（312K・278K・181K）を固定ピン留め</li>
+        <li>動画末尾1秒に「登録お願いします」大テロップ追加（以降全動画で）</li>
+        <li>概要欄テンプレ固定：大会実績（Sumabato9位、Koryu9位）を記載</li>
+        <li>プロフィール画像・バナーを「日本9位」「Rearletクッパ」で統一</li>
+      </ul>
+    </div>
+
+    <div class="phase-card p3" style="border-left-color:var(--success);">
+      <div class="phase-head">
+        <span class="phase-num" style="background:var(--success)">TASK 03 · 1週間以内</span>
+        <h3>過去バイラル3本の13秒版再投稿</h3>
+      </div>
+      <p style="color:var(--gray-700);">3/20 312K / 3/28 278K / 3/24 181K を13秒にカット、自己引用型タイトル
+      「30万再生されたクッパコンボを〇〇で再現」で連続投稿。</p>
+      <ul class="action-list">
+        <li>Week 1のカレンダー通り4月23日・25日・27日・28日に投稿</li>
+        <li>投稿間隔は2日おきで露出期間を確保</li>
+        <li>1週間後のStudioで、再投稿版の再生数と登録転換を確認</li>
+        <li>反応の良かった型を次週に倍増投入</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONCLUSION ============ -->
 <section>
-  <div class="sec-num">SECTION 04</div>
-  <h2>検索・おすすめに出ないメカニズム（2026年版）</h2>
-  <p class="sec-desc">YouTubeの3つの露出経路（①ホームフィード ②検索 ③関連動画）それぞれで、Rearletの横動画がどう評価されているかを分析します。</p>
-
-  <div class="flow-step">
-    <div class="flow-num fail">1</div>
-    <div class="flow-body">
-      <h4>ホームフィード（ブラウズ機能）<span class="badge badge-danger">ここで脱落</span></h4>
-      <p><strong>2025年12月の変更で長尺枠が80%削減</strong>。残り2枠は「CTR × 視聴維持率」が高い動画が優先。Rearletの横動画はショート登録者のCTRが構造的に低いため、フィードに載らない。さらに、ショートでのエンゲージメントが横動画のテスト配信に繋がる仕組みだが、ショートと横動画のテーマが乖離しているため連携が機能していない。</p>
-    </div>
-  </div>
-  <div class="flow-step">
-    <div class="flow-num fail">2</div>
-    <div class="flow-body">
-      <h4>YouTube検索 <span class="badge badge-danger">ここで脱落</span></h4>
-      <p>Gemini AIがタイトル・説明文・<strong>動画内の発話</strong>をマルチモーダル解析。しかしRearletの配信は1本の中に複数テーマ（大会、VIP、キャラ対策、雑談）が混在し、特定の検索クエリへの関連性スコアが分散。加えてタイトルが「チノスマリベンジ」等の内輪ワードで、検索KW（「クッパ コンボ」「クッパ 対策」等）と一致しない。</p>
-    </div>
-  </div>
-  <div class="flow-step">
-    <div class="flow-num fail">3</div>
-    <div class="flow-body">
-      <h4>関連動画（次の動画） <span class="badge badge-warning">部分的に脱落</span></h4>
-      <p>関連動画は「この動画を見た人が次に見る動画」を予測するシステム。Rearletのショートの関連には出る可能性があるが、ショート→横動画への導線（固定コメント、エンドスクリーン、説明文リンク）が一切設定されていないため、アルゴリズムが連携を学習できない。</p>
-    </div>
-  </div>
-  <div class="flow-step">
-    <div class="flow-num">4</div>
-    <div class="flow-body">
-      <h4>チャンネル全体評価 <span class="badge badge-warning">弱い</span></h4>
-      <p>2026年のYouTubeは個別動画よりチャンネル全体の「一貫性・専門性・リピーター率」を評価。横動画のテーマが散在しているため、AIが「クッパ専門チャンネル」と認識しにくい。ショートと横動画の両方を使うチャンネルは40〜60%速く成長するというデータがあるが、テーマの一貫性が前提条件。</p>
-    </div>
-  </div>
-
-  <div class="callout callout-danger" style="margin-top:var(--space-32);">
-    <strong>結論:</strong> 3つの露出経路すべてで構造的な問題がある。<strong>①ホーム: ショート登録者のCTR低下 → ②検索: テーマ分散でAI関連性スコア低下 → ③関連: ショートからの導線なし</strong>。これらは「配信だから伸びない」ではなく、コンテンツ設計とメタデータ設計の問題です。
-  </div>
-
-  <!-- 実際の動画を視聴して比較 -->
-  <div class="chart-card" style="margin-top:var(--space-32);">
-    <h3>動画を実際に見比べてみる</h3>
-    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-24);">Rearletの最新横動画と成功チャンネルの動画を埋め込みで比較。内容の「加工度」の差がわかります。</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-24);">
-      <div>
-        <h4 style="color:var(--danger);font-size:var(--font-sm);margin-bottom:var(--space-8);">❌ Rearlet 横動画（78回再生）</h4>
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);">
-          <iframe src="https://www.youtube.com/embed/pOTIkemgd7Q" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
-        </div>
-        <p style="font-size:var(--font-xs);color:var(--gray-500);margin-top:var(--space-8);">念願の大型TOP8！桜梅桃李第肆幕ハイライト</p>
-      </div>
-      <div>
-        <h4 style="color:var(--success);font-size:var(--font-sm);margin-bottom:var(--space-8);">✅ 成功チャンネル（コンボ解説）</h4>
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);">
-          <iframe src="https://www.youtube.com/embed/dMu386nulrw" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
-        </div>
-        <p style="font-size:var(--font-xs);color:var(--gray-500);margin-top:var(--space-8);">クッパのコンボ解説！高火力コンボからお手軽コンボまで</p>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-24);margin-top:var(--space-24);">
-      <div>
-        <h4 style="color:var(--danger);font-size:var(--font-sm);margin-bottom:var(--space-8);">❌ Rearlet 横動画（599回再生）</h4>
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);">
-          <iframe src="https://www.youtube.com/embed/CWBQZDgUZAc" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
-        </div>
-        <p style="font-size:var(--font-xs);color:var(--gray-500);margin-top:var(--space-8);">全一クッパがチノスマリベンジ！</p>
-      </div>
-      <div>
-        <h4 style="color:var(--success);font-size:var(--font-sm);margin-bottom:var(--space-8);">✅ 成功チャンネル（立ち回り解説）</h4>
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);">
-          <iframe src="https://www.youtube.com/embed/3RLBKZm8sBs" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
-        </div>
-        <p style="font-size:var(--font-xs);color:var(--gray-500);margin-top:var(--space-8);">【初心者必見】クッパで即VIPいける為に重要なこと7つ</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Rearletのショート：なぜ伸びるのかの実例 -->
-  <div class="chart-card" style="margin-top:var(--space-32);">
-    <h3>一方、Rearletのショートは伸びている（実際の動画）</h3>
-    <p style="color:var(--gray-600);font-size:var(--font-sm);margin-bottom:var(--space-24);">ショートは短くインパクトある構成で、アルゴリズムに好まれるフォーマット。この「伸びる力」を横動画に転用するのが鍵です。</p>
-    <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:var(--space-16);">
-      <div>
-        <div style="position:relative;padding-bottom:177.78%;height:0;overflow:hidden;border-radius:var(--radius);">
-          <iframe src="https://www.youtube.com/embed/SklqqujVTTo" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
-        </div>
-        <p style="font-size:var(--font-xs);color:var(--success);font-weight:700;margin-top:6px;text-align:center;">273,249 回</p>
-      </div>
-      <div>
-        <div style="position:relative;padding-bottom:177.78%;height:0;overflow:hidden;border-radius:var(--radius);">
-          <iframe src="https://www.youtube.com/embed/NRqiU0oGpAI" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
-        </div>
-        <p style="font-size:var(--font-xs);color:var(--success);font-weight:700;margin-top:6px;text-align:center;">121,915 回</p>
-      </div>
-      <div>
-        <div style="position:relative;padding-bottom:177.78%;height:0;overflow:hidden;border-radius:var(--radius);">
-          <iframe src="https://www.youtube.com/embed/ARnm9wvAFfU" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allowfullscreen loading="lazy"></iframe>
-        </div>
-        <p style="font-size:var(--font-xs);color:var(--success);font-weight:700;margin-top:6px;text-align:center;">34,795 回</p>
-      </div>
+  <div class="container">
+    <div class="conclusion">
+      <h2>エンタ × ガチ × 日本9位の実力</h2>
+      <p>
+        ブリカワの上限（270万再生）・Shutonの到達点（110万再生）・アカキクスの効率（med 20万再生）。
+        この3つを組み合わせて狙えるポジションに、
+        Rearletさんは既に <strong style="color:#FFD580">med/foll 17.27</strong> という武器で立っています。
+      </p>
+      <p>
+        あとは、尺を14-25秒に圧縮し、【スマブラSP】#shorts定型に統一し、
+        週4-5本ペースでShuton型疑問形タイトルを投下する ── これだけです。
+      </p>
+      <p class="cta-text">
+        半年後、50,000人の向こう側で会いましょう。
+      </p>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║   SECTION 05 : 改善アクション            ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<section>
-  <div class="sec-num">SECTION 05</div>
-  <h2>改善アクション 7選 ── 「ガチ × エンタメ融合」路線</h2>
-  <p class="sec-desc">Rearletの方向性は<strong>「ガチ × エンタメ融合」</strong>。解説系チャンネルのコピーではなく、ガチプレイの面白さをパッケージングして届ける方針で改善策を設計しています。</p>
-
-  <div class="callout callout-info" style="margin-bottom:var(--space-32);">
-    <strong>大原則: 中身は変えない。パッケージングを変える。</strong><br>
-    配信はそのまま続ける。配信の中の面白いパートを切り出して「横動画」として別途投稿する。解説トーンではなくエンタメトーンで。「こんなヤバいこと見つけた」「全一クッパが本気出した」── これがRearletの横動画。
-  </div>
-
-  <div class="card card--solution">
-    <div class="tags">
-      <span class="tag tag--danger">最優先</span>
-      <span class="tag">工数: 低</span>
-      <span class="tag tag--success">効果: 大</span>
-    </div>
-    <h3>① 配信ハイライトを「横動画」として切り出す</h3>
-    <p>配信アーカイブはそのまま残す。その中から<strong>エンタメ性の高い面白パート</strong>を5〜15分に切り出して横動画として投稿。YouTubeのAIが「何の動画か」を特定でき、ショート視聴者とは別のルートで新規に届くようになります。</p>
-    <div class="callout callout-success" style="margin-top:var(--space-16);">
-      <strong>切り出し候補（ガチ × エンタメ路線）:</strong><br>
-      ① 「<strong>全一クッパ、チノスマでリベンジしたら会場沸いた</strong>」← 大会のベストバウト10分ハイライト<br>
-      ② 「<strong>優勝狙って本気で暴れてみた【チノスマ】</strong>」← 大会ダイジェスト + リアクション<br>
-      ③ 「<strong>視聴者全員ぶっ飛ばすクッパ配信【参加型ハイライト】</strong>」← 参加型の面白シーン集<br>
-      ④ 「<strong>6時間研究してヤバいこと見つけた【クッパ ベクトル変更】</strong>」← 発見のエンタメ化
-    </div>
-    <div style="background:var(--gray-50);padding:var(--space-16);border-radius:var(--radius);margin-top:var(--space-16);font-size:var(--font-sm);border:1px solid var(--gray-200);">
-      <strong>解説系との違い:</strong> こんが・無名chの「コンボガイド」「VIP攻略法」とは土俵が違う。Rearletは「ガチ勢が本気でやるとこうなる」「研究したらヤバいこと見つけた」という体験・ストーリーを見せる。教える側ではなく、やる側の視点。
-    </div>
-  </div>
-
-  <div class="card card--solution">
-    <div class="tags">
-      <span class="tag tag--danger">最優先</span>
-      <span class="tag">工数: 中</span>
-      <span class="tag tag--success">効果: 大</span>
-    </div>
-    <h3>② サムネイルのブランド構築</h3>
-    <p>CTR（クリック率）はアルゴリズムの最初のゲート。「ガチ × エンタメ」の世界観が一瞬で伝わるサムネイルを統一デザインで。</p>
-    <ul>
-      <li><strong>テキスト 2〜5語:</strong> 「会場沸いた」「ヤバいの見つけた」「全員ぶっ飛ばす」── 感情が動く言葉</li>
-      <li><strong>キャラ素材 + プレイ画面:</strong> ガチ感を出す。配信スクショそのままはNG</li>
-      <li><strong>数字の活用:</strong> 「273K再生のクッパ」「TOP8」「VIP200連勝」── 実績で引く</li>
-      <li><strong>統一フォーマット:</strong> フォント・配色・レイアウトを固定。「これRearletの動画だ」と一目でわかるように</li>
-    </ul>
-  </div>
-
-  <div class="card card--solution">
-    <div class="tags">
-      <span class="tag tag--warning">高優先</span>
-      <span class="tag">工数: 低</span>
-      <span class="tag tag--success">効果: 大</span>
-    </div>
-    <h3>③ 動画構成の「エンタメ型フック」</h3>
-    <p>解説系の「結論→説明→まとめ」ではなく、<strong>エンタメ系の「ヤバいシーン先出し→ストーリー→クライマックス」</strong>構成に。</p>
-    <div class="callout callout-info">
-      <strong>ガチ × エンタメの動画構成:</strong><br>
-      ① <strong>フック（0〜10秒）:</strong> 一番盛り上がるシーンを先出し。「この後とんでもないことが起きます」<br>
-      ② <strong>ストーリー:</strong> そこに至るまでの流れ。配信の面白いやり取り、ピンチ、逆転の過程を編集<br>
-      ③ <strong>クライマックス:</strong> フックで見せたシーンの本編。リアクション込み<br>
-      ④ <strong>締め（ラスト10秒）:</strong> 次の動画・チャンネル登録への自然な誘導
-    </div>
-  </div>
-
-  <div class="card card--solution">
-    <div class="tags">
-      <span class="tag tag--warning">高優先</span>
-      <span class="tag">工数: 低</span>
-      <span class="tag tag--info">効果: 中〜大</span>
-    </div>
-    <h3>④ ショート ↔ 横動画の双方向導線</h3>
-    <p>2026年のYouTubeでは<strong>ショートが横動画の「テストの場」として機能</strong>します。ショートでエンゲージメントが高いチャンネルは、横動画もおすすめされやすくなる。ただし導線がなければアルゴリズムは連携を学習できません。</p>
-    <ul>
-      <li><strong>ショート → 横動画:</strong> 固定コメントに「フルver.はこちら →（横動画URL）」</li>
-      <li><strong>横動画 → ショート:</strong> 横動画のベストシーンをショートに切り出し（逆導線）</li>
-      <li><strong>テーマの一致:</strong> 同じ配信からショート（面白瞬間）+ 横動画（ハイライト集）をセットで投稿</li>
-    </ul>
-  </div>
-
-  <div class="card card--solution">
-    <div class="tags">
-      <span class="tag tag--primary">中優先</span>
-      <span class="tag">工数: 低</span>
-      <span class="tag tag--success">効果: 大（長期）</span>
-    </div>
-    <h3>⑤ 配信アーカイブの最適化（今のまま改善）</h3>
-    <p>配信アーカイブ自体もアルゴリズム上不利ではない。少しの調整で配信単体のパフォーマンスも改善できます。</p>
-    <ul>
-      <li><strong>タイトル修正:</strong> 配信後に検索KWを含むタイトルに変更（「チノスマリベンジ」→「【チノスマ】全一クッパのリベンジ配信」）</li>
-      <li><strong>説明文:</strong> 配信ごとに内容を1〜2行で記載（テンプレートコピペだけはやめる）</li>
-      <li><strong>チャプター:</strong> 「0:00 配信開始 / 15:30 第1試合 / 1:20:00 決勝」等のタイムスタンプ</li>
-      <li><strong>サムネイル:</strong> 配信スクショではなく、デザインしたサムネイルに差し替え</li>
-      <li><strong>冒頭カット:</strong> 配信開始前の待機時間・雑談をカットして本編から始める</li>
-    </ul>
-  </div>
-
-  <div class="card card--solution">
-    <div class="tags">
-      <span class="tag tag--primary">中優先</span>
-      <span class="tag">工数: 低</span>
-      <span class="tag tag--info">効果: 中</span>
-    </div>
-    <h3>⑥ シリーズ化 × プレイリスト戦略</h3>
-    <p>セッション時間（連続視聴）を伸ばし、アルゴリズムの評価を上げます。</p>
-    <ul>
-      <li>「大会ハイライト」「VIPチャレンジ」「視聴者参加型」「研究・発見」等のシリーズ化</li>
-      <li>各シリーズをプレイリストにまとめ、終了画面で次の動画へ誘導</li>
-      <li>タイトルに統一感を出す（「【チノスマ】」「【参加型】」「【研究】」等のタグ）</li>
-    </ul>
-  </div>
-
-  <div class="card card--solution">
-    <div class="tags">
-      <span class="tag tag--info">長期</span>
-      <span class="tag">工数: 低</span>
-      <span class="tag tag--success">効果: 大（ブランド）</span>
-    </div>
-    <h3>⑦ 「ガチ × エンタメ クッパ使い」のポジショニング</h3>
-    <p>チャンネルの概要欄・バナー・セクション構成で「何のチャンネルか」を明確にします。解説系でも実況系でもない、<strong>「ガチ勢がガチで楽しんでる」</strong>という独自ポジション。「クッパの面白さといえばRearlet」を確立します。</p>
-    <div style="background:var(--gray-50);padding:var(--space-16);border-radius:var(--radius);margin-top:var(--space-12);font-size:var(--font-sm);border:1px solid var(--gray-200);">
-      <strong>ポジションマップ:</strong><br>
-      こんが = クッパ解説のプロ（教材型）<br>
-      無名ch = クッパ攻略の先生（講座型）<br>
-      大会ch = 公式記録（アーカイブ型）<br>
-      <strong>Rearlet = ガチクッパの面白さを伝える人（エンタメ × ガチ）</strong> ← ここが空いている
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║   SECTION 06 : ロードマップ              ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<section>
-  <div class="sec-num">SECTION 06</div>
-  <h2>実行ロードマップ</h2>
-  <p class="sec-desc">3フェーズに分け、今すぐできる施策から段階的に実行します。</p>
-
-  <div class="roadmap">
-    <div class="rm-item active">
-      <div class="rm-dot"></div>
-      <div class="rm-phase">PHASE 1 ── 今すぐ（1〜2週間）</div>
-      <h4>配信ハイライトから「初の横動画」を1本投稿する</h4>
-      <p>直近の配信で一番盛り上がったパートを10〜15分のハイライト動画に切り出す。エンタメトーンのタイトル（「〇〇したらヤバいことになった」等）、デザインしたサムネイル、説明文を設定して投稿。ショートの固定コメントからリンク。<strong>「ガチ × エンタメの横動画はこういうものだ」を1本で体験するフェーズ。</strong></p>
-    </div>
-    <div class="rm-item">
-      <div class="rm-dot"></div>
-      <div class="rm-phase">PHASE 2 ── 1〜2ヶ月</div>
-      <h4>配信ごとにハイライト横動画をセットで投稿</h4>
-      <p>配信→ハイライト横動画→ショートの3点セット運用を確立。ショート↔横動画の双方向導線を設計。「大会ハイライト」「参加型」「研究・発見」等のシリーズをプレイリスト化。配信アーカイブのタイトル・説明文・チャプターも最適化。</p>
-    </div>
-    <div class="rm-item">
-      <div class="rm-dot"></div>
-      <div class="rm-phase">PHASE 3 ── 3ヶ月〜</div>
-      <h4>「ガチ × エンタメ クッパ」のポジション確立</h4>
-      <p>横動画が定期的に投稿される状態を維持。YouTube Studioでデータ分析（CTR・視聴維持率の離脱ポイント改善）。チャンネル概要欄・バナーのブランディング。「クッパの面白さといえばRearlet」のポジションを確立し、解説系とは別の検索・おすすめ経路を開拓。</p>
-    </div>
-  </div>
-</section>
-
-<!-- ╔══════════════════════════════════════════╗ -->
-<!-- ║   CONCLUSION                            ║ -->
-<!-- ╚══════════════════════════════════════════╝ -->
-<div class="conclusion">
-  <h2>結論</h2>
-  <!-- ショートの実績を視覚的に示す -->
-  <div style="display:flex;gap:12px;justify-content:center;margin-bottom:32px;flex-wrap:wrap;">
-    <img src="https://img.youtube.com/vi/SklqqujVTTo/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
-    <img src="https://img.youtube.com/vi/NRqiU0oGpAI/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
-    <img src="https://img.youtube.com/vi/ARnm9wvAFfU/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
-    <img src="https://img.youtube.com/vi/LYBmQyeq76k/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
-    <img src="https://img.youtube.com/vi/kUFJQSxv0CE/default.jpg" alt="" style="width:96px;border-radius:8px;opacity:0.7;">
-  </div>
-  <p>横動画が伸びない原因は、大きく<strong>3つのアルゴリズム上の構造問題</strong>に集約されます。</p>
-  <ol style="text-align:left;max-width:600px;margin:0 auto var(--space-24);line-height:1.8;">
-    <li><strong>ショート登録者と横動画のテーマ乖離</strong> → CTR構造的低下 → インプレッション停止の悪循環</li>
-    <li><strong>メタデータ不在 + 1本の中にテーマが散在</strong> → AIが「何の動画か」特定できず検索に出ない</li>
-    <li><strong>2025年12月のブラウズフィード改変</strong>（長尺枠80%削減）で、CTRの低い横動画はさらに不利に</li>
-  </ol>
-  <p>配信アーカイブを投稿すること自体は問題ではありません。解決策は<strong>「解説系に転向する」ことではなく、「ガチ × エンタメの面白さをパッケージングする」</strong>こと。配信ハイライトの切り出し、サムネイル設計、メタデータ最適化 ── <strong>中身は変えず、届け方だけ変える</strong>。これで「こんが」「無名ch」とは別の土俵で、「クッパの面白さといえばRearlet」のポジションを確立できます。</p>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:480px;margin:32px auto;">
-    <div style="text-align:center;">
-      <div style="font-size:32px;">🔍</div>
-      <div style="font-size:12px;opacity:0.8;margin-top:4px;">SEO最適化</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="font-size:32px;">🎨</div>
-      <div style="font-size:12px;opacity:0.8;margin-top:4px;">サムネイル設計</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="font-size:32px;">✂️</div>
-      <div style="font-size:12px;opacity:0.8;margin-top:4px;">コンテンツ加工</div>
-    </div>
-  </div>
-  <p class="cta-text">まずは Phase 1 ── 直近の配信から一番面白いパートを切り出して1本投稿。<br>中身は変えない。届け方だけ変える。</p>
-</div>
-
-</div>
-
-<footer>
-  <p>Rearlet チャンネル分析レポート v6 ── 2026年4月12日作成</p>
-  <p style="margin-top:var(--space-4)">データ出典: Social Blade / YouTube RSS Feed / YouTube動画ページ（メタデータ直接取得） / トランスクリプト全文分析</p>
-  <p style="margin-top:var(--space-4)">アルゴリズム分析出典: Mario Joos (MrBeast等100M+チャンネル管理) / Dataslayer / YouTube公式ヘルプ / TubeBuddy / WordStream / アドネスラボ</p>
-  <p style="margin-top:var(--space-4)">2025年12月ブラウズフィード変更: <a href="https://www.dataslayer.ai/blog/youtubes-december-2025-algorithm-update-browse-feed-cut-long-videos-by-80" style="color:var(--accent);">Dataslayer記事</a> / ショート vs 横動画アルゴリズム分離: <a href="https://ytbs.jp/book2026/" style="color:var(--accent);">YTBS 2026</a></p>
-  <p style="margin-top:var(--space-4)">サムネイル画像: YouTube Data API (img.youtube.com) / 動画埋め込み: YouTube IFrame API</p>
-  <p style="margin-top:var(--space-4)">比較対象: こんが ch (174K再生) / 無名ちゃんねる (182K再生) / VGBootCamp (667K登録)</p>
+<footer class="site-footer">
+  <p>
+    <strong>Rearlet Shorts 完全戦略レポート v3</strong> · 2026-04-22<br>
+    日本スマブラSP系 <strong>11チャンネル・計406本</strong>のShorts実データを <code>yt-dlp</code> で直接取得し分析。<br>
+    Rearlet / アカキクス / KEN / Shuton / プロトバナム / ブリとカワウソ / ザクレイ / Raito / マエスマ / 智念せいら / takera<br>
+    Web情報は参照せず、YouTube配信中のリアルタイム値のみを根拠としています。
+  </p>
 </footer>
 
 </body>
