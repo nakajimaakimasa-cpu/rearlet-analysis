@@ -1834,6 +1834,427 @@
   .suspect.rank-base { border-left-color: var(--gray-500); }
   .suspect.rank-base .fill { background: var(--gray-500); width: 30%; }
 
+  /* === §M 配信編 === */
+  .stream-compare { margin: var(--space-32) 0; }
+  .stream-compare h3 {
+    font-size: var(--font-xl);
+    font-weight: 800;
+    margin-bottom: var(--space-16);
+    color: var(--gray-900);
+  }
+  .stream-table-wrap { overflow-x: auto; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .stream-table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    font-size: var(--font-sm);
+    min-width: 720px;
+  }
+  .stream-table thead {
+    background: var(--gray-100);
+    border-bottom: 2px solid var(--gray-300);
+  }
+  .stream-table th {
+    padding: var(--space-12) var(--space-16);
+    text-align: left;
+    font-weight: 700;
+    color: var(--gray-700);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .stream-table td {
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--gray-200);
+    color: var(--gray-700);
+  }
+  .stream-table tbody tr:hover { background: var(--gray-100); }
+  .stream-table .highlight-row { background: #FFF9E6; }
+  .stream-table .highlight-row:hover { background: #FFF3D0; }
+  .stream-table .good { color: var(--success); font-weight: 700; }
+
+  /* 5つの型 */
+  .stream-types {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+  }
+  .stream-type {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border-left: 5px solid var(--primary);
+  }
+  .stream-type[data-rank="1"] { border-left-color: var(--danger); }
+  .stream-type[data-rank="2"] { border-left-color: #E67E22; }
+  .stream-type[data-rank="3"] { border-left-color: var(--warning); }
+  .stream-type[data-rank="4"] { border-left-color: var(--success); }
+  .stream-type[data-rank="5"] { border-left-color: #6C5CE7; }
+  .st-head {
+    padding: var(--space-20) var(--space-24);
+    background: var(--gray-100);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-12);
+  }
+  .st-rank {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: var(--primary);
+    background: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .stream-type[data-rank="1"] .st-rank { color: var(--danger); }
+  .stream-type[data-rank="2"] .st-rank { color: #E67E22; }
+  .stream-type[data-rank="3"] .st-rank { color: var(--warning); }
+  .stream-type[data-rank="4"] .st-rank { color: var(--success); }
+  .stream-type[data-rank="5"] .st-rank { color: #6C5CE7; }
+  .st-head h4 {
+    font-size: var(--font-lg);
+    font-weight: 800;
+    color: var(--gray-900);
+    margin: 0;
+  }
+  .st-tag {
+    font-size: var(--font-xs);
+    color: var(--gray-600);
+    background: white;
+    padding: 2px 10px;
+    border-radius: 100px;
+    margin-left: auto;
+  }
+  .st-body { padding: var(--space-24); }
+  .st-lead {
+    color: var(--gray-700);
+    line-height: 1.7;
+    margin-bottom: var(--space-16);
+    font-size: var(--font-base);
+  }
+  .st-examples {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    margin-bottom: var(--space-16);
+    padding: var(--space-16);
+    background: var(--gray-100);
+    border-radius: 8px;
+  }
+  .st-ex {
+    font-size: var(--font-sm);
+    color: var(--gray-700);
+    line-height: 1.6;
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: var(--space-12);
+  }
+  .st-ex span {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--gray-600);
+    background: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-align: center;
+    height: fit-content;
+    align-self: start;
+  }
+  .st-ex.rearlet {
+    background: #FFF9E6;
+    margin: 2px -4px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    grid-template-columns: 90px 1fr;
+  }
+  .st-ex.rearlet span { background: #F59E0B; color: white; }
+  .st-ex.highlight {
+    background: #E3F2FD;
+    margin: 2px -4px;
+    padding: 6px 8px;
+    border-radius: 6px;
+  }
+  .st-ex.highlight span { background: var(--info); color: white; }
+  .st-why {
+    padding: var(--space-12) var(--space-16);
+    background: var(--info-light);
+    border-left: 3px solid var(--info);
+    border-radius: 4px;
+    font-size: var(--font-sm);
+    line-height: 1.7;
+    color: var(--gray-700);
+  }
+  .st-why strong { color: var(--info); }
+
+  /* Before/After 配信版 */
+  .ba-stream-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+  }
+  .ba-stream {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: var(--space-16);
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .ba-stream { grid-template-columns: 1fr; }
+    .ba-stream .ba-arrow { transform: rotate(90deg); text-align: center; }
+  }
+  .ba-stream .ba-before, .ba-stream .ba-after {
+    background: white;
+    padding: var(--space-20);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+  .ba-stream .ba-before { border-left: 4px solid var(--gray-400); }
+  .ba-stream .ba-after { border-left: 4px solid var(--success); }
+  .ba-stream .tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--gray-600);
+    margin-bottom: var(--space-8);
+  }
+  .ba-stream .ba-after .tag { color: var(--success); }
+  .ba-stream .ttl {
+    font-size: var(--font-base);
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.5;
+    margin-bottom: var(--space-8);
+  }
+  .ba-stream .meta {
+    font-size: var(--font-xs);
+    color: var(--gray-600);
+  }
+  .ba-stream .ba-arrow {
+    text-align: center;
+    font-size: 28px;
+    color: var(--primary);
+    font-weight: 900;
+  }
+
+  /* 週次カレンダー */
+  .weekly-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-16);
+  }
+  @media (max-width: 1024px) { .weekly-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .weekly-grid { grid-template-columns: 1fr; } }
+  .day-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-20);
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--primary);
+  }
+  .day-card.sun { border-top-color: var(--warning); }
+  .day-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: var(--primary);
+    margin-bottom: var(--space-4);
+  }
+  .day-card.sun .day-label { color: var(--warning); }
+  .day-time {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-12);
+  }
+  .day-type {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--gray-600);
+    background: var(--gray-100);
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-bottom: var(--space-12);
+  }
+  .day-title {
+    font-size: var(--font-sm);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-8);
+    line-height: 1.5;
+  }
+  .day-note {
+    font-size: var(--font-xs);
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+
+  /* ループ図 */
+  .loop-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    align-items: center;
+  }
+  .loop-step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: var(--space-16);
+    background: white;
+    padding: var(--space-20) var(--space-24);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 760px;
+    border-left: 4px solid var(--primary);
+  }
+  .loop-step .ls-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .loop-step h4 {
+    font-size: var(--font-base);
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+  }
+  .loop-step p {
+    font-size: var(--font-sm);
+    color: var(--gray-700);
+    line-height: 1.7;
+    margin: 0;
+  }
+  .loop-arrow {
+    font-size: 20px;
+    color: var(--gray-400);
+    font-weight: 700;
+  }
+
+  /* ルール */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-16);
+    margin-top: var(--space-24);
+  }
+  @media (max-width: 1024px) { .rules-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .rules-grid { grid-template-columns: 1fr; } }
+  .rule-card {
+    background: white;
+    padding: var(--space-20);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .rule-card .rc-num {
+    position: absolute;
+    top: var(--space-16);
+    right: var(--space-16);
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    color: var(--gray-200);
+  }
+  .rule-card h4 {
+    font-size: var(--font-base);
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: var(--space-8);
+    padding-right: 40px;
+  }
+  .rule-card p {
+    font-size: var(--font-sm);
+    color: var(--gray-700);
+    line-height: 1.7;
+  }
+  .rule-card code {
+    background: var(--gray-100);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--gray-800);
+  }
+
+  /* 半年後予想 */
+  .forecast {
+    margin-top: var(--space-48);
+    padding: var(--space-32);
+    background: linear-gradient(135deg, #6C5CE7 0%, #5A4BD1 100%);
+    border-radius: var(--radius-lg);
+    color: white;
+  }
+  .forecast h3 {
+    color: white;
+    font-size: var(--font-xl);
+    font-weight: 800;
+    margin-bottom: var(--space-16);
+  }
+  .forecast > p {
+    color: rgba(255,255,255,0.92);
+    line-height: 1.8;
+    margin-bottom: var(--space-24);
+  }
+  .forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-16);
+    margin-bottom: var(--space-20);
+  }
+  @media (max-width: 1024px) { .forecast-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .forecast-grid { grid-template-columns: 1fr; } }
+  .fc-card {
+    background: rgba(255,255,255,0.1);
+    padding: var(--space-16);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+  }
+  .fc-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 6px;
+  }
+  .fc-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .fc-note {
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+  }
+  .forecast-close {
+    padding-top: var(--space-20);
+    border-top: 1px solid rgba(255,255,255,0.2);
+    font-size: var(--font-sm);
+    color: rgba(255,255,255,0.88);
+    line-height: 1.8;
+  }
+
   /* 深層セクション */
   .deep-grid {
     display: grid;
@@ -3690,6 +4111,415 @@
   </div>
 </section>
 
+<!-- ============ §M 配信編 ============ -->
+<section style="background: linear-gradient(180deg, #fff 0%, #F8FAFC 100%);">
+  <div class="container">
+    <div class="sec-num">§M · LIVE STREAM</div>
+    <h2>配信編：YouTube Liveで登録者を押し上げる</h2>
+    <p class="sec-desc">
+      Rearletさんの実配信アーカイブ30本と、日本スマブラSP系7チャンネル計201本の配信データを照合。
+      「Shortsの受け皿」として配信がどう効くか、具体的な型・タイトル・週次カレンダーまで落とし込みました。
+    </p>
+
+    <!-- 配信データ比較 -->
+    <div class="stream-compare">
+      <h3>配信アーカイブ実データ比較（各ch直近30本）</h3>
+      <div class="stream-table-wrap">
+        <table class="stream-table">
+          <thead>
+            <tr>
+              <th>ch</th>
+              <th>登録者</th>
+              <th>本数</th>
+              <th>中央尺</th>
+              <th>中央再生</th>
+              <th>最高再生</th>
+              <th>再生/登録比</th>
+              <th>主な型</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row">
+              <td><strong>Rearlet</strong></td>
+              <td>1,140</td>
+              <td>30</td>
+              <td>114分</td>
+              <td class="good">898</td>
+              <td>16,379</td>
+              <td class="good">79%</td>
+              <td>全一クッパVIP配信</td>
+            </tr>
+            <tr>
+              <td>アカキクス</td>
+              <td>21,300</td>
+              <td>30</td>
+              <td>76分</td>
+              <td>7,093</td>
+              <td>8,078</td>
+              <td>33%</td>
+              <td>参加型・企画</td>
+            </tr>
+            <tr>
+              <td>KEN</td>
+              <td>46,800</td>
+              <td>30</td>
+              <td>129分</td>
+              <td>6,204</td>
+              <td>60,702</td>
+              <td>13%</td>
+              <td>キャラ×スマメイト + 大会ミラー</td>
+            </tr>
+            <tr>
+              <td>あcola</td>
+              <td>—</td>
+              <td>22</td>
+              <td>128分</td>
+              <td>19,843</td>
+              <td>89,553</td>
+              <td>—</td>
+              <td>シンプルなスマメイト</td>
+            </tr>
+            <tr>
+              <td>Raito</td>
+              <td>—</td>
+              <td>30</td>
+              <td>153分</td>
+              <td>15,439</td>
+              <td>51,252</td>
+              <td>—</td>
+              <td>雑談×大会＋他ゲーム</td>
+            </tr>
+            <tr>
+              <td>ザクレイ</td>
+              <td>393,000</td>
+              <td>29</td>
+              <td>146分</td>
+              <td>55,433</td>
+              <td>1,076,125</td>
+              <td>14%</td>
+              <td>多様（ゲーム横断）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-success" style="margin-top:var(--space-24);">
+        <strong>実は健闘している：</strong>
+        Rearletさんの配信は <strong>登録者1,140に対して中央再生898（約79%）</strong>。
+        これはアカキクス（33%）・KEN（13%）・ザクレイ（14%）より高い数値。
+        つまり「配信に辿り着いた人は、ちゃんと見てくれている」。
+        問題は <strong>配信の存在を知らせる力</strong>＝タイトル・告知・Shorts連動です。
+      </div>
+    </div>
+
+    <!-- 配信で伸びる5つの型 -->
+    <h3 style="margin-top:var(--space-48);font-size:var(--font-xl);font-weight:800;">配信で伸びる5つの型（実データ根拠あり）</h3>
+    <p style="color:var(--gray-700);line-height:1.8;margin-bottom:var(--space-24);">
+      KEN・あcola・ザクレイ・Raitoの上位配信を全件確認して抽出した、スマブラSP配信で機能する型を5つに整理しました。
+    </p>
+
+    <div class="stream-types">
+      <div class="stream-type" data-rank="1">
+        <div class="st-head">
+          <div class="st-rank">TYPE 1</div>
+          <h4>キャラ×スマメイト型</h4>
+          <div class="st-tag">王道・週次で回す</div>
+        </div>
+        <div class="st-body">
+          <p class="st-lead">KEN・あcolaの定番フォーマット。固定ファンが「見たい試合」を即座に理解できる。</p>
+          <div class="st-examples">
+            <div class="st-ex"><span>実例</span> KEN「ガオガエンスマメイト 1700~」300同接</div>
+            <div class="st-ex"><span>実例</span> KEN「セフィロススマメイト 2050~」284同接</div>
+            <div class="st-ex"><span>実例</span> あcola「スマメイト【スマブラSP】」89,553再生</div>
+            <div class="st-ex rearlet"><span>大城さん用</span> 【クッパスマメイト 1700~】チノスマ前最終調整</div>
+          </div>
+          <div class="st-why">
+            <strong>効く理由：</strong>レート帯・キャラが明示されているので「自分に関係ある試合」が一目で伝わる。検索流入もアカ問わず狙える。
+          </div>
+        </div>
+      </div>
+
+      <div class="stream-type" data-rank="2">
+        <div class="st-head">
+          <div class="st-rank">TYPE 2</div>
+          <h4>数字×耐久企画型</h4>
+          <div class="st-tag">離脱防止・長尺化の武器</div>
+        </div>
+        <div class="st-body">
+          <p class="st-lead">「いつ終わるか分からないから見続ける」心理を使う。あcolaの70K配信はこの型。</p>
+          <div class="st-examples">
+            <div class="st-ex"><span>実例</span> あcola「スティーブvip連勝企画（0～72連勝）」70,067再生</div>
+            <div class="st-ex"><span>実例</span> KEN「誕生日です 31歳になったのでVIP31連勝します」16,251再生</div>
+            <div class="st-ex"><span>実例</span> KEN「スマブラSP7周年なので雑談アイアンマンする」16,251再生</div>
+            <div class="st-ex rearlet"><span>大城さん用</span> 【クッパVIP 50連勝耐久】途中で負けたら振り出しに戻る</div>
+            <div class="st-ex rearlet"><span>大城さん用</span> 【24歳アイアンマン】クッパで24連勝するまで寝ません</div>
+          </div>
+          <div class="st-why">
+            <strong>効く理由：</strong>明確な目標数字があると、視聴者は「達成の瞬間」を見たくて滞在時間が伸びる。アルゴリズムでも有利。
+          </div>
+        </div>
+      </div>
+
+      <div class="stream-type" data-rank="3">
+        <div class="st-head">
+          <div class="st-rank">TYPE 3</div>
+          <h4>大会直前・直後の旬配信</h4>
+          <div class="st-tag">話題性を借りる</div>
+        </div>
+        <div class="st-body">
+          <p class="st-lead">大会と連動させ、視聴者の「気になってる旬」に乗る。</p>
+          <div class="st-examples">
+            <div class="st-ex"><span>実例</span> あcola「Gimvitational優勝したのでスマメイト」57,180再生</div>
+            <div class="st-ex"><span>実例</span> KEN「マエスマでるお」16,827再生</div>
+            <div class="st-ex"><span>実例</span> あcola「Gimvitational 誰かとフリー対戦配信」37,753再生</div>
+            <div class="st-ex rearlet"><span>大城さん用</span> 【チノスマ本番前】最終調整スマメイト配信</div>
+            <div class="st-ex rearlet"><span>大城さん用</span> 【チノスマ振り返り】負けた試合を全部見直す配信</div>
+          </div>
+          <div class="st-why">
+            <strong>効く理由：</strong>大会名で検索する視聴者が取れる。負けた時こそ「次は何する？」が気になるので、振り返り配信は勝敗問わず効く。
+          </div>
+        </div>
+      </div>
+
+      <div class="stream-type" data-rank="4">
+        <div class="st-head">
+          <div class="st-rank">TYPE 4</div>
+          <h4>コラボ・対戦相手明示型</h4>
+          <div class="st-tag">Rearlet最高実績の型</div>
+        </div>
+        <div class="st-body">
+          <p class="st-lead">1人で戦わない。相手のチャンネルにも告知が載るので、両方から視聴者が流入する。</p>
+          <div class="st-examples">
+            <div class="st-ex highlight"><span>Rearlet最高</span> 「へろークッパと2on2出るよ！！！！」16,379再生</div>
+            <div class="st-ex"><span>実例</span> KEN「ガオガエンスマメイト feat.Shuton等」</div>
+            <div class="st-ex"><span>実例</span> ザクレイ「世紀の決戦 Zackray vs. M.K.R」314,583再生</div>
+            <div class="st-ex rearlet"><span>大城さん用</span> 【クッパ会議】へろー、ラッキー、DIO と今月のクッパ情勢</div>
+            <div class="st-ex rearlet"><span>大城さん用</span> 【3on3】Rearlet vs 地方最強クッパ使い (月1レギュラー化)</div>
+          </div>
+          <div class="st-why">
+            <strong>効く理由：</strong>Rearletさん自身の実データで、コラボ配信が最高再生（16K）を記録。相互流入効果が確認済み。月1の定期コラボ化が最有力。
+          </div>
+        </div>
+      </div>
+
+      <div class="stream-type" data-rank="5">
+        <div class="st-head">
+          <div class="st-rank">TYPE 5</div>
+          <h4>大会ミラー配信（許諾制）</h4>
+          <div class="st-tag">一撃で大台・要交渉</div>
+        </div>
+        <div class="st-body">
+          <p class="st-lead">KENがこの型で同接3,000超え（普段の10倍）を連発。ただし大会主催への許諾交渉が必須。</p>
+          <div class="st-examples">
+            <div class="st-ex"><span>実例</span> KEN「フランス大会 Hall of Frames ミラー配信 ※許諾済」60,702再生 / 同接2,993</div>
+            <div class="st-ex"><span>実例</span> KEN「アメリカ大会 Daily Smash Advice ミラー配信 ※許諾済」43,331再生 / 同接3,426</div>
+            <div class="st-ex rearlet"><span>大城さん用（中期）</span> 海外クッパ大会のミラー配信＋解説</div>
+          </div>
+          <div class="st-why">
+            <strong>効く理由：</strong>クッパ限定なら競合が少ない。クッパの海外強豪の試合を解説付きで流すポジションは誰も取っていない。ただし登録者5,000到達後に許諾交渉するのが現実的。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- タイトル Before/After -->
+    <h3 style="margin-top:var(--space-48);font-size:var(--font-xl);font-weight:800;">配信タイトルの Before → After</h3>
+    <p style="color:var(--gray-700);line-height:1.8;margin-bottom:var(--space-24);">
+      Rearletさん現状の配信タイトルと、5つの型を適用した改善案の対比。情報量を1.5-2倍に増やすのが基本方針です。
+    </p>
+
+    <div class="ba-stream-grid">
+      <div class="ba-stream">
+        <div class="ba-before">
+          <div class="tag">BEFORE（現状）</div>
+          <div class="ttl">【激アツ】全一クッパによるVIP連勝！スマブラSP】#shorts</div>
+          <div class="meta">5,500再生 / 110分</div>
+        </div>
+        <div class="ba-arrow">→</div>
+        <div class="ba-after">
+          <div class="tag">AFTER（型2適用）</div>
+          <div class="ttl">【クッパVIP 50連勝耐久】負けたらやり直し・何時間かかるか検証【スマブラSP】</div>
+          <div class="meta">数字＋耐久で離脱抑止</div>
+        </div>
+      </div>
+
+      <div class="ba-stream">
+        <div class="ba-before">
+          <div class="tag">BEFORE（現状）</div>
+          <div class="ttl">【激熱！】全一クッパがチノスマ優勝狙うよ！【スマブラSP】#shorts</div>
+          <div class="meta">5,576再生 / 142分</div>
+        </div>
+        <div class="ba-arrow">→</div>
+        <div class="ba-after">
+          <div class="tag">AFTER（型3適用）</div>
+          <div class="ttl">【チノスマ前最終調整】日本9位クッパのスマメイト 1800~【スマブラSP】</div>
+          <div class="meta">大会×レート×日付性で検索流入</div>
+        </div>
+      </div>
+
+      <div class="ba-stream">
+        <div class="ba-before">
+          <div class="tag">BEFORE（最高再生）</div>
+          <div class="ttl">【激熱！】へろークッパと2on2出るよ！！！！【スマブラSP】#shorts</div>
+          <div class="meta">16,379再生 / 240分</div>
+        </div>
+        <div class="ba-arrow">→</div>
+        <div class="ba-after">
+          <div class="tag">AFTER（型4強化）</div>
+          <div class="ttl">【クッパ 2on2】Rearlet×へろー vs 最強ペアに挑戦【篝火前哨戦】</div>
+          <div class="meta">対戦構図＋大会関連性を明示</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 週次カレンダー -->
+    <h3 style="margin-top:var(--space-48);font-size:var(--font-xl);font-weight:800;">週次配信カレンダー（推奨）</h3>
+    <p style="color:var(--gray-700);line-height:1.8;margin-bottom:var(--space-24);">
+      週3配信を基本に、型を曜日で固定して視聴習慣を作ります。全配信は <strong>20:00-22:00</strong> 帯がスマブラ系の競合少なめ。
+    </p>
+
+    <div class="weekly-grid">
+      <div class="day-card">
+        <div class="day-label">TUE · 火曜</div>
+        <div class="day-time">20:00 - 22:00</div>
+        <div class="day-type">TYPE 1 · キャラメイト</div>
+        <div class="day-title">【クッパスマメイト 1800~】上達記録</div>
+        <div class="day-note">週の定点。固定ファンが「火曜21時はRearlet」と覚える。</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">FRI · 金曜</div>
+        <div class="day-time">21:00 - 23:00</div>
+        <div class="day-type">TYPE 2 · 数字企画</div>
+        <div class="day-title">【クッパVIP 30連勝耐久】</div>
+        <div class="day-note">数字目標で長時間滞在を作る。達成瞬間のShorts化必須。</div>
+      </div>
+      <div class="day-card">
+        <div class="day-label">SAT · 土曜</div>
+        <div class="day-time">22:00 - 24:00</div>
+        <div class="day-type">TYPE 4 · コラボ/雑談</div>
+        <div class="day-title">【クッパ会議】or 他プロとの3on3</div>
+        <div class="day-note">月2週はコラボ、残りは視聴者交流雑談。関係資本の積み上げ。</div>
+      </div>
+      <div class="day-card sun">
+        <div class="day-label">SUN · 日曜</div>
+        <div class="day-time">大会 or 振り返り</div>
+        <div class="day-type">TYPE 3 · 旬配信</div>
+        <div class="day-title">大会出場 or 振り返り配信</div>
+        <div class="day-note">大会当日は出場、無い日は前週の試合振り返り。</div>
+      </div>
+    </div>
+
+    <!-- Shorts連動 -->
+    <h3 style="margin-top:var(--space-48);font-size:var(--font-xl);font-weight:800;">Shortsと配信の連動ループ</h3>
+    <p style="color:var(--gray-700);line-height:1.8;margin-bottom:var(--space-24);">
+      Shortsと配信は <strong>同じ動画資産から両方作る</strong>のが効率的。配信の撃墜シーンを翌日Shorts化、ShortsのコメントトップとOBSで配信告知、を機械的に回します。
+    </p>
+
+    <div class="loop-diagram">
+      <div class="loop-step">
+        <div class="ls-num">1</div>
+        <h4>火/金の配信で撃墜シーン蓄積</h4>
+        <p>2時間配信で目立つ撃墜を3-5本タイムスタンプ管理（OBSの「リプレイバッファ」で即保存も可）。</p>
+      </div>
+      <div class="loop-arrow">↓</div>
+      <div class="loop-step">
+        <div class="ls-num">2</div>
+        <h4>翌朝にShortsを1本切り出し</h4>
+        <p>CapCutで15-25秒に編集。タイトルは §I/§B の型を適用。配信の告知URLも概要欄に。</p>
+      </div>
+      <div class="loop-arrow">↓</div>
+      <div class="loop-step">
+        <div class="ls-num">3</div>
+        <h4>Shortsの固定コメント=配信告知</h4>
+        <p>「火21時・金21時にライブ配信してます → youtube.com/@Real-Scarlet_z/live」を全Shortsに固定。</p>
+      </div>
+      <div class="loop-arrow">↓</div>
+      <div class="loop-step">
+        <div class="ls-num">4</div>
+        <h4>配信中もShorts誘導</h4>
+        <p>OBSの下部固定オーバーレイに「Shorts毎日更新中 → @Real-Scarlet_z」。両方のチャンネル数字が育つ。</p>
+      </div>
+      <div class="loop-arrow">↓</div>
+      <div class="loop-step">
+        <div class="ls-num">5</div>
+        <h4>週1で配信ハイライト長尺化</h4>
+        <p>週の配信から10分の「今週のベスト撃墜＋解説」を編集し本チャンへ。§L『Shorts→長尺→登録』の受け皿になる。</p>
+      </div>
+    </div>
+
+    <!-- 同接0人脱却 -->
+    <h3 style="margin-top:var(--space-48);font-size:var(--font-xl);font-weight:800;">同接0人を避ける6ルール</h3>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rc-num">01</div>
+        <h4>X(Twitter)で事前告知2回</h4>
+        <p>配信前日21時 と 配信開始1時間前の計2回。テンプレ化して習慣に。<code>21時から【クッパVIP30連勝耐久】やります。やり直しアリ版で何時間かかるか。</code></p>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">02</div>
+        <h4>タイトルに必ず3要素</h4>
+        <p><strong>キャラ（クッパ）× 数字 or レート × 企画ワード</strong>。例：「クッパ VIP30連勝 耐久配信」「クッパスマメイト 1800~ 大会前調整」。</p>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">03</div>
+        <h4>開始時間の固定</h4>
+        <p>火21:00、金21:00、土22:00 を週次で固定。「この時間＝Rearlet」を習慣化させる。KEN・あcolaも19:30-21:00帯が圧倒的に多い。</p>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">04</div>
+        <h4>最初の5分で企画説明＋ルール</h4>
+        <p>「今日は何をやる、どうなったら終わり、途中参加もOK」を明示。遅れて来た視聴者が迷子にならない。</p>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">05</div>
+        <h4>視聴者0-5人でも名前を呼ぶ</h4>
+        <p>「〇〇さんこんばんは」の一言で常連化率が跳ねる。最初3ヶ月が勝負。無言のままだと二度と戻ってこない。</p>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">06</div>
+        <h4>配信後のX投稿</h4>
+        <p>終了30分以内に「今日の配信ありがとうございました。ハイライトはShorts化します」を投稿。見逃し視聴への誘導とコミュニティ継続感。</p>
+      </div>
+    </div>
+
+    <!-- 半年後の想定 -->
+    <div class="forecast">
+      <h3>半年後の想定シナリオ</h3>
+      <p>
+        週3配信 × 90分 = 月12本の配信アーカイブ。
+        現在の中央再生898を基準に、型の適用で1.5-2倍、コラボ・企画配信で月1本は5,000-10,000再生を狙う。
+      </p>
+      <div class="forecast-grid">
+        <div class="fc-card">
+          <div class="fc-label">配信経由の登録増</div>
+          <div class="fc-val">+1,500 〜 3,000</div>
+          <div class="fc-note">配信1本あたり+5-15人 × 月12本 × 6ヶ月</div>
+        </div>
+        <div class="fc-card">
+          <div class="fc-label">配信の平均再生</div>
+          <div class="fc-val">2,500 〜 4,000</div>
+          <div class="fc-note">現状898 → 型適用で2-4倍</div>
+        </div>
+        <div class="fc-card">
+          <div class="fc-label">同接目標</div>
+          <div class="fc-val">30 〜 80</div>
+          <div class="fc-note">KENの1/10水準、アカキクス相当へ</div>
+        </div>
+        <div class="fc-card">
+          <div class="fc-label">収益化</div>
+          <div class="fc-val">スパチャ解禁</div>
+          <div class="fc-note">登録1,140ですでに条件近接。配信時間を4,000時間に積む前に解禁条件を調べる価値あり</div>
+        </div>
+      </div>
+      <p class="forecast-close">
+        §L（深層打ち手）と §M（配信編）を組み合わせると、Shorts単独では届かなかった登録者増のルートが2本増えます。
+        半年5万人の目標は、Shorts＋配信＋長尺＋SNSの4軸同時稼働が前提です。
+      </p>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 参考②：11ch実データ ============ -->
 <section style="background: var(--gray-100);">
   <div class="container">
@@ -4097,7 +4927,7 @@
         あとは <strong style="color:#FFD580">「届け方」と「その先の受け皿」</strong> を階層ごとに整えるだけです。
       </p>
       <p class="cta-text">
-        今日は表層から1つ。今月は中層を1つ。今月中に深層の1つを仕込み始める。
+        今日は表層から1つ。今月は中層と配信編を1つずつ。今月中に深層の1つを仕込み始める。
       </p>
     </div>
   </div>
