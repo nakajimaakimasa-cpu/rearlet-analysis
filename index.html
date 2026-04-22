@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rearlet Shorts 真犯人レポート ── 原因はタイトルではなかった</title>
+<title>Rearlet Shorts 診断レポート ── 半年5万人へ向けた打ち手の地図</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap');
 
@@ -1646,22 +1646,14 @@
 <style>
   /* === v5 追加: 真犯人セクション === */
   .shock-banner {
-    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
     color: white;
-    padding: var(--space-64) 0;
+    padding: var(--space-48) 0;
     text-align: center;
     position: relative;
     overflow: hidden;
-  }
-  .shock-banner::before {
-    content: '⚠';
-    position: absolute;
-    font-size: 400px;
-    opacity: 0.08;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    line-height: 1;
-    pointer-events: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
   .shock-banner .label {
     font-family: 'Inter', sans-serif;
@@ -1676,26 +1668,24 @@
   }
   .shock-banner h2 {
     color: white;
-    font-size: 36px;
-    font-weight: 900;
+    font-size: 28px;
+    font-weight: 800;
     margin-bottom: var(--space-16);
-    line-height: 1.3;
+    line-height: 1.4;
     position: relative;
+    letter-spacing: -0.01em;
   }
   .shock-banner p {
-    font-size: var(--font-lg);
-    max-width: 720px;
+    font-size: var(--font-base);
+    max-width: 760px;
     margin: 0 auto;
-    line-height: 1.7;
-    opacity: 0.95;
+    line-height: 1.8;
+    opacity: 0.88;
     position: relative;
   }
   .shock-banner strong {
-    background: #FFD580;
-    color: #8B1E0F;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 900;
+    color: #FFD580;
+    font-weight: 700;
   }
 
   /* 逆転テーブル */
@@ -1833,12 +1823,122 @@
     height: 100%;
     border-radius: 100px;
   }
-  .suspect.rank1 .fill { background: var(--danger); width: 100%; }
-  .suspect.rank2 .fill { background: #E67E22; width: 80%; }
-  .suspect.rank3 .fill { background: var(--warning); width: 65%; }
+  .suspect.rank1 .fill { background: var(--danger); width: 85%; }
+  .suspect.rank2 .fill { background: #E67E22; width: 75%; }
+  .suspect.rank3 .fill { background: var(--warning); width: 60%; }
   .suspect.rank4 .fill { background: var(--primary); width: 50%; }
-  .suspect.rank5 .fill { background: var(--info); width: 35%; }
-  .suspect.rank6 .fill { background: var(--success); width: 25%; }
+  .suspect.rank5 .fill { background: var(--info); width: 45%; }
+  .suspect.rank6 .fill { background: var(--success); width: 40%; }
+  .suspect.rank-deep { border-left-color: #6C5CE7; }
+  .suspect.rank-deep .fill { background: #6C5CE7; width: 95%; }
+  .suspect.rank-base { border-left-color: var(--gray-500); }
+  .suspect.rank-base .fill { background: var(--gray-500); width: 30%; }
+
+  /* 深層セクション */
+  .deep-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-24);
+    margin-top: var(--space-32);
+  }
+  @media (max-width: 1024px) { .deep-grid { grid-template-columns: 1fr; } }
+  .deep-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    border-top: 4px solid #6C5CE7;
+    display: flex;
+    flex-direction: column;
+  }
+  .deep-card .deep-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #6C5CE7;
+    background: #F3F1FE;
+    padding: 4px 12px;
+    border-radius: 100px;
+    display: inline-block;
+    margin-bottom: var(--space-12);
+    align-self: flex-start;
+  }
+  .deep-card h3 {
+    font-size: var(--font-xl);
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: var(--space-12);
+    line-height: 1.4;
+  }
+  .deep-card .deep-lead {
+    color: var(--gray-700);
+    font-size: var(--font-sm);
+    line-height: 1.7;
+    margin-bottom: var(--space-20);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px dashed var(--gray-300);
+  }
+  .deep-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    flex: 1;
+  }
+  .deep-item {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: var(--space-12);
+    font-size: var(--font-sm);
+    line-height: 1.7;
+    color: var(--gray-700);
+  }
+  .deep-item .num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #6C5CE7;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .deep-item strong {
+    display: block;
+    color: var(--gray-900);
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .deep-target {
+    margin-top: var(--space-20);
+    padding: var(--space-12) var(--space-16);
+    background: #F3F1FE;
+    border-left: 3px solid #6C5CE7;
+    border-radius: 4px;
+    font-size: var(--font-xs);
+    color: #4A3DB6;
+    font-weight: 600;
+  }
+
+  /* 階層見出し */
+  .layer-head {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    color: var(--gray-700);
+    padding: var(--space-12) var(--space-16);
+    margin: var(--space-32) 0 var(--space-16);
+    border-left: 4px solid var(--gray-400);
+    background: var(--gray-100);
+    border-radius: 4px;
+  }
+  .layer-head-1 { border-left-color: var(--danger); color: var(--danger); }
+  .layer-head-2 { border-left-color: #E67E22; color: #B05717; }
+  .layer-head-3 { border-left-color: #6C5CE7; color: #4A3DB6; background: #F3F1FE; }
+  .layer-head-4 { border-left-color: var(--gray-500); color: var(--gray-700); }
 
   /* サムネ設計 */
   .thumb-anatomy {
@@ -2031,71 +2131,74 @@
 <body>
 
 <div class="report-meta">
-  🎮 REARLET SHORTS <strong>真犯人</strong>レポート v5 · 2026-04-22 · 原因を徹底再検証
+  REARLET SHORTS 診断レポート v6 · 2026-04-22 · 打ち手の地図
 </div>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="hero-content">
     <div class="hero-badge">
-      <span>●</span> REAL CAUSE ANALYSIS · データで検証済み
+      <span>●</span> DIAGNOSIS · データで整理
     </div>
     <h1>
-      原因は、<span class="highlight">タイトルじゃなかった。</span><br>
-      真犯人は別にいる。
+      半年で5万人へ。<br>
+      <span class="highlight">打ち手を、階層で整理しました。</span>
     </h1>
     <p class="hero-sub">
-      Rearletさんの実データ31本を「再生数上位 vs 下位」で再分析した結果、
-      <strong style="color:#FFD580">驚きの事実</strong>が判明しました。<br>
-      前レポートの <strong style="color:#FFD580">優先順位を完全に見直し</strong>、本当に効く改善ポイントを提示します。
+      Rearletさんの実データ31本と、日本で伸びているスマブラSP系Shorts 375本を突き合わせ、
+      伸びない要因と打ち手を <strong style="color:#FFD580">4つの階層</strong>に分けて整理しました。<br>
+      表層の戦術（サムネ・タイトル・尺）だけでは半年5万人には届きません。
+      深層の設計（導線・物語・コミュニティ）までを一つの地図にまとめます。
     </p>
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="val" style="color:#FAB1A0">逆転</span>
-        <span class="lbl">下位の方がいいね率高い</span>
+        <span class="val" style="color:#FAB1A0">50,000</span>
+        <span class="lbl">半年後の目標登録者</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#FFD580">1.23%</span>
-        <span class="lbl">下位25%のいいね率</span>
+        <span class="val" style="color:#FFD580">1,140</span>
+        <span class="lbl">現状（2026-04-22）</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#55EFC4">0.85%</span>
-        <span class="lbl">上位25%のいいね率</span>
+        <span class="val" style="color:#55EFC4">+8,100/月</span>
+        <span class="lbl">必要な増加ペース</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#A29BFE">#1</span>
-        <span class="lbl">真犯人はサムネイル</span>
+        <span class="val" style="color:#A29BFE">4層</span>
+        <span class="lbl">打ち手の階層構造</span>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ============ ショックバナー ============ -->
+<!-- ============ 観察サマリー ============ -->
 <section class="shock-banner">
   <div class="container">
-    <div class="label">⚠ 衝撃の発見</div>
-    <h2>下位動画の方が、<br>視聴者の反応が良い</h2>
+    <div class="label">OBSERVATION · 観察サマリー</div>
+    <h2>再生されれば反応は出ている。<br>届け方と、その先の受け皿が足りない。</h2>
     <p>
-      Rearletさんの <strong>下位25%動画の「いいね率」は1.23%</strong>。
-      上位25%動画の <strong>0.85%</strong> より、実に <strong>45%も高い</strong>。<br>
-      つまり「再生されれば、内容は評価されている」。問題は <strong>クリックの手前</strong> にあります。
+      Rearletさんの下位25%動画のいいね率は <strong>1.23%</strong>、上位25%は <strong>0.85%</strong>。
+      つまり再生が届いた人は、ちゃんと反応しています。<br>
+      伸びない要因は「動画の中身」だけではなく、「入口（サムネ・タイトル）」「受け皿（長尺動画・ブランド）」「外部（SNS・コラボ）」など、
+      複数の階層に分散しています。次章で階層ごとに整理します。
     </p>
   </div>
 </section>
 
-<!-- ============ §0 原因の再解剖 ============ -->
+<!-- ============ §0 要因の階層 ============ -->
 <section>
   <div class="container">
-    <div class="sec-num">§0 · ROOT CAUSE</div>
-    <h2>原因の再解剖：タイトルは主犯ではない</h2>
+    <div class="sec-num">§0 · LAYERED DIAGNOSIS</div>
+    <h2>要因を、4つの階層に分けて見る</h2>
     <p class="sec-desc">
-      Rearletさん31本の実データで、再生数上位/下位を <strong>タイトル品質スコア・いいね率・コメ率・尺</strong> 全軸で比較。
-      仮説「タイトルが原因」は部分的に正しいが、<strong>最大要因ではない</strong>ことが分かりました。
+      「伸びない原因」を一つに絞ると誤ります。Rearletさんの31本と日本のエンタ×ガチ系375本を照合した結果、
+      要因は <strong>表層（戦術）／中層（編集）／深層（設計）／土台（前提）</strong> の4層に分かれていました。
+      各層で打ち手の重みと速効性が違います。まずはデータで確認します。
     </p>
 
     <div class="reverse-table">
-      <h3>🔬 再生数トップ25% vs 下位25% 全項目比較</h3>
+      <h3>再生数トップ25% vs 下位25%：データ比較</h3>
       <div class="reverse-grid">
         <div class="reverse-col top">
           <div class="head">ZONE · TOP 25%</div>
@@ -2157,119 +2260,186 @@
       </div>
     </div>
 
-    <div class="callout callout-warning">
-      <strong>🔑 このデータが示す3つの事実：</strong><br>
-      ① <strong>下位動画の中身は、決して悪くない</strong>（むしろ反応はいい）<br>
-      ② <strong>上位動画が伸びた主因は「クリックされる力」</strong>（＝サムネ＋タイトル）<br>
-      ③ <strong>上位・下位の最大差は「大会ワード有無」と「ハンデ要素」</strong>（タイトル品質の差はわずか0.6ポイント）
+    <div class="callout callout-info">
+      <strong>このデータから読み取れること：</strong><br>
+      ① 下位動画でも、いいね率・コメント率は上位より高い（再生が届けば反応は出る）<br>
+      ② 上位・下位のタイトル品質差はわずか0.6ポイント（タイトルだけで説明はつかない）<br>
+      ③ 上位動画に共通するのは「大会ワード」「ハンデ要素」「既知の対戦相手」（＝文脈の強さ）
     </div>
 
-    <h3 style="margin-top:var(--space-48);font-size:var(--font-xl);font-weight:900;">⚖️ 原因の優先順位を再設定</h3>
+    <h3 style="margin-top:var(--space-48);font-size:var(--font-xl);font-weight:800;">要因の階層マップ</h3>
     <p style="color:var(--gray-700);line-height:1.8;margin-bottom:var(--space-24);">
-      前レポートはタイトル中心でしたが、実データ再分析の結果、以下が正しい優先順位です。
-      各要素に「改善効果の重み（バー）」を示しています。
+      同じ「伸びない」でも、打ち手の種類は4層に分かれます。
+      上の2層は数日〜数週間で効きますが、<strong>半年5万人には下2層の設計まで着手が必要</strong>です。
+      各項目のバーは速効性ではなく「半年目標への寄与度」を示しています。
     </p>
 
+    <div class="layer-head layer-head-1">表層 · 戦術（数日で実装できる）</div>
     <div class="suspect-list">
       <div class="suspect rank1">
-        <div class="medal">🥇</div>
+        <div class="medal">A</div>
         <div>
-          <h4>#1 サムネイル</h4>
+          <h4>サムネイル</h4>
           <div class="why">
-            Shortsはスワイプ中に <strong>0.3-0.5秒</strong> で判断される。タイトルより <strong>先に</strong> 見られる最重要要素。
-            Rearletさん現在は<strong>動画スクショ任せ</strong>が多く、表情・テロップ・色味の設計が不足。
-            <strong>§I で徹底改善案あり</strong>。
+            Shortsはスワイプ中に <strong>0.3-0.5秒</strong> で判断されます。タイトルより先に見られる要素。
+            Rearletさん現在は動画スクショ任せが多く、表情・テロップ・色味の設計余地があります。<strong>§I に設計図</strong>。
           </div>
         </div>
         <div class="weight-bar">
-          <span class="weight-label">IMPACT · 100%</span>
-          <div class="bar"><div class="fill"></div></div>
-        </div>
-      </div>
-
-      <div class="suspect rank2">
-        <div class="medal">🥈</div>
-        <div>
-          <h4>#2 冒頭1秒のフック</h4>
-          <div class="why">
-            Shortsでスクロール継続が決まるのは <strong>冒頭1秒</strong>。
-            現状 Rearlet は「試合開幕演出」を残すケースが多く、視聴維持率が急落。
-            <strong>§J で冒頭の型を提示</strong>。
-          </div>
-        </div>
-        <div class="weight-bar">
-          <span class="weight-label">IMPACT · 80%</span>
-          <div class="bar"><div class="fill"></div></div>
-        </div>
-      </div>
-
-      <div class="suspect rank3">
-        <div class="medal">🥉</div>
-        <div>
-          <h4>#3 撃墜演出・BGM・SE</h4>
-          <div class="why">
-            スマブラShortsは「画の強度」勝負。バイラル動画は必ず <strong>スローモ・ズーム・効果音</strong> の加工あり。
-            Rearlet は素のゲーム画面が多く、視覚的インパクトが弱い。<strong>§K 第1要素</strong>。
-          </div>
-        </div>
-        <div class="weight-bar">
-          <span class="weight-label">IMPACT · 65%</span>
+          <span class="weight-label">WEIGHT · 高</span>
           <div class="bar"><div class="fill"></div></div>
         </div>
       </div>
 
       <div class="suspect rank4">
-        <div class="medal">4️⃣</div>
+        <div class="medal">B</div>
         <div>
-          <h4>#4 タイトル</h4>
+          <h4>タイトル</h4>
           <div class="why">
-            重要だが、サムネより後。タイトル品質スコアは上位2.2 vs 下位1.6 と、差は限定的。
-            ただし末尾の <code>【スマブラSP】#shorts</code> 定型化はアルゴリズム的に効く。<strong>前章の§B/§C 参照</strong>。
+            上位 2.2 / 下位 1.6 と差は限定的ですが、末尾 <code>【スマブラSP】#shorts</code> の定型化は検索・関連動画で効きます。
+            また大会ワード・プロ名・数字・疑問符の活用余地あり。<strong>§B/§C 参照</strong>。
           </div>
         </div>
         <div class="weight-bar">
-          <span class="weight-label">IMPACT · 50%</span>
+          <span class="weight-label">WEIGHT · 中</span>
           <div class="bar"><div class="fill"></div></div>
         </div>
       </div>
 
       <div class="suspect rank5">
-        <div class="medal">5️⃣</div>
+        <div class="medal">C</div>
         <div>
-          <h4>#5 尺（14-25秒化）</h4>
+          <h4>尺（14-25秒化）</h4>
           <div class="why">
-            上位平均38秒、下位51秒でやや差があるが、これ単独の影響は大きくない。
-            ただし <strong>上位25%本（アカキクス14s）への到達にはマスト</strong>。前章§E 参照。
+            上位平均38秒、下位51秒。単独効果は限定的ですが、<strong>視聴完了率とループ再生率</strong> を上げるテコ入れに有効。<strong>§E 参照</strong>。
           </div>
         </div>
         <div class="weight-bar">
-          <span class="weight-label">IMPACT · 35%</span>
-          <div class="bar"><div class="fill"></div></div>
-        </div>
-      </div>
-
-      <div class="suspect rank6">
-        <div class="medal">6️⃣</div>
-        <div>
-          <h4>#6 投稿頻度</h4>
-          <div class="why">
-            週2.65→週4-5本への増加は確実にアルゴリズム露出を増やすが、それ単独では再生数爆発には直結しない。
-            <strong>#1-#5 の改善と合わせて効く土台</strong>。
-          </div>
-        </div>
-        <div class="weight-bar">
-          <span class="weight-label">IMPACT · 25%</span>
+          <span class="weight-label">WEIGHT · 中</span>
           <div class="bar"><div class="fill"></div></div>
         </div>
       </div>
     </div>
 
-    <div class="callout callout-danger">
-      <strong>⚠️ 前レポートとの大きな違い：</strong>
-      前レポートは「タイトル→尺→投稿頻度」の順で扱いました。
-      でも、Rearletさんの<strong>下位動画のいいね率が1.23%で同規模Shuton（1.29%）と近い</strong>ことから、
-      <strong>中身の力は既にある</strong>と判断できます。
-      だから、最優先は<strong>「届けるための入口＝サムネ」</strong>です。
+    <div class="layer-head layer-head-2">中層 · 編集技術（1-3週間で習熟）</div>
+    <div class="suspect-list">
+      <div class="suspect rank2">
+        <div class="medal">D</div>
+        <div>
+          <h4>冒頭1秒のフック</h4>
+          <div class="why">
+            Shortsでスクロール継続が決まるのは冒頭1秒。現状は「試合開幕演出」を残すケースが多く、維持率が落ちやすい。<strong>§J に冒頭の型</strong>。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">WEIGHT · 高</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+
+      <div class="suspect rank3">
+        <div class="medal">E</div>
+        <div>
+          <h4>撃墜演出・BGM・SE</h4>
+          <div class="why">
+            バイラル動画は <strong>スローモ・ズーム・効果音</strong> の加工が必ずあります。素のゲーム画面は視覚的インパクトが弱い。<strong>§K 参照</strong>。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">WEIGHT · 中〜高</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer-head layer-head-3">深層 · チャンネル設計（1-3ヶ月で効く／半年5万人にはここが必須）</div>
+    <div class="suspect-list">
+      <div class="suspect rank-deep">
+        <div class="medal">F</div>
+        <div>
+          <h4>Shorts → 長尺 → 登録の導線</h4>
+          <div class="why">
+            Shortsは業界相場で <strong>1万再生あたり登録+10〜30人</strong>。3/20の31万再生でも登録が跳ねていないのは、
+            視聴者が <strong>チャンネルに着地したときに見るべき長尺動画がない</strong> のが大きい。
+            試合解説（5-10分）、大会挑戦ダイジェスト、キャラ講座などの長尺軸が欠けている状態です。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">WEIGHT · 非常に高</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+
+      <div class="suspect rank-deep">
+        <div class="medal">G</div>
+        <div>
+          <h4>プレイヤーとしての物語</h4>
+          <div class="why">
+            Shutonは「世界大会3位」、ザクレイは「日本一」、アカキクスは「勇者の軌跡」。
+            いずれも視聴者が <strong>人物を連想できる物語軸</strong> を持っています。
+            Rearletさんは「日本9位クッパ」という実績はありますが、<strong>連続更新される物語</strong>（大会挑戦日記・ライバル関係・成長記）が弱い状態です。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">WEIGHT · 非常に高</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+
+      <div class="suspect rank-deep">
+        <div class="medal">H</div>
+        <div>
+          <h4>SNS・コラボ・コミュニティ</h4>
+          <div class="why">
+            X(Twitter)での日々の発信、他プロとの絡み、大会配信でのゲスト出演、コラボ動画。
+            Shuton・ブリカワ等の伸びているチャンネルは、YouTubeの外側で <strong>認知の土台</strong> を作ってから、Shortsに繋げています。
+            現状は YouTube Shorts 単体で戦っている状態で、外部流入が薄いです。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">WEIGHT · 高</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer-head layer-head-4">土台 · 前提条件（変えられない or 長期）</div>
+    <div class="suspect-list">
+      <div class="suspect rank6">
+        <div class="medal">I</div>
+        <div>
+          <h4>投稿頻度・継続力</h4>
+          <div class="why">
+            週2.65 → 週4-5本への増加は露出機会の底上げに必須。単独で爆発には直結しませんが、A-Hのテコが効く土台です。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">WEIGHT · 中</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+
+      <div class="suspect rank-base">
+        <div class="medal">J</div>
+        <div>
+          <h4>Shortsの構造的特性 / スマブラSP市場</h4>
+          <div class="why">
+            Shortsはそもそも登録転換しにくい設計。また2018年ピーク後、スマブラSPの競技人口は成熟期に入っています。
+            これは前提として受け入れ、<strong>長尺とSNSで登録転換</strong>を補う方針で乗り越えます。
+          </div>
+        </div>
+        <div class="weight-bar">
+          <span class="weight-label">前提条件</span>
+          <div class="bar"><div class="fill"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:var(--space-32);">
+      <strong>この地図の読み方：</strong>
+      表層（A-C）は今日〜今週の打ち手。中層（D-E）は今月中。深層（F-H）は今月着手・3ヶ月で効く。土台（I-J）は継続前提。
+      以降のセクションは、まず表層・中層の具体アクションから順に並んでいます。<br>
+      <strong>深層 F-H の具体アクション</strong>は §L「深層の打ち手」で別途まとめています。
     </div>
   </div>
 </section>
@@ -2279,9 +2449,9 @@
 <section style="background: var(--gray-100);">
   <div class="container">
     <div class="sec-num">§A · TODAY'S 3 STEPS</div>
-    <h2>今日やる3つ（真犯人ベース）</h2>
+    <h2>今日やる3つ</h2>
     <p class="sec-desc">
-      サムネ改善が最優先に変わったので、今日の3タスクもそれに合わせて再設計しました。
+      表層で速く効く打ち手から並べています。まずはこの3つで30-60分。
     </p>
 
     <div class="step-hero">
@@ -2332,8 +2502,8 @@
     </div>
 
     <div class="callout callout-success">
-      <strong>🎯 新しい仮説：</strong>
-      Rearletさんの下位動画は「中身いいのに入口で止まっていた」。
+      <strong>この章の要点：</strong>
+      Rearletさんの下位動画は「中身は悪くないのに、入口で止まっている」状態。
       サムネで入口を強化し、冒頭1秒で離脱を防げば、
       <strong>今の動画スキルのまま再生数が2-5倍に跳ねる可能性</strong>があります（あくまで可能性）。
     </div>
@@ -3009,7 +3179,7 @@
 <section>
   <div class="container">
     <div class="sec-num">§I · THUMBNAIL</div>
-    <h2>真犯人#1：サムネイル改善の設計図</h2>
+    <h2>サムネイル設計の型</h2>
     <p class="sec-desc">
       サムネがShortsで果たす役割は「スワイプの指を止める」こと。
       バイラル系チャンネルのサムネ共通構造から、Rearlet用の設計ルールを抽出しました。
@@ -3108,7 +3278,7 @@
 <section style="background: var(--gray-100);">
   <div class="container">
     <div class="sec-num">§J · FIRST SECOND HOOK</div>
-    <h2>真犯人#2：冒頭1秒の作り方</h2>
+    <h2>冒頭1秒の型</h2>
     <p class="sec-desc">
       Shortsの視聴維持率は <strong>0-1秒で50%以上が決まる</strong>。
       ここで「見続ける理由」を示せないと、その後どれだけ良くても離脱されます。
@@ -3184,7 +3354,7 @@
 <section>
   <div class="container">
     <div class="sec-num">§K · CONTENT 4 ELEMENTS</div>
-    <h2>真犯人#3：動画の中身の4要素</h2>
+    <h2>動画中身の4要素</h2>
     <p class="sec-desc">
       Rearletさんの動画は既に「いいね率」ではShutonに近いレベル。
       でもバイラル系チャンネル（Raito 2.27%、せいら 1.85%）にはまだ差があります。
@@ -3372,8 +3542,150 @@
           <li>1本270万再生の上限が桁違い</li>
           <li>週4.88本の高頻度投稿</li>
         </ul>
-        <div class="verdict">⚠️ 個人では物理的に無理</div>
+        <div class="verdict">個人では物理的に難しい</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §L 深層の打ち手 ============ -->
+<section style="background: linear-gradient(180deg, #F3F1FE 0%, #fff 100%);">
+  <div class="container">
+    <div class="sec-num">§L · DEEP LAYER</div>
+    <h2>深層の打ち手（半年5万人に必要な設計）</h2>
+    <p class="sec-desc">
+      表層・中層の戦術だけでは、半年5万人は届きません。
+      Shutonさん・ブリカワさん・アカキクスさんが「バイラル1本で終わらない」のは、深層の設計があるからです。
+      ここは1〜3ヶ月で効く中期の仕込みです。
+    </p>
+
+    <div class="deep-grid">
+      <div class="deep-card">
+        <div class="deep-tag">F · 導線</div>
+        <h3>Shorts → 長尺 → 登録</h3>
+        <p class="deep-lead">
+          Shortsだけでは登録に繋がりにくい。長尺動画が <strong>着地先の受け皿</strong> として必要。
+        </p>
+        <div class="deep-list">
+          <div class="deep-item">
+            <span class="num">1</span>
+            <div>
+              <strong>試合解説シリーズ（5-8分）</strong>
+              バイラルしたShortsの「フル試合＋解説」を長尺化。<br>
+              例：3/20の「チノスマ敗北」の対戦相手分析＋自分の反省点を7分で。
+            </div>
+          </div>
+          <div class="deep-item">
+            <span class="num">2</span>
+            <div>
+              <strong>クッパ講座（10-15分）</strong>
+              「クッパでカズヤに勝つ方法」「ダッシュ掴みの反応術」等、<strong>キャラ特化の教科書</strong>的コンテンツ。検索流入を狙う。
+            </div>
+          </div>
+          <div class="deep-item">
+            <span class="num">3</span>
+            <div>
+              <strong>大会挑戦Vlog（8-12分）</strong>
+              月1の大会出場を「前日準備→当日→振り返り」で1本の物語に。ここが G「物語」と繋がります。
+            </div>
+          </div>
+          <div class="deep-item">
+            <span class="num">4</span>
+            <div>
+              <strong>Shortsの固定コメント/概要欄</strong>
+              「→フル解説は長尺動画へ」を全Shortsに埋め込む。1本ずつ導線を付ける。
+            </div>
+          </div>
+        </div>
+        <div class="deep-target">目標：月4本の長尺を半年継続 → 計24本の資産</div>
+      </div>
+
+      <div class="deep-card">
+        <div class="deep-tag">G · 物語</div>
+        <h3>プレイヤーとしての連載</h3>
+        <p class="deep-lead">
+          単発の試合ではなく、<strong>視聴者が追いかけたくなる連続物語</strong> を作る。
+        </p>
+        <div class="deep-list">
+          <div class="deep-item">
+            <span class="num">1</span>
+            <div>
+              <strong>「日本9位→5位を目指す」連載</strong>
+              具体的な数字目標を掲げ、全動画でそれに向かう様子を記録。視聴者が成長を見届ける構造。
+            </div>
+          </div>
+          <div class="deep-item">
+            <span class="num">2</span>
+            <div>
+              <strong>ライバル・師匠・仲間を明確化</strong>
+              「誰かと戦う」「誰かに学ぶ」構図を継続的に出す。Shutonさんが Tweek・MKLeoに言及し続けるのと同じ手法。
+            </div>
+          </div>
+          <div class="deep-item">
+            <span class="num">3</span>
+            <div>
+              <strong>クッパ愛を言語化する</strong>
+              「なぜクッパなのか」を何度も語る。キャラへの偏愛は差別化の最強の武器。チャンネルトップ・概要欄・固定動画で。
+            </div>
+          </div>
+          <div class="deep-item">
+            <span class="num">4</span>
+            <div>
+              <strong>月1の「成長記録」長尺</strong>
+              月末に「今月の学び・次月の目標」動画を5分で。<strong>連載の節目</strong>になる。
+            </div>
+          </div>
+        </div>
+        <div class="deep-target">目標：半年後に「Rearlet＝日本代表クッパ使いの挑戦者」が認知</div>
+      </div>
+
+      <div class="deep-card">
+        <div class="deep-tag">H · 外部</div>
+        <h3>SNS・コラボ・配信</h3>
+        <p class="deep-lead">
+          YouTubeの外で <strong>認知の土台</strong> を作る。1人でやらない。
+        </p>
+        <div class="deep-list">
+          <div class="deep-item">
+            <span class="num">1</span>
+            <div>
+              <strong>X(Twitter)で週5投稿</strong>
+              試合直後の気づき、次の大会への抱負、他プロへのリプ。<strong>日々の発言量</strong>がブランドを作る。フォロワー3,000が半年目標。
+            </div>
+          </div>
+          <div class="deep-item">
+            <span class="num">2</span>
+            <div>
+              <strong>月2本のコラボShorts/長尺</strong>
+              同格〜格上プロとの対戦動画。相手チャンネルにも上がれば <strong>相互流入</strong> が発生。
+              候補：同じクッパ使い、同じ地方の有力選手、同じ登録者帯のプレイヤー。
+            </div>
+          </div>
+          <div class="deep-item">
+            <span class="num">3</span>
+            <div>
+              <strong>大会配信へのゲスト出演</strong>
+              ウメブラ等の実況/解説に名前を出してもらう。直接は無理でもXで観戦コメントを積み上げる。
+            </div>
+          </div>
+          <div class="deep-item">
+            <span class="num">4</span>
+            <div>
+              <strong>Twitch/YouTube Liveで週1配信</strong>
+              ガチ対戦orだべり配信を90分。<strong>コアファン</strong>が育ち、ShortsとYouTubeをループする動線ができる。
+            </div>
+          </div>
+        </div>
+        <div class="deep-target">目標：月10万リーチ（X＋コラボ先＋配信）</div>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:var(--space-32);">
+      <strong>なぜこの3つなのか：</strong>
+      Shortsで再生数を作るのは表層の戦術で十分できます。ただ <strong>登録者は Shorts 単独では増えにくい</strong>。
+      Rearletさんの3/20の31万再生が登録者1,140のまま推移しているのが、その証拠です。<br>
+      半年で5万人 = 月+8,100人を達成するには、Shortsで集めた通行人を <strong>長尺で立ち止まらせ、物語で追わせ、外部で再会させる</strong>設計が必要です。
+      この§Lが、表層の戦術（§A-§K）を「ただのバイラル」で終わらせないための仕掛けになります。
     </div>
   </div>
 </section>
@@ -3778,15 +4090,14 @@
 <section>
   <div class="container">
     <div class="conclusion">
-      <h2>タイトル×サムネ×中身×頻度。</h2>
+      <h2>表層から深層まで、同じ地図の上で。</h2>
       <p>
-        前回のレポートで「タイトル改善」を強調しすぎました。<br>
-        データで再検証したら、<strong style="color:#FFD580">真犯人はサムネと冒頭1秒</strong>でした。<br>
-        Rearletさんの動画の中身は、すでにShutonに近いレベルで刺さっています。
-        あとは<strong style="color:#FFD580">「入口」と「最初の1秒」</strong>を整えるだけです。
+        再生数が振るわない要因は一つではなく、<strong style="color:#FFD580">表層・中層・深層・土台</strong> の4層に分散しています。<br>
+        Rearletさんの動画の中身は、届いた視聴者からはちゃんと反応が出ています。
+        あとは <strong style="color:#FFD580">「届け方」と「その先の受け皿」</strong> を階層ごとに整えるだけです。
       </p>
       <p class="cta-text">
-        まず、今日のサムネ1枚から。
+        今日は表層から1つ。今月は中層を1つ。今月中に深層の1つを仕込み始める。
       </p>
     </div>
   </div>
@@ -3794,7 +4105,7 @@
 
 <footer class="site-footer">
   <p>
-    <strong>Rearlet Shorts 真犯人レポート v5</strong> · 2026-04-22<br>
+    <strong>Rearlet Shorts 診断レポート v6</strong> · 2026-04-22<br>
     Rearletさん31本+他10ch375本=計406本の実データを <code>yt-dlp</code> で直接取得・分析。<br>
     再生数/いいね率/コメ率/タイトル品質/尺/投稿頻度の6軸で因果を検証。
   </p>
