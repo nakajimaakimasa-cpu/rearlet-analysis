@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rearlet ショート診断レポート ── 再生数・視聴維持率 低下分析</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap');
+
+  :root {
+    --primary: #6C5CE7;
+    --primary-light: #A29BFE;
+    --primary-dark: #5A4BD1;
+    --accent: #FF6B35;
+    --accent-light: #FFEEE6;
+    --success: #00B894;
+    --success-light: #E6FFF8;
+    --warning: #FDCB6E;
+    --warning-light: #FFF8E1;
+    --danger: #E17055;
+    --danger-light: #FDECEA;
+    --info: #0984E3;
+    --info-light: #E3F2FD;
+    --dark: #2D3436;
+    --gray-50: #FAFBFC;
+    --gray-100: #F1F3F5;
+    --gray-200: #E9ECEF;
+    --gray-300: #DEE2E6;
+    --gray-400: #CED4DA;
+    --gray-500: #ADB5BD;
+    --gray-600: #868E96;
+    --gray-700: #495057;
+    --gray-800: #343A40;
+    --gray-900: #212529;
+    --white: #FFFFFF;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow: 0 4px 16px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+    --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+    --radius-sm: 8px;
+    --radius: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --space-4: 4px;
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+    --space-48: 48px;
+    --space-64: 64px;
+    --space-80: 80px;
+    --space-120: 120px;
+    --font-xs: 12px;
+    --font-sm: 13px;
+    --font-base: 15px;
+    --font-lg: 17px;
+    --font-xl: 20px;
+    --font-2xl: 24px;
+    --font-3xl: 30px;
+    --font-4xl: 40px;
+    --font-5xl: 52px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans JP', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    line-height: 1.8;
+    font-size: var(--font-base);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(160deg, #0f0c29 0%, #302b63 40%, #24243e 100%);
+    color: white;
+    padding: var(--space-120) var(--space-24) var(--space-80);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(108,92,231,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(255,107,53,0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(9,132,227,0.08) 0%, transparent 50%);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: var(--space-8) var(--space-24);
+    border-radius: 100px;
+    font-size: var(--font-sm);
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-32);
+    backdrop-filter: blur(8px);
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, var(--font-5xl));
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: var(--space-24);
+    letter-spacing: -0.02em;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(90deg, var(--accent), #FF9F43);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: var(--font-lg);
+    opacity: 0.75;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* Hero Stats */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-16);
+    max-width: 720px;
+    margin: var(--space-48) auto 0;
+  }
+  .hero-stat {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: var(--radius);
+    padding: var(--space-24) var(--space-16);
+    backdrop-filter: blur(8px);
+  }
+  .hero-stat .val {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-3xl);
+    font-weight: 900;
+    display: block;
+    line-height: 1.1;
+  }
+  .hero-stat .lbl {
+    font-size: var(--font-xs);
+    opacity: 0.5;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: var(--space-4);
+    display: block;
+  }
+  @media (max-width: 640px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .hero { padding: var(--space-80) var(--space-16) var(--space-64); }
+  }
+
+  /* ===== LAYOUT ===== */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 var(--space-24); }
+  .wide-container { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-24); }
+  section { padding: var(--space-80) 0; }
+
+  /* ===== SECTION HEADERS ===== */
+  .sec-num {
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+  .sec-num::before {
+    content: '';
+    width: 32px;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 1px;
+  }
+  section h2 {
+    font-size: clamp(var(--font-2xl), 4vw, var(--font-4xl));
+    font-weight: 900;
+    color: var(--gray-900);
+    margin-bottom: var(--space-12);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .sec-desc {
+    color: var(--gray-600);
+    font-size: var(--font-base);
+    max-width: 680px;
+    margin-bottom: var(--space-48);
+    line-height: 1.8;
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: var(--space-32);
+    margin-bottom: var(--space-24);
+    border: 1px solid var(--gray-200);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .card h3 {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-12);
+    line-height: 1.4;
+  }
+  .card p { color: var(--gray-700); line-height: 1.8; }
+  .card ul { list-style: none; margin-top: var(--space-16); }
+  .card ul li {
+    padding: var(--space-8) 0 var(--space-8) var(--space-24);
+    position: relative;
+    color: var(--gray-700);
+    line-height: 1.7;
+  }
+  .card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary-light);
+  }
+
+  .card--problem { border-left: 4px solid var(--danger); }
+  .card--solution { border-left: 4px solid var(--success); }
+  .card--info { border-left: 4px solid var(--info); }
+
+  /* ===== TAGS ===== */
+  .tags { display: flex; flex-wrap: wrap; gap: var(--space-8); margin-bottom: var(--space-16); }
+  .tag {
+    font-size: var(--font-xs);
+    font-weight: 600;
+    padding: var(--space-4) var(--space-12);
+    border-radius: 100px;
+    background: var(--gray-100);
+    color: var(--gray-600);
+  }
+  .tag--danger { background: var(--danger-light); color: var(--danger); }
+  .tag--success { background: var(--success-light); color: var(--success); }
+  .tag--warning { background: var(--warning-light); color: #E67E22; }
+  .tag--info { background: var(--info-light); color: var(--info); }
+  .tag--primary { background: #F0EDFF; color: var(--primary); }
+
+  /* ===== STAT GRID ===== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-16);
+    margin-bottom: var(--space-48);
+  }
+  .stat-box {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: var(--space-24);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+  }
+  .stat-box .v {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-3xl);
+    font-weight: 900;
+    display: block;
+    line-height: 1.1;
+    color: var(--gray-900);
+  }
+  .stat-box .l {
+    font-size: var(--font-xs);
+    color: var(--gray-600);
+    margin-top: var(--space-4);
+    display: block;
+  }
+  .stat-box.danger .v { color: var(--danger); }
+  .stat-box.success .v { color: var(--success); }
+  .stat-box.warning .v { color: #E67E22; }
+  .stat-box.info .v { color: var(--info); }
+
+  /* ===== BAR CHART ===== */
+  .chart-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    margin-bottom: var(--space-32);
+  }
+  .chart-card h3 {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-24);
+    color: var(--gray-900);
+  }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-8);
+    gap: var(--space-12);
+  }
+  .bar-label {
+    width: 48px;
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 600;
+    color: var(--gray-500);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .bar-track {
+    flex: 1;
+    height: 24px;
+    background: var(--gray-100);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    padding-left: var(--space-12);
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    transition: width 0.8s ease;
+    white-space: nowrap;
+  }
+  .bar-fill.green { background: linear-gradient(90deg, #00B894, #55EFC4); }
+  .bar-fill.blue { background: linear-gradient(90deg, #0984E3, #74B9FF); }
+  .bar-fill.yellow { background: linear-gradient(90deg, #E67E22, #FDCB6E); color: var(--gray-900); }
+  .bar-fill.red { background: linear-gradient(90deg, #E17055, #FAB1A0); }
+  .bar-val {
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 700;
+    color: var(--gray-500);
+    width: 64px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ===== COMPARE TABLE ===== */
+  .tbl-wrap {
+    overflow-x: auto;
+    margin: var(--space-24) 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  table.compare {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--font-sm);
+  }
+  table.compare th {
+    background: var(--gray-100);
+    padding: var(--space-12) var(--space-16);
+    font-weight: 700;
+    text-align: left;
+    color: var(--gray-600);
+    font-size: var(--font-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+  }
+  table.compare td {
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--gray-100);
+    vertical-align: top;
+  }
+  table.compare tbody tr:hover td { background: var(--gray-50); }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .badge-danger { background: var(--danger-light); color: var(--danger); }
+  .badge-success { background: var(--success-light); color: var(--success); }
+  .badge-warning { background: var(--warning-light); color: #E67E22; }
+  .badge-info { background: var(--info-light); color: var(--info); }
+  .badge-primary { background: #F0EDFF; color: var(--primary); }
+
+  /* ===== CALLOUT BOXES ===== */
+  .callout {
+    padding: var(--space-24);
+    border-radius: var(--radius);
+    margin: var(--space-24) 0;
+    line-height: 1.8;
+  }
+  .callout strong { font-weight: 700; }
+  .callout-danger {
+    background: var(--danger-light);
+    border-left: 4px solid var(--danger);
+    color: var(--gray-800);
+  }
+  .callout-success {
+    background: var(--success-light);
+    border-left: 4px solid var(--success);
+  }
+  .callout-info {
+    background: var(--info-light);
+    border-left: 4px solid var(--info);
+  }
+  .callout-warning {
+    background: var(--warning-light);
+    border-left: 4px solid var(--warning);
+  }
+
+  /* ===== TWO COLUMN GRID ===== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+  }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ===== SVG ILLUSTRATIONS ===== */
+  .illustration {
+    width: 100%;
+    max-width: 100%;
+    margin: var(--space-32) 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .illustration svg { display: block; width: 100%; height: auto; }
+
+  /* ===== CHANNEL COMPARE ===== */
+  .ch-compare {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  @media (max-width: 768px) { .ch-compare { grid-template-columns: 1fr; } }
+  .ch-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    text-align: center;
+  }
+  .ch-card.highlight {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 2px var(--primary-light), var(--shadow);
+  }
+  .ch-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin: 0 auto var(--space-12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    color: white;
+  }
+  .ch-name {
+    font-size: var(--font-base);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-4);
+  }
+  .ch-genre {
+    font-size: var(--font-xs);
+    color: var(--gray-500);
+    margin-bottom: var(--space-16);
+  }
+  .ch-stats { text-align: left; }
+  .ch-stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-8) 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: var(--font-sm);
+  }
+  .ch-stat-row:last-child { border-bottom: none; }
+  .ch-stat-row .k { color: var(--gray-500); }
+  .ch-stat-row .val { font-weight: 700; color: var(--gray-900); }
+
+  /* ===== THUMBNAIL COMPARE (SVG) ===== */
+  .thumb-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+    margin: var(--space-32) 0;
+  }
+  @media (max-width: 640px) { .thumb-compare { grid-template-columns: 1fr; } }
+  .thumb-box {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+  }
+  .thumb-box .label {
+    font-size: var(--font-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: var(--space-12) var(--space-16);
+    text-align: center;
+  }
+  .thumb-box.bad .label { background: var(--danger-light); color: var(--danger); }
+  .thumb-box.good .label { background: var(--success-light); color: var(--success); }
+
+  /* ===== ROADMAP ===== */
+  .roadmap { position: relative; padding-left: 48px; }
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary), var(--success));
+    border-radius: 1px;
+  }
+  .rm-item { position: relative; margin-bottom: var(--space-48); }
+  .rm-item:last-child { margin-bottom: 0; }
+  .rm-dot {
+    position: absolute;
+    left: -37px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 3px solid var(--primary);
+  }
+  .rm-item.active .rm-dot { background: var(--primary); }
+  .rm-phase {
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 2px;
+    margin-bottom: var(--space-4);
+  }
+  .rm-item h4 {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-8);
+  }
+  .rm-item p { color: var(--gray-600); font-size: var(--font-sm); line-height: 1.8; }
+
+  /* ===== CONCLUSION ===== */
+  .conclusion {
+    background: linear-gradient(160deg, #0f0c29 0%, #302b63 40%, #24243e 100%);
+    color: white;
+    padding: var(--space-80) var(--space-24);
+    border-radius: var(--radius-xl);
+    margin: var(--space-48) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .conclusion::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(108,92,231,0.12) 0%, transparent 60%);
+  }
+  .conclusion > * { position: relative; z-index: 1; }
+  .conclusion h2 { color: white; font-size: var(--font-3xl); margin-bottom: var(--space-24); }
+  .conclusion p {
+    opacity: 0.8;
+    max-width: 640px;
+    margin: 0 auto var(--space-16);
+    line-height: 1.8;
+    font-size: var(--font-base);
+  }
+  .conclusion .cta-text {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    opacity: 1;
+    margin-top: var(--space-32);
+  }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 0;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: var(--space-48) var(--space-24);
+    color: var(--gray-500);
+    font-size: var(--font-xs);
+  }
+
+  /* ===== REAL THUMBNAIL GRID ===== */
+  .thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  .thumb-item {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .thumb-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+  .thumb-item img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+  }
+  .thumb-meta {
+    padding: var(--space-12) var(--space-16);
+  }
+  .thumb-title {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--gray-900);
+    line-height: 1.4;
+    margin-bottom: var(--space-4);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .thumb-views {
+    font-family: 'Inter', monospace;
+    font-size: var(--font-xs);
+    font-weight: 700;
+  }
+  .thumb-views.high { color: var(--success); }
+  .thumb-views.low { color: var(--danger); }
+  .thumb-views.mid { color: var(--info); }
+  .thumb-type {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: var(--space-8);
+    text-transform: uppercase;
+  }
+  .thumb-type.shorts { background: #E8F5E9; color: #2E7D32; }
+  .thumb-type.long { background: #FFEBEE; color: #C62828; }
+  .thumb-type.compare { background: #E3F2FD; color: #1565C0; }
+
+  /* ===== SEARCH FLOW DIAGRAM ===== */
+  .flow-step {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-16);
+    margin-bottom: var(--space-16);
+  }
+  .flow-num {
+    width: 48px;
+    min-height: 48px;
+    background: var(--primary);
+    color: white;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', monospace;
+    font-weight: 900;
+    font-size: var(--font-xl);
+    flex-shrink: 0;
+  }
+  .flow-num.fail { background: var(--danger); }
+  .flow-num.pass { background: var(--success); }
+  .flow-body {
+    flex: 1;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: var(--space-16) var(--space-24);
+    border: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .flow-body h4 { font-size: var(--font-base); font-weight: 700; color: var(--gray-900); margin-bottom: var(--space-4); }
+  .flow-body p { font-size: var(--font-sm); color: var(--gray-600); margin: 0; line-height: 1.6; }
+
+  /* ===== SCORE RADAR (CSS) ===== */
+  .score-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    margin: var(--space-24) 0;
+  }
+  @media (max-width: 640px) { .score-grid { grid-template-columns: 1fr; } }
+  .score-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+  }
+  .score-label {
+    width: 96px;
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--gray-700);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .score-bar {
+    flex: 1;
+    height: 12px;
+    background: var(--gray-100);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .score-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.8s ease;
+  }
+  .score-val {
+    width: 36px;
+    font-family: 'Inter', monospace;
+    font-size: var(--font-sm);
+    font-weight: 700;
+    color: var(--gray-600);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+
+<style>
+  /* ===== ショート分析サイト 追加スタイル ===== */
+  .shot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    margin: var(--space-24) 0;
+  }
+  @media (max-width: 768px) { .shot-grid { grid-template-columns: 1fr; } }
+  .shot {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+  }
+  .shot img {
+    width: 100%;
+    display: block;
+    background: #111;
+  }
+  .shot-cap {
+    padding: var(--space-12) var(--space-16);
+    font-size: var(--font-xs);
+    color: var(--gray-600);
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .big-num {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.03em;
+  }
+  .big-num.ok {
+    background: linear-gradient(135deg, var(--success), #55EFC4);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .big-num.bad {
+    background: linear-gradient(135deg, var(--danger), #FF9F43);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .flow-chain { margin: var(--space-32) 0; }
+  .flow-step {
+    background: var(--white);
+    border-left: 6px solid var(--primary);
+    border-radius: var(--radius);
+    padding: var(--space-20, 20px) var(--space-24);
+    margin-bottom: var(--space-16);
+    box-shadow: var(--shadow-sm);
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: var(--space-16);
+    align-items: center;
+    position: relative;
+  }
+  .flow-step.warn { border-left-color: var(--warning); background: #FFFDF5; }
+  .flow-step.bad { border-left-color: var(--danger); background: #FFF7F5; }
+  .flow-step .fs-date {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    color: var(--primary);
+  }
+  .flow-step.warn .fs-date { color: #E67E22; }
+  .flow-step.bad .fs-date { color: var(--danger); }
+  .flow-step .fs-body { font-size: var(--font-base); font-weight: 700; color: var(--gray-900); }
+  .flow-step .fs-sub { font-size: var(--font-sm); color: var(--gray-600); margin-top: 4px; font-weight: 400; }
+  .flow-step::after {
+    content: '↓';
+    position: absolute;
+    left: 30px;
+    bottom: -22px;
+    color: var(--gray-400);
+    font-size: 18px;
+    font-weight: 900;
+    z-index: 1;
+  }
+  .flow-step:last-child::after { display: none; }
+
+  .ngok-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    margin: var(--space-24) 0;
+  }
+  @media (max-width: 640px) { .ngok-grid { grid-template-columns: 1fr; } }
+  .ngok-item {
+    padding: var(--space-16) var(--space-20, 20px);
+    border-radius: var(--radius);
+    font-size: var(--font-sm);
+    line-height: 1.7;
+  }
+  .ngok-item.ng {
+    background: var(--danger-light);
+    border-left: 4px solid var(--danger);
+  }
+  .ngok-item.ok {
+    background: var(--success-light);
+    border-left: 4px solid var(--success);
+  }
+  .ngok-item .lbl {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .ngok-item.ng .lbl { color: var(--danger); }
+  .ngok-item.ok .lbl { color: var(--success); }
+
+  .video-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    margin-bottom: var(--space-32);
+    border-top: 6px solid var(--primary);
+  }
+  .video-card.ok-top { border-top-color: var(--success); }
+  .video-card.warn-top { border-top-color: #E67E22; }
+  .video-card.bad-top { border-top-color: var(--danger); }
+  .video-card .vc-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-12);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-16);
+  }
+  .video-card .vc-date {
+    font-family: 'Inter', sans-serif;
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    color: var(--primary);
+  }
+  .video-card.ok-top .vc-date { color: var(--success); }
+  .video-card.warn-top .vc-date { color: #E67E22; }
+  .video-card.bad-top .vc-date { color: var(--danger); }
+  .video-card h3 {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--gray-900);
+    flex: 1;
+  }
+
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
+  }
+  .insight-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: var(--space-24);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .insight-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .insight-card .letter {
+    position: absolute;
+    top: -12px;
+    left: var(--space-24);
+    background: var(--primary);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+  }
+  .insight-card.pos .letter { background: var(--success); }
+  .insight-card.neg .letter { background: var(--danger); }
+  .insight-card.neu .letter { background: #E67E22; }
+  .insight-card h3 {
+    font-size: var(--font-base);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: var(--space-12) 0 var(--space-8);
+    line-height: 1.4;
+  }
+  .insight-card p {
+    font-size: var(--font-sm);
+    color: var(--gray-600);
+    line-height: 1.7;
+  }
+
+  .anchor-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--gray-200);
+    padding: var(--space-12) 0;
+  }
+  .anchor-nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--space-24);
+    display: flex;
+    gap: var(--space-16);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .anchor-nav-inner::-webkit-scrollbar { display: none; }
+  .anchor-nav a {
+    font-size: var(--font-xs);
+    font-weight: 600;
+    color: var(--gray-600);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 100px;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .anchor-nav a:hover { background: var(--gray-100); color: var(--gray-900); }
+
+  footer.site-footer {
+    background: var(--gray-900);
+    color: var(--gray-400);
+    padding: var(--space-64) var(--space-24);
+    text-align: center;
+    font-size: var(--font-sm);
+  }
+  footer.site-footer strong { color: white; }
+  footer.site-footer code {
+    background: rgba(255,255,255,0.08);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #F0EDFF;
+  }
+</style>
+
+
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>●</span> YOUTUBE SHORTS DIAGNOSIS · 2026.04.22
+    </div>
+    <h1>
+      Rearlet ショート<br>
+      <span class="highlight">再生数・視聴維持率 診断</span>
+    </h1>
+    <p class="hero-sub">
+      直近 4 本（4/14〜4/21）× バイラル比較（4/7）× YouTube Studio 実データ 18 スクショ。<br>
+      結論：<strong style="color:#FFD580">動画の中身は上位 5% 級に優秀。問題はタイトルで、アルゴリズム露出の悪循環に入っている。</strong>
+    </p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="val" style="color:#55EFC4">111.8%</span>
+        <span class="lbl">4/16 平均視聴率（上位5%級）</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val" style="color:#FAB1A0">47.8%</span>
+        <span class="lbl">4/19 スワイプ離脱</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val" style="color:#FDCB6E">-6.2pt</span>
+        <span class="lbl">4/21 Shortsフィード率低下</span>
+      </div>
+      <div class="hero-stat">
+        <span class="val" style="color:#A29BFE">1/14</span>
+        <span class="lbl">ピーク比の再生数</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ANCHOR NAV ============ -->
+<nav class="anchor-nav">
+  <div class="anchor-nav-inner">
+    <a href="#summary">結論</a>
+    <a href="#data">データ一覧</a>
+    <a href="#insights">6つの発見</a>
+    <a href="#mechanism">悪循環</a>
+    <a href="#individual">動画別診断</a>
+    <a href="#viral">バイラル比較</a>
+    <a href="#prescription">処方箋</a>
+    <a href="#roadmap">次のアクション</a>
+  </div>
+</nav>
+
+<!-- ============ 01 結論サマリー ============ -->
+<section id="summary">
+  <div class="container">
+    <div class="sec-num">01 · EXECUTIVE SUMMARY</div>
+    <h2>結論サマリー</h2>
+    <p class="sec-desc">
+      一言で言うと「動画は超優秀、タイトルが悪い、露出が絞られた」。内訳は以下の3点。
+    </p>
+
+    <div class="grid-2">
+      <div class="card card--solution">
+        <div class="tags"><span class="tag tag--success">🟢 良いニュース</span></div>
+        <h3>動画の中身は問題なし。むしろ上位5%級</h3>
+        <ul>
+          <li>4/14「魂の逆転劇」: 平均視聴率 103.7%（ループ視聴発生）</li>
+          <li>4/16「上b空後」: 平均視聴率 111.8%（ループ視聴発生）</li>
+          <li>100% 超は全ショートクリエイターの上位 5% 級指標</li>
+        </ul>
+      </div>
+
+      <div class="card card--problem">
+        <div class="tags"><span class="tag tag--danger">🔴 悪いニュース</span></div>
+        <h3>アルゴリズムから露出を絞られ始めている</h3>
+        <ul>
+          <li>YouTubeが「通常より1.0万減」「通常より6,733減」と警告表示</li>
+          <li>4/19でスワイプ離脱47.8% → 判定決定打</li>
+          <li>4/21でShortsフィード率が89% → 82.8%に急落</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>🟠 原因：</strong>
+      タイトルの語彙がライト層に届いていない。視聴者の74%は「スマブラ詳しくないライト層」なのに、
+      直近は「魂の逆転劇」「ルナマドさん」「上b空後」など抽象語・マニア用語・プレイヤー名が並んでいる。
+      過去バイラル4本は全て「カズヤ」「ゴブリンマリオ」「200%ハンデ」という<strong>具体・一般語彙</strong>だった。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 データ一覧 ============ -->
+<section id="data" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">02 · DATA</div>
+    <h2>Studio実数値 一覧</h2>
+    <p class="sec-desc">
+      直近4本＋バイラル比較動画（4/7）の主要指標。平均視聴率 100% 超 = ループ視聴発生。
+    </p>
+
+    <div class="tbl-wrap">
+      <table class="compare">
+        <thead>
+          <tr>
+            <th>日付</th><th>尺</th><th>再生数</th>
+            <th>平均視聴率</th><th>視聴継続</th><th>スワイプ</th>
+            <th>Shortsフィード</th><th>新規視聴者</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-info">バイラル</span> 4/7</td>
+            <td>45s</td>
+            <td><strong>136,242</strong></td>
+            <td>—</td><td>—</td><td>—</td><td>—</td><td>26.0%</td>
+          </tr>
+          <tr>
+            <td>4/14</td><td>25s</td><td>9,053</td>
+            <td><span class="badge badge-success">103.7%</span></td>
+            <td>62.8%</td><td>37.2%</td><td>86.9%</td><td>28.6%</td>
+          </tr>
+          <tr>
+            <td>4/16</td><td>22s</td><td>11,000</td>
+            <td><span class="badge badge-success">111.8%</span></td>
+            <td>64.7%</td><td>35.3%</td><td>89.0%</td><td>20.3%</td>
+          </tr>
+          <tr>
+            <td>4/19</td><td>43s</td><td>9,566</td>
+            <td>82.5%</td><td>52.2%</td>
+            <td><span class="badge badge-danger">47.8%</span></td>
+            <td>89.0%</td><td>—</td>
+          </tr>
+          <tr>
+            <td>4/21</td><td>56s</td>
+            <td><span class="badge badge-danger">4,799</span></td>
+            <td><span class="badge badge-danger">67.4%</span></td>
+            <td>62.4%</td><td>37.6%</td>
+            <td><span class="badge badge-danger">82.8%</span></td><td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-card">
+      <h3>📉 再生数の推移（10日窓）</h3>
+      <div class="bar-row">
+        <div class="bar-label">2月</div>
+        <div class="bar-track"><div class="bar-fill yellow" style="width:20%">29,345</div></div>
+        <div class="bar-val">29.3K</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">3/20〜</div>
+        <div class="bar-track"><div class="bar-fill green" style="width:100%">120,047</div></div>
+        <div class="bar-val">120K</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">4/1〜</div>
+        <div class="bar-track"><div class="bar-fill blue" style="width:40%">47,103</div></div>
+        <div class="bar-val">47.1K</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">4/14〜</div>
+        <div class="bar-track"><div class="bar-fill red" style="width:7%">8,638</div></div>
+        <div class="bar-val">8.6K</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 6つの発見 ============ -->
+<section id="insights">
+  <div class="container">
+    <div class="sec-num">03 · KEY INSIGHTS</div>
+    <h2>6つの決定的発見</h2>
+    <p class="sec-desc">
+      Studio実データから浮かび上がった、この低下の正体。
+    </p>
+
+    <div class="insight-grid">
+      <div class="insight-card pos">
+        <span class="letter">A</span>
+        <h3>動画の中身は衝撃的に優秀</h3>
+        <p>4/14維持率103.7% / 4/16維持率111.8%。ショートクリエイター上位5%級。<strong>直近の再生数低下は動画の質低下ではない。</strong></p>
+      </div>
+      <div class="insight-card neg">
+        <span class="letter">B</span>
+        <h3>YouTube自身が警告を出している</h3>
+        <p>「通常より1.0万減」「通常より6,733減」とStudioが明示。<strong>アルゴリズムがこのチャンネルを通常より露出していない直接の証拠。</strong></p>
+      </div>
+      <div class="insight-card neu">
+        <span class="letter">C</span>
+        <h3>直近2本で動画の質も崩れた</h3>
+        <p>平均視聴率 103.7% → 111.8% → 82.5% → 67.4%。<strong>4/19のスワイプ離脱47.8%</strong>が判定の決定打になった。</p>
+      </div>
+      <div class="insight-card neg">
+        <span class="letter">D</span>
+        <h3>Shortsフィード露出も急落</h3>
+        <p>4/21だけ86.9%→82.8%に<strong>-6.2pt</strong>。代わりにブラウジングが13.5%に上昇 = フィードから弾かれ他経路に依存し始めた。</p>
+      </div>
+      <div class="insight-card pos">
+        <span class="letter">E</span>
+        <h3>ショートで勝負はライト層で決まる</h3>
+        <p>バイラル時は男性94.3%、18-34歳60%超、<strong>ライト層73.8% / コア層0.2%</strong>。ほぼ全員がスマブラ詳しくない層。</p>
+      </div>
+      <div class="insight-card neg">
+        <span class="letter">F</span>
+        <h3>新規視聴者が直近で消えた</h3>
+        <p>4/14は28.6%、4/16は20.3%、<strong>4/19・4/21は「データ不足」で表示不能</strong>。新規リーチが実質ゼロに。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 悪循環メカニズム ============ -->
+<section id="mechanism" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">04 · MECHANISM</div>
+    <h2>悪循環メカニズム</h2>
+    <p class="sec-desc">
+      なぜ「動画は優秀なのに伸びない」が起きるのか。時系列で起きたことを追う。
+    </p>
+
+    <div class="flow-chain">
+      <div class="flow-step warn">
+        <div class="fs-date">4/14</div>
+        <div>
+          <div class="fs-body">動画◎ 維持率103.7%・視聴継続62.8%</div>
+          <div class="fs-sub">でもYouTube「通常より1万減」→ インプレッション既に弱含み</div>
+        </div>
+      </div>
+      <div class="flow-step warn">
+        <div class="fs-date">4/16</div>
+        <div>
+          <div class="fs-body">動画◎ 維持率111.8%・視聴継続64.7%</div>
+          <div class="fs-sub">でもYouTube「通常より6,733減」→ 停滞が継続</div>
+        </div>
+      </div>
+      <div class="flow-step bad">
+        <div class="fs-date">4/19</div>
+        <div>
+          <div class="fs-body">動画△ スワイプ離脱 47.8%</div>
+          <div class="fs-sub">「半数がスワイプ離脱」= アルゴリズム判定の決定打</div>
+        </div>
+      </div>
+      <div class="flow-step bad">
+        <div class="fs-date">4/21</div>
+        <div>
+          <div class="fs-body">動画× 維持率67.4% / 56秒の長尺</div>
+          <div class="fs-sub">Shortsフィード率 82.8% に急落 = 露出が絞られた</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>要するに：</strong>
+      4/14・4/16 の動画◎ がインプレッション不足でCTRを証明できず、既にアルゴリズムは露出を絞り始めていた。
+      そこに 4/19（スワイプ47.8%）、4/21（維持率67.4%・56秒長尺）が来て、
+      <strong>「このチャンネルを伸ばすのは危険」と判定が確定</strong>した。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 個別診断 ============ -->
+<section id="individual">
+  <div class="container">
+    <div class="sec-num">05 · INDIVIDUAL DIAGNOSIS</div>
+    <h2>動画別 個別診断</h2>
+    <p class="sec-desc">
+      直近4本それぞれ、Studioスクショの実データで診断。
+    </p>
+
+    <div class="video-card ok-top">
+      <div class="vc-head">
+        <div class="vc-date">4/14</div>
+        <h3>Rearletクッパ魂の逆転劇 — <span style="color:var(--gray-500); font-weight:500">9,053再生</span></h3>
+        <span class="badge badge-success">動画◎</span>
+      </div>
+      <p style="color:var(--gray-700); margin-bottom: var(--space-16)">
+        <strong>平均視聴率 103.7%でループ視聴発生。</strong>動画の完成度は最高だが、
+        タイトル「魂の逆転劇」が抽象的すぎてライト層に刺さらず、CTRが立たなかった可能性が高い。
+      </p>
+      <div class="shot-grid">
+        <div class="shot">
+          <img src="./imgs/4-14_engagement.jpg" alt="4/14 エンゲージメント">
+          <div class="shot-cap">エンゲージメント：視聴継続 62.8% / スワイプ消去 37.2%</div>
+        </div>
+        <div class="shot">
+          <img src="./imgs/4-14_reach.jpg" alt="4/14 リーチ">
+          <div class="shot-cap">リーチ：Shortsフィード 86.9% / <strong style="color:var(--danger)">通常より1.0万減少</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-card ok-top">
+      <div class="vc-head">
+        <div class="vc-date">4/16</div>
+        <h3>上b空後で逆転撃墜 — <span style="color:var(--gray-500); font-weight:500">11,000再生</span></h3>
+        <span class="badge badge-success">動画◎</span>
+      </div>
+      <p style="color:var(--gray-700); margin-bottom: var(--space-16)">
+        <strong>平均視聴率 111.8% でループ視聴発生。</strong>動画はさらに優秀。しかし「上b空後」は
+        マニア用語でライト層には意味不明。YouTubeが「通常より 6,733 減」と警告している。
+      </p>
+      <div class="shot-grid">
+        <div class="shot">
+          <img src="./imgs/4-16_engagement.jpg" alt="4/16 エンゲージメント">
+          <div class="shot-cap">エンゲージメント：視聴継続 64.7% / スワイプ消去 35.3%</div>
+        </div>
+        <div class="shot">
+          <img src="./imgs/4-16_reach.jpg" alt="4/16 リーチ">
+          <div class="shot-cap">リーチ：Shortsフィード 89.0% / <strong style="color:var(--danger)">通常より6,733減少</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-card warn-top">
+      <div class="vc-head">
+        <div class="vc-date">4/19</div>
+        <h3>ルナマドさんの大逆転即死コンボ — <span style="color:var(--gray-500); font-weight:500">9,566再生</span></h3>
+        <span class="badge badge-warning">崩壊の瞬間</span>
+      </div>
+      <p style="color:var(--gray-700); margin-bottom: var(--space-16)">
+        <strong>スワイプ離脱 47.8% = 半数が最後まで見ていない。</strong>主語が「ルナマドさん（プレイヤー名）」で
+        ライト層には響かず、43秒の中尺で冒頭フックも弱い。ここでアルゴリズムが判定を下した。
+      </p>
+      <div class="shot-grid">
+        <div class="shot">
+          <img src="./imgs/4-19_engagement.jpg" alt="4/19 エンゲージメント">
+          <div class="shot-cap">エンゲージメント：<strong style="color:var(--danger)">スワイプ離脱 47.8%</strong></div>
+        </div>
+        <div class="shot">
+          <img src="./imgs/4-19_reach.jpg" alt="4/19 リーチ">
+          <div class="shot-cap">リーチ：Shortsフィード 89.0%（まだ露出あり）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-card bad-top">
+      <div class="vc-head">
+        <div class="vc-date">4/21</div>
+        <h3>これが最強クッパRearlet — <span style="color:var(--gray-500); font-weight:500">4,799再生</span></h3>
+        <span class="badge badge-danger">露出停止</span>
+      </div>
+      <p style="color:var(--gray-700); margin-bottom: var(--space-16)">
+        <strong>56秒の長尺 × 自称系タイトル × Shortsフィード率 -6.2pt。</strong>
+        編集・タイトル・露出のすべてが負のスパイラルに入っている。平均視聴率は 67.4% まで低下。
+      </p>
+      <div class="shot-grid">
+        <div class="shot">
+          <img src="./imgs/4-21_engagement.jpg" alt="4/21 エンゲージメント">
+          <div class="shot-cap">エンゲージメント：<strong style="color:var(--danger)">平均視聴率 67.4%</strong></div>
+        </div>
+        <div class="shot">
+          <img src="./imgs/4-21_reach.jpg" alt="4/21 リーチ">
+          <div class="shot-cap">リーチ：<strong style="color:var(--danger)">Shortsフィード 82.8% に急落</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 バイラル比較 ============ -->
+<section id="viral" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">06 · VIRAL BENCHMARK</div>
+    <h2>4/7 バイラル時の視聴者像（比較基準）</h2>
+    <p class="sec-desc">
+      Rearletさんが「ショートで伸びる」と証明した回の視聴者層。これがターゲット像。
+    </p>
+
+    <div class="stat-grid">
+      <div class="stat-box info"><span class="v">136K</span><span class="l">バイラル再生数</span></div>
+      <div class="stat-box success"><span class="v">94.3%</span><span class="l">男性比率</span></div>
+      <div class="stat-box warning"><span class="v">73.8%</span><span class="l">ライト層</span></div>
+      <div class="stat-box danger"><span class="v">0.2%</span><span class="l">コア層（ファン）</span></div>
+    </div>
+
+    <div class="shot-grid">
+      <div class="shot">
+        <img src="./imgs/4-7_viewers.jpg" alt="4/7 視聴者">
+        <div class="shot-cap">視聴行動別：新規26.0% / ライト73.8% / コア0.2%</div>
+      </div>
+      <div class="shot">
+        <img src="./imgs/4-7_demographics.jpg" alt="4/7 年齢・性別">
+        <div class="shot-cap">年齢：25-34歳35% / 18-24歳26% / 13-17歳19%</div>
+      </div>
+    </div>
+
+    <div class="callout callout-success">
+      <strong>💡 重要な示唆：</strong>
+      ショートで伸びる相手は <strong>99%が非コア視聴者（≒スマブラ詳しくない人）</strong>。
+      彼らの語彙で喋らないと、タイトルを見た瞬間にスワイプされる。
+      「カズヤ」「強キャラ」「ハンデ」は通じるが、「ルナマド」「上b空後」「即死コンボ」は通じない。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 処方箋 ============ -->
+<section id="prescription">
+  <div class="container">
+    <div class="sec-num">07 · PRESCRIPTION</div>
+    <h2>具体的な処方箋</h2>
+    <p class="sec-desc">
+      今日から打てる3つのアクション。優先度順。
+    </p>
+
+    <!-- 処方箋① -->
+    <div class="card" style="border-left: 4px solid var(--primary); margin-bottom: var(--space-32);">
+      <div class="tags"><span class="tag tag--primary">#1 最優先</span></div>
+      <h3>タイトルを「ライト層語彙」に書き換える</h3>
+      <p style="margin-bottom: var(--space-16)">
+        過去バイラル 4 本は全て具体・一般語彙だった。マニア用語・プレイヤー名・抽象語は捨てる。
+      </p>
+
+      <div class="ngok-grid">
+        <div class="ngok-item ng">
+          <span class="lbl">NG（実際投稿）</span>
+          ルナマドさんの大逆転即死コンボ！？？
+        </div>
+        <div class="ngok-item ok">
+          <span class="lbl">OK（改善案）</span>
+          最強カズヤに追い詰められたクッパが一撃で返した瞬間
+        </div>
+        <div class="ngok-item ng">
+          <span class="lbl">NG</span>
+          これが最強クッパRearlet
+        </div>
+        <div class="ngok-item ok">
+          <span class="lbl">OK</span>
+          世界一クッパ vs 世界一ガノン、1分で決着
+        </div>
+        <div class="ngok-item ng">
+          <span class="lbl">NG</span>
+          Rearletクッパ魂の逆転劇！！
+        </div>
+        <div class="ngok-item ok">
+          <span class="lbl">OK</span>
+          2スト先取されたクッパがラスト30秒で逆転した試合
+        </div>
+        <div class="ngok-item ng">
+          <span class="lbl">NG</span>
+          上b空後で逆転撃墜？！！
+        </div>
+        <div class="ngok-item ok">
+          <span class="lbl">OK</span>
+          負け確定の場面でクッパが意味不明な技で勝った
+        </div>
+      </div>
+
+      <div class="callout callout-info" style="margin-top: var(--space-16)">
+        <strong>タイトル公式：</strong>
+        【強キャラ名 or 数字 or 有名人】＋【具体アクション】＋【感情フック】
+        <br><br>
+        <strong>❌ 避ける：</strong> プレイヤー名（ルナマド、へろー）／マニア技名（上b、空後、即死コンボ）／抽象語（魂、逆転劇）<br>
+        <strong>⭕ 使う：</strong> 「世界一◯◯」「最強の◯◯使い」／「意味不明な技」「ヤバい技」／具体数字（200%ハンデ、5年ぶり）
+      </div>
+    </div>
+
+    <!-- 処方箋②③ -->
+    <div class="grid-2">
+      <div class="card" style="border-left: 4px solid var(--info);">
+        <div class="tags"><span class="tag tag--info">#2</span></div>
+        <h3>尺を 30〜45 秒に固定</h3>
+        <p>バイラル4本の平均は <strong>39秒</strong>。4/21の56秒は明確にNG。編集で30秒前後まで詰める。
+        短いほど視聴維持率が出やすい。</p>
+      </div>
+      <div class="card" style="border-left: 4px solid var(--warning);">
+        <div class="tags"><span class="tag tag--warning">#3</span></div>
+        <h3>冒頭 1 秒にインパクト</h3>
+        <p>4/19のスワイプ47.8%は<strong>冒頭離脱</strong>が多い。
+        0秒時点でキルシーン or 煽りテロップを置き、「続きが気になる」状態を作る。</p>
+      </div>
+    </div>
+
+    <!-- 処方箋④ -->
+    <div class="card" style="border-left: 4px solid var(--success); margin-top: var(--space-24);">
+      <div class="tags"><span class="tag tag--success">#4</span></div>
+      <h3>「刺さる型」で2本連投して露出リブート</h3>
+      <p style="margin-bottom: var(--space-16)">
+        アルゴリズムに「伸ばすと危険」と判定されかけている現状、復活には<strong>高維持率 × 高CTR</strong>の動画を連続で出す必要がある。
+        過去バイラルから逆算した刺さる型は以下3つ。
+      </p>
+      <div class="ch-compare">
+        <div class="ch-card">
+          <div class="ch-avatar" style="background: linear-gradient(135deg, var(--accent), #FF9F43)">H</div>
+          <div class="ch-name">ハンデ縛り型</div>
+          <div class="ch-genre">「ゴブリンマリオに200%ハンデ」型</div>
+          <div class="ch-stats">
+            <div class="ch-stat-row"><span class="k">強み</span><span class="val">条件の具体性</span></div>
+            <div class="ch-stat-row"><span class="k">狙い</span><span class="val">CTR ↑</span></div>
+          </div>
+        </div>
+        <div class="ch-card">
+          <div class="ch-avatar" style="background: linear-gradient(135deg, var(--primary), var(--primary-light))">S</div>
+          <div class="ch-name">有名人×敗北型</div>
+          <div class="ch-genre">「チノスマ主催者に敗北」型</div>
+          <div class="ch-stats">
+            <div class="ch-stat-row"><span class="k">強み</span><span class="val">物語性</span></div>
+            <div class="ch-stat-row"><span class="k">狙い</span><span class="val">維持率 ↑</span></div>
+          </div>
+        </div>
+        <div class="ch-card">
+          <div class="ch-avatar" style="background: linear-gradient(135deg, var(--success), #55EFC4)">N</div>
+          <div class="ch-name">新技お披露目型</div>
+          <div class="ch-genre">「令和クッパの新即死コンボ」型</div>
+          <div class="ch-stats">
+            <div class="ch-stat-row"><span class="k">強み</span><span class="val">新規性</span></div>
+            <div class="ch-stat-row"><span class="k">狙い</span><span class="val">リピート ↑</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-warning" style="margin-top: var(--space-16)">
+        <strong>投稿ペースは一時的に 2日1本 → 1週1本 に絞る。</strong>
+        アルゴリズム圏外リスク時は量より質。高クオリティに絞る方が回復が早い。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 ロードマップ ============ -->
+<section id="roadmap" style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">08 · ROADMAP</div>
+    <h2>次のアクション</h2>
+    <p class="sec-desc">
+      タイトル改革は<strong>次の1本から</strong>すぐ始められます。
+    </p>
+
+    <div class="roadmap">
+      <div class="rm-item active">
+        <div class="rm-dot"></div>
+        <div class="rm-phase">PHASE 01 · 今日</div>
+        <h4>次の投稿を改善案タイトルで出す</h4>
+        <p>「世界一◯◯」「最強の◯◯使い」「ヤバい技」で投稿する。NGタイトル表の OK 欄を参考にそのまま使って OK。</p>
+      </div>
+      <div class="rm-item">
+        <div class="rm-dot"></div>
+        <div class="rm-phase">PHASE 02 · 今週中</div>
+        <h4>「刺さる型」で 2 本連投して露出リブート</h4>
+        <p>ハンデ縛り型 / 有名人×敗北型 / 新技お披露目型のいずれかで、高クオリティの動画を 2 本連投。アルゴリズム判定をリセット。</p>
+      </div>
+      <div class="rm-item">
+        <div class="rm-dot"></div>
+        <div class="rm-phase">PHASE 03 · 1週間後</div>
+        <h4>Studioデータを再取得して回復確認</h4>
+        <p>「通常より減少」警告が消えているか、Shortsフィード率が 89% 台に戻っているか、新規視聴者率が 25% 以上に回復しているかを確認。</p>
+      </div>
+      <div class="rm-item">
+        <div class="rm-dot"></div>
+        <div class="rm-phase">PHASE 04 · 追加取得</div>
+        <h4>4/7バイラル動画の「リーチ」「エンゲージメント」タブ</h4>
+        <p>今回取得できなかったデータ。追加でもらえれば、バイラル基準（Shortsフィード率・視聴継続率・平均視聴率）と直近の差分が数値で出せる。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONCLUSION ============ -->
+<section>
+  <div class="container">
+    <div class="conclusion">
+      <h2>結論（5点まとめ）</h2>
+      <p style="font-size: var(--font-lg); margin-bottom: var(--space-32);">
+        動画の中身は問題ない。むしろ上位5%級。<br>
+        問題はタイトルで、アルゴリズム露出の悪循環に入っている。<br>
+        タイトル改革＋尺30-45秒＋2本連投で、相当回復できる。
+      </p>
+
+      <div style="max-width: 640px; margin: 0 auto; text-align: left; display: grid; gap: var(--space-12);">
+        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #55EFC4">① 動画の質は問題なし。4/14・4/16は上位5%級に優秀</div>
+        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #FFD580">② 問題はタイトルとアルゴリズム露出の悪循環</div>
+        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #FAB1A0">③ 4/19のスワイプ47.8%と4/21の56秒が判定決定打</div>
+        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #A29BFE">④ 回復はタイトル改革＋尺30-45秒＋2本連投で可能</div>
+        <div style="padding: var(--space-12) var(--space-16); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); border-left: 3px solid #74B9FF">⑤ サムネ放置でもタイトル改革だけで相当回復する見込み</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div style="max-width: 720px; margin: 0 auto;">
+    <p style="margin-bottom: var(--space-16)">
+      <strong>Rearlet ショート診断レポート</strong><br>
+      分析期間：2026/01/30 〜 2026/04/21 ／ データ源：YouTube Studio 実スクショ 18 枚
+    </p>
+    <p style="margin-bottom: var(--space-16)">
+      関連ファイル：<br>
+      <code>company/projects/rearlet_analysis/shorts_data/</code> — Raw データ<br>
+      <code>company/projects/rearlet_analysis/shorts_diagnosis_v2.md</code> — Markdown 版<br>
+      <code>~/Downloads/Rearlet_ショート診断レポート.pdf</code> — A4 縦 PDF
+    </p>
+    <p style="opacity: 0.6; font-size: 12px; margin-top: var(--space-32);">
+      © 2026 サポートライン ／ 作成者: 中嶋
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
