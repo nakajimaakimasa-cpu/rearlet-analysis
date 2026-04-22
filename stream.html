@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配信診断レポート ── Rearlet 30配信の全件分析と打ち手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#0E7490;
+  --primary-light:#E0F2FE;
+  --accent:#14B8A6;
+  --accent-2:#6C5CE7;
+  --success:#10B981;
+  --warning:#F59E0B;
+  --danger:#EF4444;
+  --gray-100:#F8FAFC;
+  --gray-200:#E2E8F0;
+  --gray-300:#CBD5E1;
+  --gray-400:#94A3B8;
+  --gray-500:#64748B;
+  --gray-600:#475569;
+  --gray-700:#334155;
+  --gray-800:#1E293B;
+  --gray-900:#0F172A;
+  --font-xs:12px; --font-sm:14px; --font-base:16px; --font-lg:18px;
+  --font-xl:22px; --font-2xl:28px; --font-3xl:36px; --font-4xl:48px; --font-5xl:60px;
+  --space-4:4px; --space-8:8px; --space-12:12px; --space-16:16px;
+  --space-20:20px; --space-24:24px; --space-32:32px; --space-48:48px; --space-64:64px; --space-96:96px;
+  --radius-sm:4px; --radius-md:8px; --radius-lg:12px; --radius-xl:20px;
+  --shadow:0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+}
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family:'Noto Sans JP',-apple-system,sans-serif;
+  font-size:var(--font-base);
+  line-height:1.7;
+  color:var(--gray-800);
+  background:var(--gray-100);
+  -webkit-font-smoothing:antialiased;
+}
+.container { max-width:1120px; margin:0 auto; padding:0 var(--space-24); }
+section { padding:var(--space-64) 0; }
+.nav {
+  position:sticky; top:0; z-index:100;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--gray-200);
+  padding:12px 0;
+}
+.nav-inner { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.nav-title { font-family:'Inter',sans-serif; font-weight:900; font-size:14px; letter-spacing:1px; color:var(--primary); }
+.nav-links { display:flex; gap:4px; flex-wrap:wrap; }
+.nav-links a {
+  font-size:12px; padding:6px 12px; border-radius:100px;
+  color:var(--gray-600); text-decoration:none; font-weight:600;
+}
+.nav-links a:hover { background:var(--gray-100); color:var(--primary); }
+.nav-links a.home { background:var(--primary); color:white; }
+.nav-links a.home:hover { background:#0369A1; color:white; }
+
+/* HERO */
+.hero {
+  background:linear-gradient(135deg,#0E7490 0%,#0C4A6E 50%,#0F172A 100%);
+  color:white; padding:var(--space-96) 0 var(--space-64);
+}
+.hero .meta-row {
+  display:flex; gap:var(--space-12); margin-bottom:var(--space-24);
+  font-family:'Inter',sans-serif; font-size:11px; letter-spacing:2px;
+}
+.hero .meta-chip {
+  background:rgba(255,255,255,0.15); padding:4px 12px; border-radius:100px;
+  color:rgba(255,255,255,0.95); font-weight:700;
+}
+.hero h1 {
+  font-size:var(--font-4xl); font-weight:900; line-height:1.2;
+  margin-bottom:var(--space-24);
+}
+@media (max-width:768px) { .hero h1 { font-size:var(--font-3xl); } }
+.hero .subtitle {
+  font-size:var(--font-lg); color:rgba(255,255,255,0.92); max-width:800px;
+  line-height:1.8; margin-bottom:var(--space-48);
+}
+.hero-stats {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-20);
+}
+@media (max-width:900px) { .hero-stats { grid-template-columns:repeat(2,1fr); } }
+.hero-stat { background:rgba(255,255,255,0.1); padding:var(--space-20); border-radius:var(--radius-lg); backdrop-filter:blur(10px); }
+.hero-stat .lbl { font-size:11px; letter-spacing:1.5px; color:rgba(255,255,255,0.75); font-weight:700; margin-bottom:6px; }
+.hero-stat .val { font-family:'Inter',sans-serif; font-size:var(--font-2xl); font-weight:900; color:white; line-height:1.1; }
+.hero-stat .note { font-size:11px; color:rgba(255,255,255,0.8); margin-top:6px; }
+
+/* Sections */
+.sec-num {
+  font-family:'Inter',sans-serif; font-size:12px; letter-spacing:2.5px;
+  color:var(--primary); font-weight:800; margin-bottom:var(--space-12);
+}
+h2 {
+  font-size:var(--font-3xl); font-weight:900; line-height:1.3;
+  color:var(--gray-900); margin-bottom:var(--space-16);
+}
+h3 {
+  font-size:var(--font-xl); font-weight:800;
+  color:var(--gray-900); margin-bottom:var(--space-12);
+}
+@media (max-width:768px) { h2 { font-size:var(--font-2xl); } }
+.sec-desc {
+  font-size:var(--font-base); color:var(--gray-700); line-height:1.9;
+  max-width:800px; margin-bottom:var(--space-32);
+}
+.callout {
+  padding:var(--space-20) var(--space-24); border-radius:var(--radius-lg);
+  margin:var(--space-24) 0; border-left:4px solid;
+}
+.callout-info { background:var(--primary-light); border-left-color:var(--primary); }
+.callout-success { background:#ECFDF5; border-left-color:var(--success); }
+.callout-warning { background:#FEF3C7; border-left-color:var(--warning); }
+.callout-danger { background:#FEE2E2; border-left-color:var(--danger); }
+
+/* 月別タイムライン */
+.timeline {
+  display:flex; gap:var(--space-8); overflow-x:auto; padding:var(--space-16) 0;
+}
+.tl-month {
+  min-width:120px; flex:1;
+  background:white; border-radius:var(--radius-lg); padding:var(--space-16);
+  box-shadow:var(--shadow); text-align:center;
+}
+.tl-month.bang { border-top:3px solid var(--accent); }
+.tl-label { font-family:'Inter',sans-serif; font-size:11px; letter-spacing:1.5px; color:var(--gray-600); font-weight:700; }
+.tl-count { font-family:'Inter',sans-serif; font-size:24px; font-weight:900; color:var(--gray-900); line-height:1.2; }
+.tl-avg { font-size:11px; color:var(--gray-600); margin-top:4px; }
+.tl-bar {
+  margin-top:var(--space-8);
+  width:100%; height:60px; background:var(--gray-100); border-radius:4px;
+  position:relative; display:flex; align-items:flex-end; justify-content:center;
+}
+.tl-bar .fill {
+  background:linear-gradient(180deg,var(--accent) 0%,var(--primary) 100%);
+  border-radius:4px 4px 0 0; width:60%;
+}
+
+/* Video table */
+.vtable-wrap { overflow-x:auto; border-radius:var(--radius-lg); box-shadow:var(--shadow-md); background:white; }
+.vtable { width:100%; border-collapse:collapse; min-width:880px; }
+.vtable thead { background:var(--gray-100); border-bottom:2px solid var(--gray-300); }
+.vtable th {
+  padding:var(--space-12) var(--space-16); text-align:left;
+  font-family:'Inter',sans-serif; font-size:11px; letter-spacing:1.5px;
+  color:var(--gray-700); font-weight:700; text-transform:uppercase;
+}
+.vtable th.num, .vtable td.num { text-align:right; font-variant-numeric:tabular-nums; }
+.vtable td { padding:var(--space-12) var(--space-16); border-bottom:1px solid var(--gray-200); font-size:var(--font-sm); color:var(--gray-700); }
+.vtable tbody tr:hover { background:var(--gray-100); }
+.vtable .rank { font-family:'Inter',sans-serif; font-weight:900; color:var(--gray-400); }
+.vtable .rank.gold { color:#F59E0B; }
+.vtable .rank.silver { color:#94A3B8; }
+.vtable .rank.bronze { color:#D97706; }
+.vtable .view { font-family:'Inter',sans-serif; font-weight:800; color:var(--gray-900); }
+.vtable .view.high { color:var(--success); }
+.vtable .title { color:var(--gray-900); font-weight:500; max-width:420px; }
+.badge {
+  display:inline-block; font-family:'Inter','Noto Sans JP',sans-serif;
+  font-size:10px; font-weight:700; letter-spacing:0.5px;
+  padding:2px 8px; border-radius:100px; color:white;
+}
+.badge.t-coll { background:#6C5CE7; }
+.badge.t-vip { background:#10B981; }
+.badge.t-end { background:#0EA5E9; }
+.badge.t-chino { background:#94A3B8; }
+.badge.t-mate { background:#F59E0B; }
+.badge.t-tour { background:#EF4444; }
+.badge.t-misc { background:#CBD5E1; color:var(--gray-700); }
+
+/* ヒートマップ */
+.heatmap {
+  display:grid; grid-template-columns:48px repeat(24,1fr); gap:2px;
+  background:white; padding:var(--space-16); border-radius:var(--radius-lg); box-shadow:var(--shadow-md);
+}
+.hm-head, .hm-row-head { font-family:'Inter',sans-serif; font-size:10px; color:var(--gray-500); font-weight:700; text-align:center; padding:4px 0; }
+.hm-row-head { text-align:right; padding-right:8px; }
+.hm-cell { aspect-ratio:1; border-radius:3px; background:var(--gray-100); position:relative; }
+.hm-cell[data-c="1"] { background:#BAE6FD; }
+.hm-cell[data-c="2"] { background:#38BDF8; }
+.hm-cell[data-c="3"] { background:#0369A1; }
+.hm-cell[data-c="4"] { background:#0C4A6E; }
+.hm-cell[data-c="5"] { background:#0F172A; }
+.hm-cell:hover::after {
+  content:attr(data-n) "本"; position:absolute; bottom:100%; left:50%;
+  transform:translateX(-50%); background:var(--gray-900); color:white;
+  font-size:10px; padding:2px 6px; border-radius:3px; white-space:nowrap;
+}
+
+/* Type grid */
+.type-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-16); }
+@media (max-width:900px) { .type-grid { grid-template-columns:1fr; } }
+.type-card {
+  background:white; border-radius:var(--radius-lg); padding:var(--space-24);
+  box-shadow:var(--shadow-md); border-top:4px solid;
+}
+.type-card .name { font-size:var(--font-lg); font-weight:800; color:var(--gray-900); margin-bottom:var(--space-8); }
+.type-card .metrics { display:flex; gap:var(--space-16); margin-bottom:var(--space-16); flex-wrap:wrap; }
+.type-card .m { }
+.type-card .m .v { font-family:'Inter',sans-serif; font-size:22px; font-weight:900; color:var(--gray-900); line-height:1.1; }
+.type-card .m .l { font-size:10px; color:var(--gray-500); letter-spacing:1px; font-weight:700; }
+.type-card .verdict { font-size:var(--font-sm); line-height:1.7; color:var(--gray-700); padding:var(--space-12); background:var(--gray-100); border-radius:8px; }
+
+/* Duration bars */
+.dur-bars { display:flex; flex-direction:column; gap:var(--space-12); }
+.dur-row {
+  display:grid; grid-template-columns:80px 1fr 120px; gap:var(--space-16);
+  align-items:center; padding:var(--space-12) var(--space-16);
+  background:white; border-radius:var(--radius-lg); box-shadow:var(--shadow);
+}
+.dur-label { font-family:'Inter',sans-serif; font-weight:800; color:var(--gray-900); }
+.dur-bar { height:24px; background:var(--gray-100); border-radius:4px; overflow:hidden; }
+.dur-bar .fill { height:100%; background:linear-gradient(90deg,var(--accent) 0%,var(--primary) 100%); border-radius:4px; display:flex; align-items:center; padding-left:12px; font-size:11px; color:white; font-weight:700; }
+.dur-meta { font-size:var(--font-sm); color:var(--gray-600); text-align:right; }
+
+/* Title rewrite */
+.ttl-rewrite { display:flex; flex-direction:column; gap:var(--space-20); }
+.ttl-item {
+  display:grid; grid-template-columns:1fr 60px 1fr;
+  gap:var(--space-16); align-items:center;
+}
+@media (max-width:900px) { .ttl-item { grid-template-columns:1fr; } .ttl-arrow { transform:rotate(90deg); text-align:center; } }
+.ttl-side { background:white; padding:var(--space-20); border-radius:var(--radius-lg); box-shadow:var(--shadow); border-left:4px solid var(--gray-400); }
+.ttl-side.after { border-left-color:var(--success); }
+.ttl-tag { font-family:'Inter',sans-serif; font-size:10px; letter-spacing:1.5px; color:var(--gray-600); font-weight:700; margin-bottom:8px; }
+.ttl-side.after .ttl-tag { color:var(--success); }
+.ttl-text { font-size:var(--font-base); font-weight:700; color:var(--gray-900); line-height:1.5; margin-bottom:8px; }
+.ttl-meta { font-size:var(--font-xs); color:var(--gray-500); line-height:1.6; }
+.ttl-issues { display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; }
+.ttl-issue { font-size:10px; padding:2px 8px; border-radius:100px; background:#FEE2E2; color:var(--danger); font-weight:700; }
+.ttl-arrow { font-size:28px; color:var(--primary); font-weight:900; text-align:center; }
+
+/* KEN/acola Top list */
+.bench-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-24); }
+@media (max-width:900px) { .bench-grid { grid-template-columns:1fr; } }
+.bench-card { background:white; border-radius:var(--radius-lg); box-shadow:var(--shadow-md); overflow:hidden; }
+.bench-head { padding:var(--space-20); background:linear-gradient(135deg,#0E7490,#0C4A6E); color:white; }
+.bench-head h4 { font-family:'Inter',sans-serif; font-weight:900; color:white; font-size:var(--font-xl); }
+.bench-head .sub { font-size:11px; letter-spacing:1.5px; color:rgba(255,255,255,0.85); margin-top:4px; font-weight:700; }
+.bench-list { padding:var(--space-12) 0; }
+.bench-item { padding:var(--space-12) var(--space-20); border-bottom:1px solid var(--gray-200); display:grid; grid-template-columns:24px 80px 1fr; gap:var(--space-12); align-items:center; }
+.bench-item:last-child { border-bottom:0; }
+.bench-item .br { font-family:'Inter',sans-serif; font-weight:900; color:var(--gray-400); text-align:center; }
+.bench-item .bv { font-family:'Inter',sans-serif; font-weight:900; color:var(--gray-900); font-size:var(--font-sm); text-align:right; }
+.bench-item .bt { font-size:var(--font-sm); color:var(--gray-700); line-height:1.4; }
+
+/* Actions */
+.actions-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-20); }
+@media (max-width:900px) { .actions-grid { grid-template-columns:1fr; } }
+.action-card { background:white; border-radius:var(--radius-lg); box-shadow:var(--shadow-md); padding:var(--space-24); position:relative; border-top:4px solid var(--primary); }
+.action-card.primary { border-top-color:var(--accent); }
+.action-num { position:absolute; top:var(--space-16); right:var(--space-20); font-family:'Inter',sans-serif; font-weight:900; font-size:28px; color:var(--gray-200); }
+.action-card h4 { font-size:var(--font-lg); font-weight:800; color:var(--gray-900); margin-bottom:var(--space-12); padding-right:50px; }
+.action-impact { display:inline-block; font-size:10px; font-weight:700; padding:3px 10px; border-radius:100px; background:var(--accent); color:white; letter-spacing:1px; margin-bottom:var(--space-12); }
+.action-impact.med { background:var(--warning); }
+.action-impact.small { background:var(--gray-400); }
+.action-card p { font-size:var(--font-sm); color:var(--gray-700); line-height:1.8; margin-bottom:var(--space-12); }
+.action-card .how { font-size:var(--font-sm); color:var(--gray-700); line-height:1.8; padding:var(--space-12); background:var(--gray-100); border-radius:8px; }
+.action-card .how strong { color:var(--primary); }
+
+/* 30日プラン */
+.plan-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-16); }
+@media (max-width:900px) { .plan-grid { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:600px) { .plan-grid { grid-template-columns:1fr; } }
+.week-card { background:white; border-radius:var(--radius-lg); box-shadow:var(--shadow-md); padding:var(--space-20); border-top:4px solid var(--primary); }
+.week-card.w4 { border-top-color:var(--success); }
+.week-lbl { font-family:'Inter',sans-serif; font-size:11px; letter-spacing:2px; color:var(--primary); font-weight:900; margin-bottom:var(--space-4); }
+.week-card.w4 .week-lbl { color:var(--success); }
+.week-title { font-size:var(--font-base); font-weight:800; color:var(--gray-900); margin-bottom:var(--space-12); line-height:1.4; }
+.week-list { font-size:var(--font-xs); color:var(--gray-700); line-height:1.8; list-style:none; }
+.week-list li { padding-left:14px; position:relative; margin-bottom:6px; }
+.week-list li::before { content:'▸'; position:absolute; left:0; color:var(--primary); }
+.week-card.w4 .week-list li::before { color:var(--success); }
+
+footer { padding:var(--space-48) 0; background:var(--gray-900); color:white; text-align:center; }
+footer .t { font-family:'Inter',sans-serif; font-weight:900; font-size:var(--font-lg); color:white; margin-bottom:var(--space-8); }
+footer .s { color:rgba(255,255,255,0.6); font-size:var(--font-sm); }
+</style>
+</head>
+<body>
+<div class="nav"><div class="container nav-inner">
+  <div class="nav-title">REARLET · STREAM REPORT</div>
+  <div class="nav-links">
+    <a href="#sum">サマリー</a>
+    <a href="#tl">タイムライン</a>
+    <a href="#all30">全30本</a>
+    <a href="#heat">時間帯</a>
+    <a href="#type">タイプ別</a>
+    <a href="#dur">尺</a>
+    <a href="#title">タイトル</a>
+    <a href="#bench">ベンチマーク</a>
+    <a href="#act">打ち手</a>
+    <a href="#plan">30日プラン</a>
+    <a href="index.html" class="home">Shorts版へ</a>
+  </div>
+</div></div>
+
+<header class="hero">
+  <div class="container">
+    <div class="meta-row">
+      <span class="meta-chip">LIVE STREAM DIAGNOSIS</span>
+      <span class="meta-chip">DATA · 30 ARCHIVES</span>
+      <span class="meta-chip">PERIOD · 7 MONTHS</span>
+    </div>
+    <h1>配信だけを、見つめ直す。<br>30本の実データが語ること。</h1>
+    <p class="subtitle">
+      Rearletさんの直近30配信（2025年9月〜2026年4月・約7ヶ月）を全件分解。
+      タイトル・曜日・時間帯・尺・タイプ別成果を、KEN・あcola・アカキクスの上位配信と突き合わせて、
+      「配信だけで登録者と同接を伸ばす」ための打ち手を組み立てます。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="lbl">配信本数</div>
+        <div class="val">30</div>
+        <div class="note">直近7ヶ月</div>
+      </div>
+      <div class="hero-stat">
+        <div class="lbl">総配信時間</div>
+        <div class="val">58h</div>
+        <div class="note">中央 114分/本</div>
+      </div>
+      <div class="hero-stat">
+        <div class="lbl">中央再生数</div>
+        <div class="val">807</div>
+        <div class="note">最高 16,380</div>
+      </div>
+      <div class="hero-stat">
+        <div class="lbl">登録者比</div>
+        <div class="val">79<span style="font-size:18px;">%</span></div>
+        <div class="note">1,140人に対する中央再生</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- SUMMARY -->
+<section id="sum">
+  <div class="container">
+    <div class="sec-num">§1 · SUMMARY</div>
+    <h2>配信の「現在地」は、悪くない。</h2>
+    <p class="sec-desc">
+      登録者1,140に対して配信の中央再生898（約79%）は、他のスマブラ系配信者と比べてトップクラスの数値です。
+      登録者比で同じ数字が出せているのは、既に配信してる人がRearletさんの試合をちゃんと見てくれている証拠。
+      問題は「配信にたどり着く人の数」であって、「配信の質」ではありません。
+    </p>
+
+    <div class="callout callout-success">
+      <strong>3/20のShorts 31万バイラル以降、配信の再生も明確に上振れ。</strong><br>
+      11月以前は配信中央再生400〜900 → 3月以降は平均2,500前後・最高16,380。
+      Shorts → 配信の導線は実データで確認済みです。<br>
+      逆に言えば、配信の設計を整えれば、この波に乗って登録者を一気に伸ばせるタイミングです。
+    </p>
+  </div>
+</section>
+
+<!-- タイムライン -->
+<section id="tl" style="background:white;">
+  <div class="container">
+    <div class="sec-num">§2 · TIMELINE</div>
+    <h2>7ヶ月の月別推移 ── 3月が転換点</h2>
+    <p class="sec-desc">
+      月別の配信本数と平均再生数を並べると、2026年3月を境に明らかな変化が見えます。
+      それ以前は月1〜3本・平均500再生前後。3月以降は月5〜8本・平均2,500再生前後。
+      <strong>Shortsのバイラル（3/20）と配信の伸びは連動しています。</strong>
+    </p>
+    <div class="timeline"><div class="tl-month"><div class="tl-label">2025/09</div><div class="tl-count">1<span style="font-size:12px;color:var(--gray-500);">本</span></div><div class="tl-avg">平均 351</div><div class="tl-bar"><div class="fill" style="height:8%;"></div></div></div><div class="tl-month"><div class="tl-label">2025/11</div><div class="tl-count">6<span style="font-size:12px;color:var(--gray-500);">本</span></div><div class="tl-avg">平均 448</div><div class="tl-bar"><div class="fill" style="height:10%;"></div></div></div><div class="tl-month"><div class="tl-label">2025/12</div><div class="tl-count">3<span style="font-size:12px;color:var(--gray-500);">本</span></div><div class="tl-avg">平均 573</div><div class="tl-bar"><div class="fill" style="height:12%;"></div></div></div><div class="tl-month"><div class="tl-label">2026/01</div><div class="tl-count">1<span style="font-size:12px;color:var(--gray-500);">本</span></div><div class="tl-avg">平均 717</div><div class="tl-bar"><div class="fill" style="height:15%;"></div></div></div><div class="tl-month"><div class="tl-label">2026/02</div><div class="tl-count">1<span style="font-size:12px;color:var(--gray-500);">本</span></div><div class="tl-avg">平均 591</div><div class="tl-bar"><div class="fill" style="height:13%;"></div></div></div><div class="tl-month bang"><div class="tl-label">2026/03</div><div class="tl-count">8<span style="font-size:12px;color:var(--gray-500);">本</span></div><div class="tl-avg">平均 2,252</div><div class="tl-bar"><div class="fill" style="height:48%;"></div></div></div><div class="tl-month bang"><div class="tl-label">2026/04</div><div class="tl-count">10<span style="font-size:12px;color:var(--gray-500);">本</span></div><div class="tl-avg">平均 4,665</div><div class="tl-bar"><div class="fill" style="height:100%;"></div></div></div>
+    </div>
+    <div class="callout callout-info" style="margin-top:var(--space-32);">
+      <strong>読み方：</strong>
+      9〜12月は月2〜3本で平均500再生以下の「冬眠期」。1〜2月は月1本に減少。
+      <strong>3月から月5本以上に増え、4月は8本・平均4,000再生超。</strong>
+      配信頻度を上げた + Shortsからの流入が重なって、加速フェーズに入っています。
+      このまま型を整えて配信本数を維持できれば、5月も上げ止まらない可能性が高い。
+    </div>
+  </div>
+</section>
+
+<!-- §3 全30本 -->
+<section id="all30">
+  <div class="container">
+    <div class="sec-num">§3 · ALL 30 STREAMS</div>
+    <h2>30配信の完全ランキング（再生数順）</h2>
+    <p class="sec-desc">
+      タイプ別バッジで一目で分かるように並べました。トップ10のうち<strong>コラボ型が2本・連勝耐久が2本・チノスマが3本・振り返り系が3本</strong>。
+      「コラボ」と「連勝耐久」は本数が少ないのにトップ10入り率が高い = 1本あたりの効率が良いタイプです。
+    </p><div class="vtable-wrap"><table class="vtable"><thead><tr><th class="num">#</th><th>配信日</th><th class="num">再生</th><th class="num">尺</th><th>タイプ</th><th>タイトル</th></tr></thead><tbody><tr><td class="num rank gold">1</td><td style="white-space:nowrap;font-size:12px;">4/2(木) 20:00</td><td class="num view high">16,380</td><td class="num">240分</td><td><span class="badge t-coll">コラボ</span></td><td class="title">【激熱！】へろークッパと2on2出るよ！！！！【スマブラSP】</td></tr><tr><td class="num rank silver">2</td><td style="white-space:nowrap;font-size:12px;">4/15(水) 21:03</td><td class="num view high">5,576</td><td class="num">142分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">【激熱！】全一クッパがチノスマ優勝狙うよ！【スマブラSP】</td></tr><tr><td class="num rank bronze">3</td><td style="white-space:nowrap;font-size:12px;">4/21(火) 15:23</td><td class="num view high">5,500</td><td class="num">110分</td><td><span class="badge t-end">連勝耐久</span></td><td class="title">【激アツ】全一クッパによるVIP連勝！スマブラSP】</td></tr><tr><td class="num rank">4</td><td style="white-space:nowrap;font-size:12px;">3/23(月) 21:32</td><td class="num view high">5,207</td><td class="num">191分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">【スマブラSP】全1クッパがチノスマ優勝狙うで！</td></tr><tr><td class="num rank">5</td><td style="white-space:nowrap;font-size:12px;">3/30(月) 21:18</td><td class="num view high">5,060</td><td class="num">155分</td><td><span class="badge t-end">連勝耐久</span></td><td class="title">【スマブラSP】全一クッパが負けたら終わりVIP連勝をします</td></tr><tr><td class="num rank">6</td><td style="white-space:nowrap;font-size:12px;">4/7(火) 21:04</td><td class="num view">4,953</td><td class="num">189分</td><td><span class="badge t-misc">雑談/振返</span></td><td class="title">【激熱！】全一クッパが桜梅桃李の振り返りをやるよ！【スマブラSP】</td></tr><tr><td class="num rank">7</td><td style="white-space:nowrap;font-size:12px;">4/1(水) 21:20</td><td class="num view">3,974</td><td class="num">57分</td><td><span class="badge t-misc">雑談/振返</span></td><td class="title">【スマブラSP】かかってこい！みんな相手するわ！</td></tr><tr><td class="num rank">8</td><td style="white-space:nowrap;font-size:12px;">3/24(火) 20:30</td><td class="num view">3,628</td><td class="num">103分</td><td><span class="badge t-coll">コラボ</span></td><td class="title">【スマブラSP】ゴブリンさんと10先するよ！！！</td></tr><tr><td class="num rank">9</td><td style="white-space:nowrap;font-size:12px;">4/19(日) 21:07</td><td class="num view">3,477</td><td class="num">130分</td><td><span class="badge t-misc">雑談/振返</span></td><td class="title">【激アツ】全一クッパがレート2200目指す【スマブラSP】</td></tr><tr><td class="num rank">10</td><td style="white-space:nowrap;font-size:12px;">4/21(火) 22:06</td><td class="num view">2,674</td><td class="num">159分</td><td><span class="badge t-end">連勝耐久</span></td><td class="title">【激アツ】全一クッパによるVIP連勝！スマブラSP】</td></tr><tr><td class="num rank">11</td><td style="white-space:nowrap;font-size:12px;">4/13(月) 22:28</td><td class="num view">2,170</td><td class="num">105分</td><td><span class="badge t-coll">コラボ</span></td><td class="title">【激熱！】わたるさんとスマバト振り返るよ！！【スマブラSP】</td></tr><tr><td class="num rank">12</td><td style="white-space:nowrap;font-size:12px;">4/16(木) 20:02</td><td class="num view">1,851</td><td class="num">141分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">【超神回】へろーさんとルナマドさんでチノスマ3on3！！【スマブラSP】</td></tr><tr><td class="num rank">13</td><td style="white-space:nowrap;font-size:12px;">3/22(日) 21:04</td><td class="num view">1,643</td><td class="num">121分</td><td><span class="badge t-misc">雑談/振返</span></td><td class="title">【スマブラSP】クッパのコンボ解説するで！</td></tr><tr><td class="num rank">14</td><td style="white-space:nowrap;font-size:12px;">12/10(水) 21:55</td><td class="num view">1,034</td><td class="num">165分</td><td><span class="badge t-misc">雑談/振返</span></td><td class="title">【スマブラSP】クッパのキャラパワーについて議論をする</td></tr><tr><td class="num rank">15</td><td style="white-space:nowrap;font-size:12px;">11/27(木) 20:02</td><td class="num view">898</td><td class="num">115分</td><td><span class="badge t-misc">雑談/振返</span></td><td class="title">【スマブラSP】最強の3人でリベンジ！！</td></tr><tr><td class="num rank">16</td><td style="white-space:nowrap;font-size:12px;">1/14(水) 21:15</td><td class="num view">717</td><td class="num">114分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">【スマブラSP】久しぶりのチノスマ優勝したよ！！</td></tr><tr><td class="num rank">17</td><td style="white-space:nowrap;font-size:12px;">3/23(月) 21:00</td><td class="num view">668</td><td class="num">31分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">【スマブラSP】全1クッパがチノスマ優勝狙うで！</td></tr><tr><td class="num rank">18</td><td style="white-space:nowrap;font-size:12px;">11/13(木) 20:04</td><td class="num view">643</td><td class="num">83分</td><td><span class="badge t-misc">雑談/振返</span></td><td class="title">【スマブラSP】最強の3人で3on3！！！</td></tr><tr><td class="num rank">19</td><td style="white-space:nowrap;font-size:12px;">3/10(火) 21:31</td><td class="num view">612</td><td class="num">115分</td><td><span class="badge t-tour">大会</span></td><td class="title">【スマブラSP】久しぶりにマエスマ出るでー</td></tr><tr><td class="num rank">20</td><td style="white-space:nowrap;font-size:12px;">3/27(金) 21:00</td><td class="num view">604</td><td class="num">169分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">【スマブラSP】全一クッパがチノスマリベンジ！</td></tr><tr><td class="num rank">21</td><td style="white-space:nowrap;font-size:12px;">3/25(水) 21:18</td><td class="num view">600</td><td class="num">178分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">【スマブラSP】チノスマ本気で優勝狙うで！！→メイト</td></tr><tr><td class="num rank">22</td><td style="white-space:nowrap;font-size:12px;">2/11(水) 21:08</td><td class="num view">591</td><td class="num">62分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">【スマブラSP】チノスマ出るよ～</td></tr><tr><td class="num rank">23</td><td style="white-space:nowrap;font-size:12px;">11/20(木) 20:28</td><td class="num view">544</td><td class="num">109分</td><td><span class="badge t-mate">スマメイト</span></td><td class="title">【スマブラSP】2000は行きたいスマメイト！→誰でも参加型！</td></tr><tr><td class="num rank">24</td><td style="white-space:nowrap;font-size:12px;">12/22(月) 22:09</td><td class="num view">390</td><td class="num">84分</td><td><span class="badge t-misc">雑談/振返</span></td><td class="title">【スマブラSP】桜梅桃李お疲れ様でした！試合を振り返っていきます！</td></tr><tr><td class="num rank">25</td><td style="white-space:nowrap;font-size:12px;">9/26(金) 20:45</td><td class="num view">351</td><td class="num">35分</td><td><span class="badge t-mate">スマメイト</span></td><td class="title">【スマブラSPクッパ】少しメイト</td></tr><tr><td class="num rank">26</td><td style="white-space:nowrap;font-size:12px;">12/22(月) 21:03</td><td class="num view">295</td><td class="num">60分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">【スマブラSP】振り返りの前にチノスマ優勝するわ</td></tr><tr><td class="num rank">27</td><td style="white-space:nowrap;font-size:12px;">11/5(水) 21:24</td><td class="num view">238</td><td class="num">109分</td><td><span class="badge t-chino">チノスマ</span></td><td class="title">神になるためにチノスマを優勝する！</td></tr><tr><td class="num rank">28</td><td style="white-space:nowrap;font-size:12px;">11/3(月) 23:16</td><td class="num view">213</td><td class="num">104分</td><td><span class="badge t-tour">大会</span></td><td class="title">篝火お疲れ様！試合の振り返りと、今後について話す</td></tr><tr><td class="num rank">29</td><td style="white-space:nowrap;font-size:12px;">11/6(木) 20:47</td><td class="num view">156</td><td class="num">98分</td><td><span class="badge t-mate">スマメイト</span></td><td class="title">【スマブラSP】おまかせ杯→少しメイト</td></tr><tr><td class="num rank">30</td><td style="white-space:nowrap;font-size:12px;">4/22(水) 21:04</td><td class="num view">99</td><td class="num">?</td><td><span class="badge t-tour">大会</span></td><td class="title">【激アツ】全一クッパによる大会優勝を狙う配信スマブラSP】 2026-04-22 21:36</td></tr></tbody></table></div>
+    <div class="callout callout-warning" style="margin-top:var(--space-24);">
+      <strong>目立つ観察：</strong>
+      1位「へろークッパと2on2」16,380は <strong>コラボ×大会前哨戦×2on2</strong> の3条件揃い踏み。
+      4位・5位の「VIP連勝」はシンプルなフォーマットで5,500前後。
+      一方で <strong>チノスマ配信10本中、5,000再生超は2本のみ</strong>。
+      タイトルが毎回ほぼ同じ（「全一クッパがチノスマ優勝狙うで！」）なのでアルゴリズム上区別されにくい。ここが改善の最大余白です。
+    </div>
+  </div>
+</section>
+
+<!-- §4 HEATMAP -->
+<section id="heat" style="background:white;">
+  <div class="container">
+    <div class="sec-num">§4 · DAY × TIME</div>
+    <h2>曜日 × 時間帯ヒートマップ</h2>
+    <p class="sec-desc">
+      30配信を曜日×時刻でプロット。<strong>水・月・火・木に集中 / 土日がほぼ空白</strong>、時間は21時台が57%を占めます。
+      他のスマブラ系配信者（KEN、あcola）も19〜21時帯が中心なので、配信数密度が高い時間帯で戦っている状態です。
+    </p>
+    <div class="heatmap">
+      <div class="hm-head"></div><div class="hm-head">00</div><div class="hm-head">01</div><div class="hm-head">02</div><div class="hm-head">03</div><div class="hm-head">04</div><div class="hm-head">05</div><div class="hm-head">06</div><div class="hm-head">07</div><div class="hm-head">08</div><div class="hm-head">09</div><div class="hm-head">10</div><div class="hm-head">11</div><div class="hm-head">12</div><div class="hm-head">13</div><div class="hm-head">14</div><div class="hm-head">15</div><div class="hm-head">16</div><div class="hm-head">17</div><div class="hm-head">18</div><div class="hm-head">19</div><div class="hm-head">20</div><div class="hm-head">21</div><div class="hm-head">22</div><div class="hm-head">23</div><div class="hm-row-head">月</div><div class="hm-cell" data-c="0" data-n="0" title="月曜0時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜1時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜2時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜3時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜4時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜5時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜6時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜7時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜8時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜9時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜10時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜11時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜12時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜13時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜14時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜15時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜16時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜17時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜18時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜19時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="月曜20時:0本"></div><div class="hm-cell" data-c="4" data-n="4" title="月曜21時:4本"></div><div class="hm-cell" data-c="2" data-n="2" title="月曜22時:2本"></div><div class="hm-cell" data-c="1" data-n="1" title="月曜23時:1本"></div><div class="hm-row-head">火</div><div class="hm-cell" data-c="0" data-n="0" title="火曜0時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜1時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜2時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜3時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜4時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜5時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜6時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜7時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜8時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜9時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜10時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜11時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜12時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜13時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜14時:0本"></div><div class="hm-cell" data-c="1" data-n="1" title="火曜15時:1本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜16時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜17時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜18時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜19時:0本"></div><div class="hm-cell" data-c="1" data-n="1" title="火曜20時:1本"></div><div class="hm-cell" data-c="2" data-n="2" title="火曜21時:2本"></div><div class="hm-cell" data-c="1" data-n="1" title="火曜22時:1本"></div><div class="hm-cell" data-c="0" data-n="0" title="火曜23時:0本"></div><div class="hm-row-head">水</div><div class="hm-cell" data-c="0" data-n="0" title="水曜0時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜1時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜2時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜3時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜4時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜5時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜6時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜7時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜8時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜9時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜10時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜11時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜12時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜13時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜14時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜15時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜16時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜17時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜18時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜19時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜20時:0本"></div><div class="hm-cell" data-c="5" data-n="8" title="水曜21時:8本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜22時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="水曜23時:0本"></div><div class="hm-row-head">木</div><div class="hm-cell" data-c="0" data-n="0" title="木曜0時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜1時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜2時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜3時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜4時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜5時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜6時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜7時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜8時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜9時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜10時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜11時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜12時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜13時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜14時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜15時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜16時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜17時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜18時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜19時:0本"></div><div class="hm-cell" data-c="5" data-n="6" title="木曜20時:6本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜21時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜22時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="木曜23時:0本"></div><div class="hm-row-head">金</div><div class="hm-cell" data-c="0" data-n="0" title="金曜0時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜1時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜2時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜3時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜4時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜5時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜6時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜7時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜8時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜9時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜10時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜11時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜12時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜13時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜14時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜15時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜16時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜17時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜18時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜19時:0本"></div><div class="hm-cell" data-c="1" data-n="1" title="金曜20時:1本"></div><div class="hm-cell" data-c="1" data-n="1" title="金曜21時:1本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜22時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="金曜23時:0本"></div><div class="hm-row-head">土</div><div class="hm-cell" data-c="0" data-n="0" title="土曜0時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜1時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜2時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜3時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜4時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜5時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜6時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜7時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜8時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜9時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜10時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜11時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜12時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜13時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜14時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜15時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜16時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜17時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜18時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜19時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜20時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜21時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜22時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="土曜23時:0本"></div><div class="hm-row-head">日</div><div class="hm-cell" data-c="0" data-n="0" title="日曜0時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜1時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜2時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜3時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜4時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜5時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜6時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜7時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜8時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜9時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜10時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜11時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜12時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜13時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜14時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜15時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜16時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜17時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜18時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜19時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜20時:0本"></div><div class="hm-cell" data-c="2" data-n="2" title="日曜21時:2本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜22時:0本"></div><div class="hm-cell" data-c="0" data-n="0" title="日曜23時:0本"></div>
+    </div>
+    <div class="callout callout-info" style="margin-top:var(--space-24);">
+      <strong>空白の機会：</strong>
+      <strong>土曜22時〜深夜、金曜20時台、日曜昼</strong>は現状ほぼ配信していない帯。
+      スマブラ系配信者の競合も薄く、平日の仕事帰り視聴者とは違う層が取れます。
+      火21時（既存定番）+ 土22時（新設）+ 金or日（可変）の週3枠が理想形です。
+    </div>
+  </div>
+</section>
+
+<!-- §5 TYPE -->
+<section id="type">
+  <div class="container">
+    <div class="sec-num">§5 · TYPE PERFORMANCE</div>
+    <h2>タイプ別の成果 ── どの型が伸びているか</h2>
+    <p class="sec-desc">
+      配信タイトルから7タイプに分類して、中央再生数・本数・合計再生を算出しました。
+      「本数が少ないのに中央再生が高い」タイプは1本あたりの効率が良く、逆は機会損失の可能性があります。
+    </p><div class="type-grid"><div class="type-card" style="border-top-color:#0EA5E9;"><div class="name">連勝耐久</div><div class="metrics"><div class="m"><div class="v">5,060</div><div class="l">中央再生</div></div><div class="m"><div class="v">3</div><div class="l">本数</div></div><div class="m"><div class="v">5,500</div><div class="l">最高</div></div></div><div class="verdict"><strong>伸びしろ大。</strong> 3本しかないが中央5,060・最高5,500。月2本に増やすだけで総再生+1万〜2万見込み。</div></div><div class="type-card" style="border-top-color:#6C5CE7;"><div class="name">コラボ/対戦</div><div class="metrics"><div class="m"><div class="v">3,628</div><div class="l">中央再生</div></div><div class="m"><div class="v">3</div><div class="l">本数</div></div><div class="m"><div class="v">16,380</div><div class="l">最高</div></div></div><div class="verdict"><strong>最強の型。</strong> 最高16,380はこの型。月1本の定期コラボ化が半年5万人への近道。</div></div><div class="type-card" style="border-top-color:#94A3B8;"><div class="name">その他</div><div class="metrics"><div class="m"><div class="v">1,338</div><div class="l">中央再生</div></div><div class="m"><div class="v">8</div><div class="l">本数</div></div><div class="m"><div class="v">4,953</div><div class="l">最高</div></div></div><div class="verdict">振り返り・議論系。中央1,338と悪くない。大会の翌日に振り返りを1本入れるのは良ルーティン。</div></div><div class="type-card" style="border-top-color:#94A3B8;"><div class="name">チノスマ大会</div><div class="metrics"><div class="m"><div class="v">636</div><div class="l">中央再生</div></div><div class="m"><div class="v">10</div><div class="l">本数</div></div><div class="m"><div class="v">5,576</div><div class="l">最高</div></div></div><div class="verdict"><strong>機会損失の筆頭。</strong> 10本あるのに中央636。タイトルの差別化とレート/相手明示が急務。</div></div><div class="type-card" style="border-top-color:#F59E0B;"><div class="name">スマメイト</div><div class="metrics"><div class="m"><div class="v">351</div><div class="l">中央再生</div></div><div class="m"><div class="v">3</div><div class="l">本数</div></div><div class="m"><div class="v">544</div><div class="l">最高</div></div></div><div class="verdict">中央351と最低。タイトルを「クッパスマメイト 1800~」型に変えるだけで数倍になり得る。</div></div><div class="type-card" style="border-top-color:#EF4444;"><div class="name">大会</div><div class="metrics"><div class="m"><div class="v">213</div><div class="l">中央再生</div></div><div class="m"><div class="v">3</div><div class="l">本数</div></div><div class="m"><div class="v">612</div><div class="l">最高</div></div></div><div class="verdict">アーカイブとしての価値は高いが告知型。振り返り枠との組み合わせで消化。</div></div></div>
+  </div>
+</section>
+
+<!-- §6 DURATION -->
+<section id="dur" style="background:white;">
+  <div class="container">
+    <div class="sec-num">§6 · DURATION</div>
+    <h2>尺が長いほど、再生が伸びる。</h2>
+    <p class="sec-desc">
+      意外かもしれませんが、尺と再生は明確な正の相関。<strong>1-2h配信の中央601に対し、3h+配信は中央5,207と8倍以上</strong>の差が出ています。
+      長尺配信は総再生分母が大きく、アルゴリズムのセッション時間評価にも有利です。
+    </p><div class="dur-bars"><div class="dur-row"><div class="dur-label"><1h</div><div class="dur-bar"><div class="fill" style="width:13%;">668</div></div><div class="dur-meta">n=3 / 中央 668</div></div><div class="dur-row"><div class="dur-label">1-2h</div><div class="dur-bar"><div class="fill" style="width:12%;">601</div></div><div class="dur-meta">n=14 / 中央 601</div></div><div class="dur-row"><div class="dur-label">2-3h</div><div class="dur-bar"><div class="fill" style="width:36%;">1,851</div></div><div class="dur-meta">n=9 / 中央 1,851</div></div><div class="dur-row"><div class="dur-label">3h+</div><div class="dur-bar"><div class="fill" style="width:100%;">5,207</div></div><div class="dur-meta">n=3 / 中央 5,207</div></div></div>
+    <div class="callout callout-warning" style="margin-top:var(--space-24);">
+      <strong>但し書き：</strong>
+      「長くすれば伸びる」ではなく、<strong>伸ばせるテーマの時だけ長く</strong>が正解。
+      連勝耐久・コラボ・2on2は3時間超えても視聴者が離れにくい型。
+      一方でVIP連勝の単発だけで3時間引っ張るとダレやすい。
+      <strong>火曜と金曜を2時間、土曜のコラボ枠を3時間</strong>のメリハリが最適解。
+    </div>
+  </div>
+</section>
+
+<!-- §7 TITLE -->
+<section id="title">
+  <div class="container">
+    <div class="sec-num">§7 · TITLE REWRITE</div>
+    <h2>タイトル、Before → After</h2>
+    <p class="sec-desc">
+      Rearletさんの現行タイトルには共通のクセがあります：<strong>「激熱／激アツ」「全一クッパ」「狙うよ！」「#shorts」</strong>の組み合わせ。
+      アルゴリズム・視聴者ともに「毎回同じ枕詞」と認識されやすく、クリック率が頭打ちになりがち。
+      実データTop10を直接書き換えてみると、改善の余地が明確に見えてきます。
+    </p>
+
+    <div class="ttl-rewrite"><div class="ttl-item"><div class="ttl-side"><div class="ttl-tag">BEFORE</div><div class="ttl-text">【激熱！】全一クッパがチノスマ優勝狙うよ！【スマブラSP】#shorts</div><div class="ttl-meta">5,576再生 / 142分 / 4/15</div><div class="ttl-issues"><span class="ttl-issue">煽り過多</span><span class="ttl-issue">毎回同じ枕詞</span><span class="ttl-issue">曖昧な目標</span><span class="ttl-issue">Shortsタグ不要</span></div></div><div class="ttl-arrow">→</div><div class="ttl-side after"><div class="ttl-tag">AFTER</div><div class="ttl-text">【チノスマ 2026/4/15】日本9位クッパのスマメイト1800→本番【スマブラSP】</div><div class="ttl-meta">日付 + レート + 実際に何が起こるか を明示</div></div></div><div class="ttl-item"><div class="ttl-side"><div class="ttl-tag">BEFORE</div><div class="ttl-text">【激アツ】全一クッパによるVIP連勝！スマブラSP】#shorts</div><div class="ttl-meta">5,500再生 / 110分 / 4/21</div><div class="ttl-issues"><span class="ttl-issue">煽り過多</span><span class="ttl-issue">数字なし</span><span class="ttl-issue">曖昧な目標</span></div></div><div class="ttl-arrow">→</div><div class="ttl-side after"><div class="ttl-tag">AFTER</div><div class="ttl-text">【クッパVIP30連勝耐久】負けたら振り出し・何時間で達成できるか【スマブラSP】</div><div class="ttl-meta">数字目標＋ルール明示で滞在時間が伸びる</div></div></div><div class="ttl-item"><div class="ttl-side"><div class="ttl-tag">BEFORE</div><div class="ttl-text">【激熱！】へろークッパと2on2出るよ！！！！【スマブラSP】#shorts</div><div class="ttl-meta">16,380再生 / 240分 / 4/02 ※最高再生</div><div class="ttl-issues"><span class="ttl-issue">感嘆符連打</span><span class="ttl-issue">相手の詳細なし</span></div></div><div class="ttl-arrow">→</div><div class="ttl-side after"><div class="ttl-tag">AFTER</div><div class="ttl-text">【クッパ2on2】Rearlet×へろー vs 最強勢3組【チノスマ決勝前哨戦】</div><div class="ttl-meta">相手の構成と文脈を足すだけで検索流入増</div></div></div><div class="ttl-item"><div class="ttl-side"><div class="ttl-tag">BEFORE</div><div class="ttl-text">【スマブラSP】全一クッパが負けたら終わりVIP連勝をします#shorts</div><div class="ttl-meta">5,060再生 / 155分 / 3/30</div><div class="ttl-issues"><span class="ttl-issue">ひらがな羅列</span><span class="ttl-issue">終了条件のみ</span></div></div><div class="ttl-arrow">→</div><div class="ttl-side after"><div class="ttl-tag">AFTER</div><div class="ttl-text">【クッパVIP20連勝 サドンデス】1敗で終了・リアル勝負【スマブラSP】</div><div class="ttl-meta">緊張感のあるワード（サドンデス・リアル）で期待値UP</div></div></div><div class="ttl-item"><div class="ttl-side"><div class="ttl-tag">BEFORE</div><div class="ttl-text">【スマブラSP】クッパのコンボ解説するで！</div><div class="ttl-meta">1,643再生 / 121分 / 3/22</div><div class="ttl-issues"><span class="ttl-issue">内容薄い</span><span class="ttl-issue">誰向けか不明</span></div></div><div class="ttl-arrow">→</div><div class="ttl-side after"><div class="ttl-tag">AFTER</div><div class="ttl-text">【クッパ講座】ホリ下→即死コンボ 初心者〜VIP向け全パターン解説</div><div class="ttl-meta">対象レベルを3段階明示 → 検索/サジェスト強化</div></div></div><div class="ttl-item"><div class="ttl-side"><div class="ttl-tag">BEFORE</div><div class="ttl-text">【スマブラSP】最強の3人で3on3！！！</div><div class="ttl-meta">643再生 / 83分 / 11/13</div><div class="ttl-issues"><span class="ttl-issue">メンバー不明</span><span class="ttl-issue">文脈なし</span></div></div><div class="ttl-arrow">→</div><div class="ttl-side after"><div class="ttl-tag">AFTER</div><div class="ttl-text">【クッパ3on3】Rearlet×○○×○○ vs 全一勢 ステージ別5本先取</div><div class="ttl-meta">メンバーとルールを書く。これだけで2〜3倍変わる型</div></div></div></div>
+    <div class="callout callout-info" style="margin-top:var(--space-32);">
+      <strong>タイトル3原則：</strong>
+      ① 煽り語（激熱・激アツ・神回）は1本に1つまで　
+      ② キャラ or レート or 数字 のいずれか2つを必ず入れる　
+      ③ Shortsタグは配信には不要（Shortsとは別プラットフォーム扱い）
+    </div>
+  </div>
+</section>
+
+<!-- §8 BENCHMARK -->
+<section id="bench" style="background:white;">
+  <div class="container">
+    <div class="sec-num">§8 · BENCHMARK</div>
+    <h2>KEN・あcola の上位配信で、同じ型を確認</h2>
+    <p class="sec-desc">
+      日本スマブラSP系で配信再生が突出しているKEN（登録46,800）とあcola（登録非公開だが推定10万前後）の
+      <strong>上位10配信</strong>を抽出。タイプ分布を見ると、<strong>両者ともスマメイト・連勝耐久・大会ミラー・振り返りの4種が中心</strong>で、
+      Rearletさんが目指すべき構成と完全に一致しています。
+    </p>
+    <div class="bench-grid"><div class="bench-card"><div class="bench-head"><h4>KEN Top10</h4><div class="sub">登録 46,800 · セフィロス/ガオガエン主</div></div><div class="bench-list"><div class="bench-item"><div class="br">1</div><div class="bv">60,703</div><div class="bt"><span class="badge t-coll" style="margin-right:6px;">コラボ</span>【スマブラSP】フランス大会 Hall of Frames feat.Shuton.Raru.Tea.Akakikusu</div></div><div class="bench-item"><div class="br">2</div><div class="bv">43,331</div><div class="bt"><span class="badge t-coll" style="margin-right:6px;">コラボ</span>【スマブラSP】アメリカ大会 What’s the Daily Smash Advice? feat.Asimo,Yau</div></div><div class="bench-item"><div class="br">3</div><div class="bv">16,827</div><div class="bt"><span class="badge t-tour" style="margin-right:6px;">大会</span>マエスマでるお</div></div><div class="bench-item"><div class="br">4</div><div class="bv">16,251</div><div class="bt"><span class="badge t-misc" style="margin-right:6px;">雑談/振返</span>【スマブラSP】スマブラSP7周年なので雑談アイアンマンする</div></div><div class="bench-item"><div class="br">5</div><div class="bv">11,788</div><div class="bt"><span class="badge t-mate" style="margin-right:6px;">スマメイト</span>【スマブラSP】帰ってきたガオガエンスマメイト</div></div><div class="bench-item"><div class="br">6</div><div class="bv">11,275</div><div class="bt"><span class="badge t-mate" style="margin-right:6px;">スマメイト</span>【スマブラSP】セフィロススマメイト 2000いく</div></div><div class="bench-item"><div class="br">7</div><div class="bv">10,382</div><div class="bt"><span class="badge t-tour" style="margin-right:6px;">大会</span>【スマブラSP】たいけいとオフ対戦</div></div><div class="bench-item"><div class="br">8</div><div class="bv">10,203</div><div class="bt"><span class="badge t-mate" style="margin-right:6px;">スマメイト</span>【スマブラSP】セフィロススマメイト 2050~</div></div><div class="bench-item"><div class="br">9</div><div class="bv">9,798</div><div class="bt"><span class="badge t-mate" style="margin-right:6px;">スマメイト</span>【スマブラSP】セフィロススマメイト 2000~</div></div><div class="bench-item"><div class="br">10</div><div class="bv">9,485</div><div class="bt"><span class="badge t-end" style="margin-right:6px;">連勝耐久</span>【スマブラSP】誕生日です 31歳になったのでVIP31連勝します</div></div></div></div><div class="bench-card"><div class="bench-head"><h4>あcola Top10</h4><div class="sub">世界最強スティーブ使い</div></div><div class="bench-list"><div class="bench-item"><div class="br">1</div><div class="bv">89,553</div><div class="bt"><span class="badge t-mate" style="margin-right:6px;">スマメイト</span>スマメイト【スマブラSP】</div></div><div class="bench-item"><div class="br">2</div><div class="bv">70,067</div><div class="bt"><span class="badge t-end" style="margin-right:6px;">連勝耐久</span>スティーブvip連勝企画（0～72連勝）【スマブラSP】</div></div><div class="bench-item"><div class="br">3</div><div class="bv">57,180</div><div class="bt"><span class="badge t-mate" style="margin-right:6px;">スマメイト</span>Gimvitational優勝したのでスマメイト【スマブラSP】</div></div><div class="bench-item"><div class="br">4</div><div class="bv">52,623</div><div class="bt"><span class="badge t-mate" style="margin-right:6px;">スマメイト</span>レート2403からスマメイト【スマブラSP】</div></div><div class="bench-item"><div class="br">5</div><div class="bv">37,753</div><div class="bt"><span class="badge t-misc" style="margin-right:6px;">雑談/振返</span>Gimvitational 誰かとフリー対戦配信</div></div><div class="bench-item"><div class="br">6</div><div class="bv">35,842</div><div class="bt"><span class="badge t-misc" style="margin-right:6px;">雑談/振返</span>オンチャレやろう【スマブラSP】</div></div><div class="bench-item"><div class="br">7</div><div class="bv">33,068</div><div class="bt"><span class="badge t-mate" style="margin-right:6px;">スマメイト</span>スマメイト【スマブラSP】</div></div><div class="bench-item"><div class="br">8</div><div class="bv">29,737</div><div class="bt"><span class="badge t-misc" style="margin-right:6px;">雑談/振返</span>Ludwig準優勝でした 起きちゃったので振り返る</div></div><div class="bench-item"><div class="br">9</div><div class="bv">22,514</div><div class="bt"><span class="badge t-misc" style="margin-right:6px;">雑談/振返</span>GWを振り返る配信【スマブラSP】</div></div><div class="bench-item"><div class="br">10</div><div class="bv">21,188</div><div class="bt"><span class="badge t-misc" style="margin-right:6px;">雑談/振返</span>LMMM優勝でした すこし雑談</div></div></div></div></div>
+    <div class="callout callout-success" style="margin-top:var(--space-24);">
+      <strong>共通点の抽出：</strong>
+      ① <strong>キャラ×スマメイト</strong>（KEN「セフィロススマメイト 2050~」/ あcola「スマメイト」）<br>
+      ② <strong>大会ミラー配信</strong>（KENだけで10本中2本、両方6万/4万再生）<br>
+      ③ <strong>記念 or 数字企画</strong>（KEN「31歳VIP31連勝」9,485 / あcola「スティーブvip連勝0〜72」70,067）<br>
+      ④ <strong>大会直後の振り返り</strong>（あcola「Ludwig準優勝でした 起きちゃったので振り返る」29,737）<br>
+      Rearletさんが次にやるべき順番：<strong>①→③→④→②（ミラー配信は中期）</strong>
+    </div>
+  </div>
+</section>
+
+<!-- §9 ACTIONS -->
+<section id="act">
+  <div class="container">
+    <div class="sec-num">§9 · ACTIONS</div>
+    <h2>配信だけで、半年の登録者ブーストを作る打ち手10</h2>
+    <p class="sec-desc">
+      ここまでのデータから導かれる「配信に閉じた」打ち手を、インパクト順に10個。
+      大きいものから着手するのが原則ですが、実装コストが低いタイトル改善（A・B）は今週から始められます。
+    </p>
+
+    <div class="actions-grid">
+      <div class="action-card primary">
+        <div class="action-num">A</div>
+        <span class="action-impact">INPACT 大</span>
+        <h4>チノスマ配信10本の「タイトル型」リニューアル</h4>
+        <p>現状10本中8本が「全一クッパがチノスマ優勝狙うで！」系で中央636再生。タイプ比較で最も機会損失が大きい領域。</p>
+        <div class="how">
+          <strong>やること：</strong> 1) タイトルに「日付＋レート or 目標順位」を入れる<br>
+          例：「チノスマ 4/15 クッパで上位8入り狙う 1800~」<br>
+          2) サムネに「今日どこまで勝つか」を明記 → §4のサムネ原則と揃える
+        </div>
+      </div>
+
+      <div class="action-card primary">
+        <div class="action-num">B</div>
+        <span class="action-impact">INPACT 大</span>
+        <h4>月2本の連勝耐久企画を定例化</h4>
+        <p>連勝耐久は中央5,060（タイプ別1位）なのに直近30本で3本しかない。月2本に増やせば総再生+2〜3万が見込める。</p>
+        <div class="how">
+          <strong>やること：</strong> 第1金曜「クッパVIP30連勝耐久」、第3金曜「20連勝サドンデス」を固定化。<br>
+          達成瞬間をクリップ化しShortsへ即日転用。Shorts→配信の循環を作る。
+        </div>
+      </div>
+
+      <div class="action-card primary">
+        <div class="action-num">C</div>
+        <span class="action-impact">INPACT 大</span>
+        <h4>月1の定期コラボ配信枠を作る</h4>
+        <p>Rearletさんの配信最高再生（16,380）はへろーさんとの2on2。コラボは1本で通常の3〜6倍の効果。</p>
+        <div class="how">
+          <strong>やること：</strong> 第2土曜を「クッパ会議」枠に固定。<br>
+          想定ゲスト：へろー、ゴブリン、わたる、もつだ、その他クッパ/重量級使い。<br>
+          告知はゲストのXにも載せてもらい、両チャンネルから流入。
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">D</div>
+        <span class="action-impact med">INPACT 中</span>
+        <h4>土曜22時枠の新設</h4>
+        <p>直近30本で土曜配信は0件、日曜21時以外は2件のみ。週末は家族層・学生層の視聴時間帯で、競合も薄い。</p>
+        <div class="how">
+          <strong>やること：</strong> 土22:00〜24:00で週1配信を追加。<br>
+          内容は「クッパ会議」or「VIP耐久」or「視聴者参加スマメイト」の3択ローテ。
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">E</div>
+        <span class="action-impact med">INPACT 中</span>
+        <h4>配信→Shortsの翌朝切り出しを機械化</h4>
+        <p>配信の撃墜・決着シーンを翌日10:00-12:00にShorts化。配信再生 × Shorts再生 両方を底上げする。</p>
+        <div class="how">
+          <strong>やること：</strong> OBSに「リプレイバッファ」を設定し、良い瞬間だけ即保存。<br>
+          CapCutテンプレ1つ用意して15-25秒で編集。Shorts概要欄に配信URL必ず。
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">F</div>
+        <span class="action-impact med">INPACT 中</span>
+        <h4>大会当日・翌日の「振り返り配信」定着</h4>
+        <p>現状、大会当日・翌日の振り返り配信は約4本と少なめ。あcolaの「Ludwig準優勝でした 振り返る」は29,737再生。大会結果と紐付けた配信は旬を活かせる。</p>
+        <div class="how">
+          <strong>やること：</strong> チノスマ、篝火、マエスマの翌日に必ず「クッパ視点の振り返り」を1時間配信。<br>
+          負けた試合ほど「次はどうする？」が気になるので勝敗問わず出す。
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">G</div>
+        <span class="action-impact med">INPACT 中</span>
+        <h4>タイトル「煽り語」の使用制限</h4>
+        <p>「激熱／激アツ／神回」が30本中20本で使用されている。多用するとアルゴリズムに「同じ配信」と認識されやすい。</p>
+        <div class="how">
+          <strong>やること：</strong> 煽り語は月2本までに制限。<br>
+          代わりに「数字・日付・レート・メンバー」のいずれか2つを必ず入れるルールに。
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">H</div>
+        <span class="action-impact small">INPACT 小〜中</span>
+        <h4>配信前後のX投稿テンプレ化</h4>
+        <p>配信前後の告知・お礼投稿は関係性ストックに効く。毎回書くのは負担なのでテンプレ固定が現実的。</p>
+        <div class="how">
+          <strong>やること：</strong> 配信前日21時に「明日21時から〇〇やります」、開始1時間前に「あと1時間！」、終了後30分以内に「〇〇ありがとうございました！」の3投稿をテンプレ化。
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">I</div>
+        <span class="action-impact small">INPACT 小</span>
+        <h4>スパチャ・メンバーシップの準備</h4>
+        <p>登録1,140人で条件はほぼクリア目前。スパチャが開けば応援の可視化とロイヤル化が進む。</p>
+        <div class="how">
+          <strong>やること：</strong> YouTube StudioでSpark条件を確認し、必要な配信時間を積む。<br>
+          メンバーシップは登録2,000到達後に2-3段階設計（月490円から）で導入検討。
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-num">J</div>
+        <span class="action-impact small">INPACT 中期</span>
+        <h4>大会ミラー配信（許諾交渉）</h4>
+        <p>KENの最高配信（6万再生）はこの型。クッパ限定ミラー配信は誰も取っていないポジション。</p>
+        <div class="how">
+          <strong>やること：</strong> 登録5,000到達後に大会主催（チノスマ、マエスマ、海外大会）に許諾交渉。<br>
+          まずは海外クッパ勢の試合限定で解説付きミラーから試す。同接3,000〜の可能性あり。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §10 30-day Plan -->
+<section id="plan" style="background:white;">
+  <div class="container">
+    <div class="sec-num">§10 · 30-DAY PLAN</div>
+    <h2>今日からの30日プラン</h2>
+    <p class="sec-desc">
+      打ち手A〜Jを、実装コストが低く効果が早いものから週単位で並べました。
+      最初の週はタイトル整備（A・G）だけに絞って、3週目からコラボ・耐久企画の定例化に進むのが現実的です。
+    </p>
+
+    <div class="plan-grid">
+      <div class="week-card">
+        <div class="week-lbl">WEEK 1</div>
+        <div class="week-title">土台整備（実装コスト最小）</div>
+        <ul class="week-list">
+          <li>次の配信タイトルをA・Gルールで書き直す</li>
+          <li>配信前後のX投稿テンプレ3種を作成（H）</li>
+          <li>OBSリプレイバッファを設定（E前準備）</li>
+          <li>YouTubeチャンネル概要を「クッパ専用チャンネル」明記</li>
+          <li>既存30配信のうち、再生100未満の古いタイトル3本だけリネーム実験</li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-lbl">WEEK 2</div>
+        <div class="week-title">連勝耐久の初回投入</div>
+        <ul class="week-list">
+          <li>金21時に「クッパVIP30連勝耐久」を初回開催（B）</li>
+          <li>翌朝にハイライトShorts1本切り出し（E）</li>
+          <li>チノスマ配信のタイトルを A の型で運用開始</li>
+          <li>へろーさんに次回コラボ日程の打診（C）</li>
+          <li>配信後の振り返り雑談30分を短尺化して試投</li>
+        </ul>
+      </div>
+
+      <div class="week-card">
+        <div class="week-lbl">WEEK 3</div>
+        <div class="week-title">コラボと週末枠の実装</div>
+        <ul class="week-list">
+          <li>土22時に初のコラボ配信 or 雑談配信を実施（C・D）</li>
+          <li>大会翌日に振り返り配信を試運転（F）</li>
+          <li>Shorts切り出し体制を完全ルーティン化（E）</li>
+          <li>W2で投入した耐久企画の数字を確認→タイトル改善</li>
+          <li>スパチャ条件を確認・申請準備（I）</li>
+        </ul>
+      </div>
+
+      <div class="week-card w4">
+        <div class="week-lbl">WEEK 4</div>
+        <div class="week-title">週3配信の定例化</div>
+        <ul class="week-list">
+          <li>火21 / 金21 / 土22 の週3配信を確立</li>
+          <li>月間レビュー：再生中央値、本数、コラボ効果を数値化</li>
+          <li>5月の月間テーマ（例：VIP 2200達成）を設定・告知</li>
+          <li>Shorts・配信・長尺のサイクル回数をカウント</li>
+          <li>次月の打ち手J（許諾交渉）の準備開始</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-success" style="margin-top:var(--space-32);">
+      <strong>30日後の想定：</strong>
+      本数11〜12本（週3×4週）、中央再生 1,500〜3,000、コラボ配信1本で8,000〜15,000、
+      連勝耐久2本で5,000〜10,000。月間総再生は現在の2〜3倍。
+      登録者は +150〜400人（配信経由で月+40〜100、Shorts継続分と合算）。
+      半年で +1,500〜3,000を配信単独で積み上げる想定です。
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="t">Rearlet Stream Diagnosis Report</div>
+    <div class="s">30配信を全件分解した配信特化レポート · Data: YouTube (yt-dlp) · Generated: 2026-04-22</div>
+  </div>
+</footer>
+</body>
+</html>
