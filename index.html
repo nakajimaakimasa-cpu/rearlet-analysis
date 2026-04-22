@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rearlet Shorts戦略 完全レポート ── エンタ×ガチで半年5万人</title>
+<title>Rearlet Shorts 行動レポート ── 今日から始める半年5万人プラン</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap');
 
@@ -1006,10 +1006,10 @@
 </style>
 
 <style>
-  /* ===== v3 追加スタイル ===== */
+  /* === v4 行動駆動UI === */
   .report-meta {
     background: var(--gray-900);
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.7);
     padding: var(--space-12) 0;
     font-size: var(--font-xs);
     text-align: center;
@@ -1017,332 +1017,325 @@
   }
   .report-meta strong { color: #FFD580; }
 
-  .metric-hero {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--space-16);
-    margin: var(--space-32) 0;
-  }
-  .metric-hero .box {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-24);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--gray-200);
-    position: relative;
-    overflow: hidden;
-  }
-  .metric-hero .box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-  }
-  .metric-hero .num {
-    font-family: 'Inter', sans-serif;
-    font-size: var(--font-3xl);
-    font-weight: 900;
-    color: var(--gray-900);
-    line-height: 1.1;
-  }
-  .metric-hero .lbl {
-    font-size: var(--font-xs);
-    color: var(--gray-500);
-    letter-spacing: 1px;
-    margin-top: 4px;
-  }
-  .metric-hero .sub {
-    font-size: var(--font-sm);
-    color: var(--gray-700);
-    margin-top: var(--space-8);
-    line-height: 1.5;
-  }
-
-  .triage-grid {
+  /* ---- STEP CARD 巨大 ---- */
+  .step-hero {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-16);
+    margin: var(--space-32) 0 var(--space-48);
+  }
+  @media (max-width: 900px) { .step-hero { grid-template-columns: 1fr; } }
+  .step-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-32);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    border-top: 8px solid var(--primary);
+    overflow: hidden;
+  }
+  .step-card.s2 { border-top-color: #E67E22; }
+  .step-card.s3 { border-top-color: var(--success); }
+  .step-card::before {
+    content: attr(data-step);
+    position: absolute;
+    top: -20px; right: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 180px;
+    color: rgba(108,92,231,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .step-card.s2::before { color: rgba(230,126,34,0.08); }
+  .step-card.s3::before { color: rgba(0,184,148,0.08); }
+  .step-card .step-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    color: var(--primary);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .step-card.s2 .step-label { color: #E67E22; }
+  .step-card.s3 .step-label { color: var(--success); }
+  .step-card .step-time {
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-bottom: var(--space-16);
+    letter-spacing: 1px;
+  }
+  .step-card h3 {
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    color: var(--gray-900);
+    line-height: 1.3;
+    margin-bottom: var(--space-16);
+    position: relative;
+    z-index: 1;
+  }
+  .step-card .step-body {
+    font-size: var(--font-sm);
+    color: var(--gray-700);
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+  .step-card .step-body strong {
+    background: #FFF4C4;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .step-card .step-cta {
+    margin-top: var(--space-16);
+    padding: var(--space-12);
+    background: var(--gray-100);
+    border-radius: 8px;
+    font-size: var(--font-xs);
+    color: var(--gray-700);
+  }
+  .step-card .step-cta strong {
+    display: block;
+    color: var(--gray-900);
+    font-size: var(--font-sm);
+    margin-bottom: 4px;
+  }
+
+  /* ---- Before / After 変換カード ---- */
+  .ba-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
     margin: var(--space-32) 0;
   }
-  @media (max-width: 900px) { .triage-grid { grid-template-columns: 1fr; } }
-  .triage-card {
+  .ba-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+  }
+  .ba-card .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    gap: 0;
+  }
+  @media (max-width: 768px) {
+    .ba-card .ba-grid { grid-template-columns: 1fr; }
+  }
+  .ba-side {
+    padding: var(--space-16) var(--space-24);
+  }
+  .ba-side.before {
+    background: #FFF5F2;
+    border-right: 1px solid var(--gray-200);
+  }
+  .ba-side.after {
+    background: #F0FFF8;
+  }
+  .ba-side .tag {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-8);
+  }
+  .ba-side.before .tag {
+    background: var(--danger);
+    color: white;
+  }
+  .ba-side.after .tag {
+    background: var(--success);
+    color: white;
+  }
+  .ba-side .ttl {
+    font-size: var(--font-base);
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.5;
+    margin-bottom: var(--space-8);
+  }
+  .ba-side.before .ttl {
+    color: var(--gray-700);
+    text-decoration: line-through;
+    text-decoration-color: rgba(231,76,60,0.3);
+  }
+  .ba-side .meta {
+    font-size: var(--font-xs);
+    color: var(--gray-500);
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+  }
+  .ba-side .meta .v {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 100px;
+    margin-right: 4px;
+    font-weight: 700;
+  }
+  .ba-side.before .meta .v { background: #FFE5E0; color: var(--danger); }
+  .ba-side.after .meta .v { background: #D1F5E0; color: var(--success); }
+  .ba-arrow {
+    background: var(--gray-900);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 20px;
+  }
+  @media (max-width: 768px) { .ba-arrow { padding: 8px; } }
+  .ba-card .ba-reason {
+    padding: var(--space-12) var(--space-24);
+    background: var(--gray-900);
+    color: rgba(255,255,255,0.9);
+    font-size: var(--font-xs);
+    line-height: 1.6;
+  }
+  .ba-card .ba-reason strong {
+    color: #FFD580;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    margin-right: 6px;
+  }
+
+  /* ---- テンプレ（穴埋め式） ---- */
+  .tmpl-card {
     background: var(--white);
     border-radius: var(--radius-lg);
     padding: var(--space-32);
     box-shadow: var(--shadow);
-    border: 1px solid var(--gray-200);
-    border-top: 6px solid;
-    position: relative;
+    border: 2px solid var(--gray-200);
+    margin-bottom: var(--space-16);
   }
-  .triage-card.akakikus { border-top-color: var(--info); }
-  .triage-card.shuton { border-top-color: var(--success); }
-  .triage-card.buri { border-top-color: #E67E22; }
-  .triage-card .trophy {
-    position: absolute;
-    top: -12px; right: 16px;
-    background: var(--success);
-    color: white;
-    font-size: 11px;
-    padding: 4px 12px;
-    border-radius: 100px;
-    letter-spacing: 1px;
-    font-weight: 700;
+  .tmpl-card .tmpl-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16);
+    margin-bottom: var(--space-16);
   }
-  .triage-card h3 {
+  .tmpl-card .tmpl-num {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: var(--primary);
+    line-height: 1;
+  }
+  .tmpl-card h3 {
     font-size: var(--font-xl);
     font-weight: 900;
     color: var(--gray-900);
-    margin-bottom: var(--space-8);
   }
-  .triage-card .subtitle {
-    color: var(--gray-500);
+  .tmpl-card .tmpl-use {
     font-size: var(--font-xs);
-    margin-bottom: var(--space-16);
-    letter-spacing: 1px;
-  }
-  .triage-card .big-metric {
-    font-family: 'Inter', sans-serif;
-    font-size: var(--font-4xl);
-    font-weight: 900;
-    line-height: 1;
-    margin: var(--space-16) 0 var(--space-8);
-  }
-  .triage-card.akakikus .big-metric { color: var(--info); }
-  .triage-card.shuton .big-metric { color: var(--success); }
-  .triage-card.buri .big-metric { color: #E67E22; }
-  .triage-card .metric-label {
-    font-size: var(--font-xs);
-    color: var(--gray-500);
-    letter-spacing: 1px;
-  }
-  .triage-card ul {
-    list-style: none;
-    margin-top: var(--space-16);
-    padding: 0;
-    font-size: var(--font-sm);
-    line-height: 1.8;
-    color: var(--gray-700);
-  }
-  .triage-card ul li { padding: 4px 0; }
-  .triage-card ul li::before {
-    content: '■ ';
-    color: var(--primary);
-    margin-right: 6px;
-  }
-  .triage-card.shuton ul li::before { color: var(--success); }
-  .triage-card.buri ul li::before { color: #E67E22; }
-  .triage-card .verdict {
-    margin-top: var(--space-24);
-    padding: var(--space-12);
-    border-radius: 8px;
-    font-size: var(--font-sm);
-    font-weight: 700;
-    text-align: center;
-  }
-  .triage-card.akakikus .verdict {
-    background: var(--info-light); color: var(--info);
-  }
-  .triage-card.shuton .verdict {
-    background: var(--success-light); color: var(--success);
-  }
-  .triage-card.buri .verdict {
-    background: var(--warning-light); color: #E67E22;
-  }
-
-  /* 11チャンネル大比較テーブル */
-  .mega-table-wrap {
-    overflow-x: auto;
-    margin: var(--space-24) 0;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--gray-200);
-  }
-  .mega-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--font-xs);
-    font-variant-numeric: tabular-nums;
-    font-family: 'Inter', 'Noto Sans JP', sans-serif;
-    min-width: 880px;
-  }
-  .mega-table th {
-    background: var(--gray-900);
-    color: white;
-    padding: var(--space-12) var(--space-8);
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 0.5px;
-    text-align: right;
-    white-space: nowrap;
-  }
-  .mega-table th:first-child,
-  .mega-table td:first-child { text-align: left; }
-  .mega-table td {
-    padding: var(--space-8);
-    border-bottom: 1px solid var(--gray-100);
-    background: var(--white);
-    text-align: right;
-    white-space: nowrap;
-  }
-  .mega-table tr.rearlet td {
-    background: linear-gradient(90deg, #FFF4C4, #F0EDFF);
-    font-weight: 700;
-  }
-  .mega-table tr:hover td { background: var(--gray-50); }
-  .mega-table tr.rearlet:hover td { background: linear-gradient(90deg, #FFE8A3, #E4DCFF); }
-  .mega-table .ch-name { font-weight: 700; }
-  .mega-table .good { color: var(--success); font-weight: 700; }
-  .mega-table .bad { color: var(--danger); }
-
-  .viral-list-v3 {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: 0;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--gray-200);
-    overflow: hidden;
-    margin: var(--space-24) 0;
-  }
-  .viral-row {
-    display: grid;
-    grid-template-columns: 48px 100px 52px 1fr;
-    gap: var(--space-12);
-    padding: var(--space-12) var(--space-16);
-    border-bottom: 1px solid var(--gray-100);
-    align-items: center;
-  }
-  .viral-row:hover { background: var(--gray-50); }
-  .viral-row .rank {
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    color: var(--gray-300);
-    font-size: var(--font-lg);
-    text-align: center;
-  }
-  .viral-row .views {
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    font-size: var(--font-base);
-    text-align: right;
-    color: var(--accent);
-  }
-  .viral-row .dur {
-    font-size: 11px;
-    font-weight: 700;
-    color: white;
-    border-radius: 100px;
-    padding: 3px 6px;
-    text-align: center;
-  }
-  .viral-row .dur.x1 { background: var(--success); }
-  .viral-row .dur.x2 { background: var(--info); }
-  .viral-row .dur.x3 { background: #E67E22; }
-  .viral-row .dur.x4 { background: var(--danger); }
-  .viral-row .info .t {
-    font-size: var(--font-sm);
-    color: var(--gray-800);
-    font-weight: 600;
-    line-height: 1.4;
-  }
-  .viral-row .info .m {
-    font-size: 10px;
     color: var(--gray-500);
     margin-top: 2px;
     letter-spacing: 0.5px;
   }
-
-  .title30-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-12);
-    margin: var(--space-24) 0;
-  }
-  @media (max-width: 768px) { .title30-grid { grid-template-columns: 1fr; } }
-  .title30-item {
-    background: var(--white);
-    border-left: 4px solid var(--primary);
-    padding: var(--space-12) var(--space-16);
-    border-radius: 0 8px 8px 0;
-    font-size: var(--font-sm);
-    line-height: 1.6;
-    box-shadow: var(--shadow-sm);
-  }
-  .title30-item.t-a { border-left-color: var(--info); }
-  .title30-item.t-b { border-left-color: var(--success); }
-  .title30-item.t-c { border-left-color: #E67E22; }
-  .title30-item .ix {
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    color: var(--gray-400);
-    font-size: 11px;
-    display: inline-block;
-    margin-right: 8px;
-  }
-  .title30-item .type-tag {
-    display: inline-block;
-    font-size: 10px;
+  .tmpl-card .formula {
+    background: var(--gray-900);
+    color: white;
+    border-radius: 8px;
+    padding: var(--space-16);
+    font-family: 'Inter', 'Noto Sans JP', monospace;
+    font-size: var(--font-base);
     font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 100px;
-    background: var(--info-light);
-    color: var(--info);
-    margin-left: 4px;
-    letter-spacing: 0.5px;
+    line-height: 1.8;
+    margin: var(--space-16) 0;
   }
-  .title30-item.t-b .type-tag {
-    background: var(--success-light); color: var(--success);
+  .tmpl-card .formula .slot {
+    background: #FFD580;
+    color: #333;
+    padding: 2px 10px;
+    border-radius: 6px;
+    margin: 0 2px;
+    font-size: 13px;
+    font-weight: 900;
   }
-  .title30-item.t-c .type-tag {
-    background: var(--warning-light); color: #E67E22;
+  .tmpl-card .examples {
+    background: var(--success-light);
+    border-left: 4px solid var(--success);
+    border-radius: 0 8px 8px 0;
+    padding: var(--space-16);
+  }
+  .tmpl-card .examples h4 {
+    font-size: var(--font-sm);
+    color: var(--success);
+    margin-bottom: var(--space-8);
+    font-weight: 900;
+  }
+  .tmpl-card .examples .ex {
+    font-size: var(--font-sm);
+    color: var(--gray-800);
+    padding: 4px 0;
+    line-height: 1.6;
+  }
+  .tmpl-card .examples .ex::before {
+    content: '→ ';
+    color: var(--success);
+    font-weight: 900;
   }
 
-  .calendar {
+  /* ---- 状況別マトリクス ---- */
+  .sitmat {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-12);
     margin: var(--space-32) 0;
   }
-  .cal-day {
+  @media (max-width: 900px) { .sitmat { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px) { .sitmat { grid-template-columns: 1fr; } }
+  .sit {
     background: var(--white);
-    border-radius: 8px;
-    padding: var(--space-12) var(--space-8);
+    border-radius: var(--radius-lg);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-sm);
     border: 1px solid var(--gray-200);
-    min-height: 110px;
-    font-size: 11px;
+    text-align: center;
   }
-  .cal-day.post {
-    background: linear-gradient(145deg, #F0EDFF, #FFF);
-    border-color: var(--primary-light);
+  .sit .emoji {
+    font-size: 32px;
+    margin-bottom: 4px;
+    display: block;
   }
-  .cal-day .dow {
+  .sit .case {
+    font-size: var(--font-sm);
     font-weight: 900;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+  }
+  .sit .use {
+    font-size: 10px;
     color: var(--gray-500);
-    font-size: 10px;
     letter-spacing: 1px;
+    margin-bottom: var(--space-8);
   }
-  .cal-day .task {
-    font-size: 10px;
-    color: var(--primary);
-    font-weight: 700;
-    margin-top: 6px;
-    line-height: 1.3;
-  }
-  .cal-day.post .task { color: var(--primary); }
-  .cal-day .type {
+  .sit .use-tag {
     display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 100px;
     background: var(--primary);
     color: white;
-    font-size: 9px;
-    padding: 2px 6px;
-    border-radius: 100px;
-    margin-top: 4px;
-    font-weight: 700;
   }
-  .cal-day .type.b { background: var(--success); }
-  .cal-day .type.c { background: #E67E22; }
+  .sit .example {
+    margin-top: var(--space-8);
+    padding: var(--space-8);
+    background: var(--gray-100);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--gray-700);
+    line-height: 1.5;
+    text-align: left;
+  }
 
-  .revenue-chart {
+  /* ---- 尺カット図解 ---- */
+  .cut-viz {
     background: var(--white);
     border-radius: var(--radius-lg);
     padding: var(--space-32);
@@ -1350,311 +1343,1096 @@
     border: 1px solid var(--gray-200);
     margin: var(--space-32) 0;
   }
-  .rev-row {
-    display: grid;
-    grid-template-columns: 90px 1fr 110px;
-    gap: var(--space-16);
-    align-items: center;
-    padding: var(--space-12) 0;
-    border-bottom: 1px solid var(--gray-100);
-  }
-  .rev-row:last-child { border-bottom: none; }
-  .rev-row .milestone {
+  .cut-viz .viz-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-8);
+    font-size: var(--font-xs);
+    color: var(--gray-500);
     font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    color: var(--gray-900);
-    font-size: var(--font-lg);
+    letter-spacing: 1px;
   }
-  .rev-row .bar-container {
-    background: var(--gray-100);
-    border-radius: 100px;
-    height: 24px;
-    position: relative;
+  .cut-viz .timeline {
+    display: grid;
+    grid-template-columns: repeat(40, 1fr);
+    gap: 2px;
+    height: 56px;
+    border-radius: 8px;
     overflow: hidden;
+    margin-bottom: var(--space-24);
   }
-  .rev-row .bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    border-radius: 100px;
+  .cut-viz .seg {
+    font-size: 10px;
+    color: white;
+    font-weight: 700;
     display: flex;
     align-items: center;
-    padding-left: var(--space-12);
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
+    justify-content: center;
+    padding: 0 4px;
+    overflow: hidden;
+    white-space: nowrap;
   }
-  .rev-row .revenue {
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    color: var(--success);
+  .cut-viz .seg.keep { background: var(--success); }
+  .cut-viz .seg.cut { background: var(--danger); opacity: 0.7; }
+  .cut-viz .seg.maybe { background: var(--warning); color: #333; }
+  .cut-viz .viz-row {
+    margin-bottom: var(--space-24);
+  }
+  .cut-viz .viz-row h4 {
     font-size: var(--font-base);
-    text-align: right;
-  }
-
-  .pattern-card-v3 {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: var(--space-24);
-    border: 2px solid var(--gray-200);
-    box-shadow: var(--shadow-sm);
-    transition: all 0.2s;
-  }
-  .pattern-card-v3:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-light);
-  }
-  .pattern-card-v3 .type-badge {
-    display: inline-block;
-    background: var(--primary);
-    color: white;
-    font-family: 'Inter', sans-serif;
     font-weight: 900;
-    font-size: 13px;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-bottom: var(--space-12);
-  }
-  .pattern-card-v3.shuton-t .type-badge { background: var(--success); }
-  .pattern-card-v3.akakikus-t .type-badge { background: var(--info); }
-  .pattern-card-v3.proto-t .type-badge { background: #E67E22; }
-  .pattern-card-v3 h3 {
-    font-size: var(--font-lg);
-    font-weight: 800;
     color: var(--gray-900);
     margin-bottom: var(--space-8);
   }
-  .pattern-card-v3 .metric {
-    color: var(--gray-600);
-    font-size: var(--font-sm);
-    margin-bottom: var(--space-16);
+  .cut-viz .viz-row h4 .dur {
+    font-family: 'Inter', sans-serif;
+    color: var(--accent);
+    font-size: var(--font-lg);
+    margin-right: 8px;
   }
-  .pattern-card-v3 .metric strong { color: var(--gray-900); }
-  .pattern-card-v3 .ex {
-    background: var(--gray-100);
-    border-radius: 8px;
-    padding: var(--space-12);
+  .cut-viz .legend {
+    display: flex;
+    gap: var(--space-16);
+    font-size: var(--font-xs);
+    color: var(--gray-700);
+    margin-top: var(--space-16);
+    flex-wrap: wrap;
+  }
+  .cut-viz .legend .chip {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  .cut-viz .legend .chip.keep { background: var(--success); }
+  .cut-viz .legend .chip.cut { background: var(--danger); opacity: 0.7; }
+  .cut-viz .legend .chip.maybe { background: var(--warning); }
+
+  /* ---- 1日のワークフロー ---- */
+  .workflow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-12);
+    margin: var(--space-32) 0;
+  }
+  @media (max-width: 900px) { .workflow { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px) { .workflow { grid-template-columns: 1fr; } }
+  .wf {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--primary);
+    position: relative;
+  }
+  .wf.wf2 { border-top-color: #FDCB6E; }
+  .wf.wf3 { border-top-color: #E67E22; }
+  .wf.wf4 { border-top-color: #6C5CE7; }
+  .wf .time {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: var(--font-xl);
+    color: var(--primary);
+    line-height: 1;
+  }
+  .wf.wf2 .time { color: #FDCB6E; }
+  .wf.wf3 .time { color: #E67E22; }
+  .wf.wf4 .time { color: #6C5CE7; }
+  .wf .label {
+    font-size: 11px;
+    color: var(--gray-500);
+    letter-spacing: 1px;
+    margin: 4px 0 var(--space-12);
+  }
+  .wf h4 {
+    font-size: var(--font-base);
+    font-weight: 900;
+    color: var(--gray-900);
+    margin-bottom: var(--space-8);
+  }
+  .wf ul {
+    list-style: none;
+    padding: 0;
     font-size: var(--font-sm);
     color: var(--gray-700);
-    margin-bottom: 8px;
     line-height: 1.6;
   }
-  .pattern-card-v3 .rearlet-ex {
-    background: #F0EDFF;
+  .wf ul li {
+    padding: 3px 0;
+    padding-left: var(--space-16);
+    position: relative;
+  }
+  .wf ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
     color: var(--primary);
-    font-weight: 700;
-    border: 1px solid var(--primary-light);
+    font-weight: 900;
+  }
+  .wf.wf2 ul li::before { color: #FDCB6E; }
+  .wf.wf3 ul li::before { color: #E67E22; }
+  .wf.wf4 ul li::before { color: #6C5CE7; }
+  .wf .duration {
+    margin-top: var(--space-12);
+    padding: 6px 12px;
+    background: var(--gray-100);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--gray-600);
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+    text-align: center;
   }
 
-  .sec-hero-bg {
-    background: linear-gradient(160deg, #FFF5E8 0%, #FFF 50%);
+  /* ---- Do / Don't ---- */
+  .dodont {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    margin: var(--space-32) 0;
   }
-
-  .toc-block {
+  @media (max-width: 768px) { .dodont { grid-template-columns: 1fr; } }
+  .dd-col {
     background: var(--white);
     border-radius: var(--radius-lg);
-    padding: var(--space-32);
+    padding: var(--space-24);
     box-shadow: var(--shadow);
-    border: 1px solid var(--gray-200);
-    margin: var(--space-48) 0;
   }
-  .toc-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--space-12);
-    margin-top: var(--space-16);
+  .dd-col.do {
+    border-top: 6px solid var(--success);
   }
-  .toc-item {
-    padding: var(--space-12) var(--space-16);
-    border-radius: 8px;
-    background: var(--gray-100);
-    text-decoration: none;
-    color: var(--gray-800);
-    font-size: var(--font-sm);
-    font-weight: 600;
+  .dd-col.dont {
+    border-top: 6px solid var(--danger);
+  }
+  .dd-col h3 {
+    font-size: var(--font-xl);
+    font-weight: 900;
+    margin-bottom: var(--space-16);
     display: flex;
     align-items: center;
-    gap: var(--space-12);
-    transition: background 0.2s;
+    gap: var(--space-8);
   }
-  .toc-item:hover { background: var(--primary); color: white; }
-  .toc-item .toc-num {
-    font-family: 'Inter', sans-serif;
+  .dd-col.do h3 { color: var(--success); }
+  .dd-col.dont h3 { color: var(--danger); }
+  .dd-col h3 .ic {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
     font-weight: 900;
-    font-size: var(--font-base);
-    color: var(--primary);
-    width: 24px;
+    color: white;
+  }
+  .dd-col.do h3 .ic { background: var(--success); }
+  .dd-col.dont h3 .ic { background: var(--danger); }
+  .dd-col ul {
+    list-style: none;
+    padding: 0;
+    font-size: var(--font-sm);
+    line-height: 1.8;
+  }
+  .dd-col ul li {
+    padding: var(--space-8) 0;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-800);
+    display: flex;
+    gap: var(--space-8);
+  }
+  .dd-col ul li:last-child { border-bottom: none; }
+  .dd-col.do ul li::before {
+    content: '⭕';
+    color: var(--success);
+    font-size: 14px;
     flex-shrink: 0;
   }
-  .toc-item:hover .toc-num { color: white; }
+  .dd-col.dont ul li::before {
+    content: '❌';
+    color: var(--danger);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .dd-col ul li b {
+    color: var(--gray-900);
+    font-weight: 900;
+  }
 
-  /* 投稿頻度チャート */
-  .freq-chart {
+  /* ---- 今週チェックリスト ---- */
+  .checklist {
     background: var(--white);
     border-radius: var(--radius-lg);
     padding: var(--space-32);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--gray-200);
-    margin: var(--space-24) 0;
+    box-shadow: var(--shadow-lg);
+    border: 2px solid var(--primary);
+    margin: var(--space-32) 0;
   }
-  .freq-row {
-    display: grid;
-    grid-template-columns: 140px 1fr 80px;
-    gap: var(--space-16);
-    align-items: center;
-    padding: var(--space-8) 0;
-  }
-  .freq-row .ch {
-    font-size: var(--font-sm);
-    font-weight: 700;
-    color: var(--gray-800);
-  }
-  .freq-row .bar {
-    background: var(--gray-100);
-    border-radius: 100px;
-    height: 20px;
-    overflow: hidden;
-  }
-  .freq-row .fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--success), #55EFC4);
-    border-radius: 100px;
-  }
-  .freq-row .fill.low { background: linear-gradient(90deg, var(--danger), #FAB1A0); }
-  .freq-row .fill.mid { background: linear-gradient(90deg, #E67E22, #FDCB6E); }
-  .freq-row .val {
-    font-family: 'Inter', sans-serif;
+  .checklist h3 {
+    font-size: var(--font-xl);
     font-weight: 900;
-    font-size: var(--font-sm);
-    color: var(--gray-800);
-    text-align: right;
+    color: var(--primary);
+    margin-bottom: var(--space-24);
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
   }
+  .check-group {
+    margin-bottom: var(--space-24);
+  }
+  .check-group h4 {
+    font-size: var(--font-base);
+    font-weight: 900;
+    color: var(--gray-700);
+    letter-spacing: 1px;
+    margin-bottom: var(--space-8);
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--gray-200);
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-12);
+    padding: var(--space-8) 0;
+    font-size: var(--font-sm);
+    line-height: 1.6;
+    color: var(--gray-800);
+  }
+  .check-item .box {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--gray-400);
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .check-item b {
+    display: block;
+    color: var(--gray-900);
+    margin-bottom: 2px;
+  }
+  .check-item .how {
+    font-size: var(--font-xs);
+    color: var(--gray-500);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* 他ページへ ---- */
+  .reference-notice {
+    background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+    color: rgba(255,255,255,0.85);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    margin: var(--space-48) 0 var(--space-24);
+    text-align: center;
+  }
+  .reference-notice h3 {
+    color: white;
+    font-size: var(--font-lg);
+    margin-bottom: var(--space-8);
+    font-weight: 900;
+  }
+  .reference-notice p {
+    font-size: var(--font-sm);
+    line-height: 1.7;
+  }
+  .reference-notice strong { color: #FFD580; }
+
+  /* セクション小 */
+  .sec-compact { padding: var(--space-64) 0 !important; }
+  .sec-tight h2 { margin-bottom: var(--space-16); }
 </style>
 
 
 <body>
 
 <div class="report-meta">
-  🎮 REARLET SHORTS 完全戦略レポート v3 · データ取得 2026-04-22 · 日本スマブラSP 11ch <strong>406本</strong>解析
+  🎮 REARLET SHORTS <strong>行動</strong>レポート v4 · 2026-04-22 · 日本スマブラSP 11ch 406本解析 · 実タイトル31本に基づく変換案
 </div>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="hero-content">
     <div class="hero-badge">
-      <span>●</span> COMPLETE REPORT · DATA DRIVEN · JAPAN ONLY
+      <span>●</span> ACTION FIRST · 5分読んで次の1本が撮れる
     </div>
     <h1>
-      Rearlet Shorts 完全戦略<br>
-      <span class="highlight">エンタ × ガチ</span>で半年5万人
+      読んだら、<span class="highlight">次の1本</span>が作れる。<br>
+      半年で5万人。
     </h1>
     <p class="hero-sub">
-      日本スマブラSP系 <strong style="color:#FFD580">11チャンネル</strong>・
-      計 <strong style="color:#FFD580">406本のShorts実データ</strong>を <code>yt-dlp</code> で全件取得し、
-      タイトル構造・尺分布・投稿頻度・バイラル形態までを徹底分析。<br>
-      結論：<strong style="color:#FFD580">Shuton型（プロ実力×エンタ×短尺）こそ Rearletさんの最速路線</strong>です。
+      データも戦略も書いてありますが、まず <strong style="color:#FFD580">「今日やる3つ」</strong> から読んでください。<br>
+      後半に詳細分析（11ch・406本のデータ）も入れてますが、<strong style="color:#FFD580">最初の§A〜§Hだけ読めば行動できます</strong>。
     </p>
 
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="val" style="color:#55EFC4">17.27</span>
-        <span class="lbl">med/foll 1位(全11ch中)</span>
+        <span class="val" style="color:#55EFC4">§A</span>
+        <span class="lbl">今日やる3つ</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#A29BFE">274万</span>
-        <span class="lbl">エンタ×ガチ系最高再生(ブリカワ)</span>
+        <span class="val" style="color:#FDCB6E">§B</span>
+        <span class="lbl">直近動画の変換</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#FDCB6E">週4-5本</span>
-        <span class="lbl">推奨投稿頻度(Phase1〜3共通)</span>
+        <span class="val" style="color:#A29BFE">§C</span>
+        <span class="lbl">タイトル穴埋め</span>
       </div>
       <div class="hero-stat">
-        <span class="val" style="color:#FAB1A0">+48,860</span>
-        <span class="lbl">6ヶ月の純増ノルマ</span>
+        <span class="val" style="color:#FAB1A0">§H</span>
+        <span class="lbl">今週チェック</span>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ============ ANCHOR NAV ============ -->
-<nav class="anchor-nav">
-  <div class="anchor-nav-inner">
-    <a href="#exec">結論</a>
-    <a href="#triage">3型比較</a>
-    <a href="#bench">11ch実データ</a>
-    <a href="#viral">Top20バイラル</a>
-    <a href="#pattern">勝ちパターン</a>
-    <a href="#freq">投稿頻度分析</a>
-    <a href="#gap">Rearletギャップ</a>
-    <a href="#titles">30本タイトル案</a>
-    <a href="#calendar">4週間カレンダー</a>
-    <a href="#roadmap">半年ロードマップ</a>
-    <a href="#revenue">収益化マイル</a>
-    <a href="#action">今週やる事</a>
-  </div>
-</nav>
-
-<!-- ============ 01 EXEC SUMMARY ============ -->
-<section id="exec">
+<!-- ============ §A 今日やる3つ ============ -->
+<section>
   <div class="container">
-    <div class="sec-num">01 · EXECUTIVE SUMMARY</div>
-    <h2>このレポートで分かったこと</h2>
+    <div class="sec-num">§A · TODAY'S 3 STEPS</div>
+    <h2>今日、これだけやる</h2>
     <p class="sec-desc">
-      「J!さん路線（エンタ×ガチ混合）を真似したい」という仮説を、日本スマブラSP系11チャンネル406本の
-      実データで徹底検証した結果です。<strong>仮説はYES、ただし採用すべきは「Shuton型」</strong>。
+      5万人への道は、この3つを<strong>今日1日</strong>でやれば始まります。合計30分、頭は使いません。
     </p>
 
-    <div class="metric-hero">
-      <div class="box">
-        <div class="num">17.27</div>
-        <div class="lbl">REARLET med/foll</div>
-        <div class="sub">登録者1人あたり平均再生数。<br>全11chで最高値。動画の力は最強水準。</div>
+    <div class="step-hero">
+      <div class="step-card" data-step="1">
+        <div class="step-label">STEP 1</div>
+        <div class="step-time">今から15分</div>
+        <h3>直近1本を<br>16秒版に切る</h3>
+        <div class="step-body">
+          直近の動画を <strong>14〜20秒</strong> に縮めるだけ。撮り直し不要。
+          撃墜の瞬間＋結果テロップ2秒＋余韻2秒、それ以外はすべてカット。
+        </div>
+        <div class="step-cta">
+          <strong>どの動画？</strong>
+          4/14「魂の逆転劇」25秒→16秒、または4/16「上b空後で逆転撃墜」22秒→14秒
+          のどちらか。後述の§Eに切り方の図解あり。
+        </div>
       </div>
-      <div class="box">
-        <div class="num">40秒→16秒</div>
-        <div class="lbl">DURATION GAP</div>
-        <div class="sub">バイラル上位は13-25秒が主流。<br>Rearletは現在40秒で明確に長すぎ。</div>
+
+      <div class="step-card s2" data-step="2">
+        <div class="step-label">STEP 2</div>
+        <div class="step-time">今から5分</div>
+        <h3>タイトルを<br>公式に当てはめる</h3>
+        <div class="step-body">
+          後述§Cの <strong>穴埋めテンプレ</strong> に、今日の動画の内容を入れる。
+          「！」を「？」に変えて、末尾を<code>【スマブラSP】#shorts</code>で固定。
+        </div>
+        <div class="step-cta">
+          <strong>例：</strong>
+          「上b空後で逆転撃墜？！！」
+          →「最凶カズヤの即死、<br>クッパで耐えられますか？【スマブラSP】#shorts」
+        </div>
       </div>
-      <div class="box">
-        <div class="num">週2.65→4.5</div>
-        <div class="lbl">POSTING FREQUENCY</div>
-        <div class="sub">ブリカワは週4.88、智念4.79。<br>伸びるチャンネルは週4-5が基準。</div>
-      </div>
-      <div class="box">
-        <div class="num">100万再生</div>
-        <div class="lbl">SHUTON型ヒット</div>
-        <div class="sub">ガチ×疑問形×視聴者参加<br>「〜できますか？」型は個人でも射程内。</div>
+
+      <div class="step-card s3" data-step="3">
+        <div class="step-label">STEP 3</div>
+        <div class="step-time">21時ジャスト</div>
+        <h3>夜21時に<br>投稿する</h3>
+        <div class="step-body">
+          スマブラ層の退勤〜就寝前がゴールデンタイム。
+          <strong>投稿ボタンを押すだけ</strong>。コメント欄には「次回：〇〇予告」を固定。
+        </div>
+        <div class="step-cta">
+          <strong>投稿後30分でやること：</strong>
+          早期コメントにいいね＋返信、視聴者保持率＆CTRをStudioで即確認。
+          数値が悪ければ翌日にタイトル差し替えで再挑戦。
+        </div>
       </div>
     </div>
 
-    <div class="toc-block">
-      <h3 style="font-size:var(--font-lg);margin-bottom:var(--space-8);">📖 目次</h3>
-      <p style="color:var(--gray-600);font-size:var(--font-sm);">全12章。気になるところから読めます。</p>
-      <div class="toc-grid">
-        <a href="#triage" class="toc-item"><span class="toc-num">02</span> 3型比較（アカ/Shu/ブリ）</a>
-        <a href="#bench" class="toc-item"><span class="toc-num">03</span> 11ch実データ大表</a>
-        <a href="#viral" class="toc-item"><span class="toc-num">04</span> Top20バイラル一覧</a>
-        <a href="#pattern" class="toc-item"><span class="toc-num">05</span> 6つの勝ちパターン</a>
-        <a href="#freq" class="toc-item"><span class="toc-num">06</span> 投稿頻度ランキング</a>
-        <a href="#gap" class="toc-item"><span class="toc-num">07</span> Rearletギャップ分析</a>
-        <a href="#titles" class="toc-item"><span class="toc-num">08</span> 30本タイトル案</a>
-        <a href="#calendar" class="toc-item"><span class="toc-num">09</span> 4週投稿カレンダー</a>
-        <a href="#roadmap" class="toc-item"><span class="toc-num">10</span> 半年ロードマップ</a>
-        <a href="#revenue" class="toc-item"><span class="toc-num">11</span> 収益マイルストーン</a>
-        <a href="#action" class="toc-item"><span class="toc-num">12</span> 今週やる3タスク</a>
+    <div class="callout callout-success">
+      <strong>🎯 今日これをやると何が起きるか：</strong>
+      Rearletさんの med/foll 17.27 は既に全11chで1位。
+      あとは <strong>尺を短く</strong>・<strong>タイトルを型に</strong>・<strong>投稿時刻を固定</strong> の3条件が揃うだけで、
+      平均再生は現在の 19,691回 → 40,000〜80,000回 のレンジに到達可能です（同型チャンネルの実績値）。
+    </div>
+  </div>
+</section>
+
+<!-- ============ §B Before→After ============ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">§B · BEFORE → AFTER</div>
+    <h2>Rearletさんの実タイトル10本を、その場で変換</h2>
+    <p class="sec-desc">
+      2026年1月〜4月にRearletさんが実際に投稿した31本から、代表10本を抜粋。
+      左が現状、右が<strong>3型（Shuton/アカキクス/プロトバナム）に基づく推奨版</strong>。
+      コピペしてそのまま使えます。
+    </p>
+
+    <div class="ba-list">
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #01</span>
+            <div class="ttl">これが最強クッパRearlet #スマブラ #クッパ</div>
+            <div class="meta"><span class="v">4,817回</span> 56s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">日本9位クッパの最強コンボ、200%ハンデで通用しますか？【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→16s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>「最強クッパ」は主観で検索HIT不可。具体的な数字・条件・疑問で引きを作る。</div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #02</span>
+            <div class="ttl">ルナマドさんの大逆転即死コンボ！？？ #クッパ</div>
+            <div class="meta"><span class="v">9,526回</span> 43s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">ルナマドさんの大逆転即死コンボ、日本9位クッパで返せますか？【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→18s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>「！？？」を「？」1つに統一。肩書「日本9位」で権威性。末尾定型。</div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #03</span>
+            <div class="ttl">上b空後で逆転撃墜？！！ #クッパ</div>
+            <div class="meta"><span class="v">11,360回</span> 22s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">最凶カズヤの即死間際、クッパの上B空後で耐えられますか？【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→16s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>専門技名だけでは非登録者に刺さらない。相手＋状況＋結果を文章で。</div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #04</span>
+            <div class="ttl">Rearletクッパ魂の逆転劇！！ #クッパ</div>
+            <div class="meta"><span class="v">9,057回</span> 25s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">2ストックビハインドから、日本9位クッパは逆転できますか？【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→17s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>「魂の逆転劇」は抽象的。「2ストビハインドから」で具体条件を提示。</div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #05</span>
+            <div class="ttl">クッパおもスンギ #クッパ #スマブラsp</div>
+            <div class="meta"><span class="v">24,693回</span> 32s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">クッパの強いとこ全部出た対最強カズヤ戦ｗ【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→20s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>内輪ノリは検索されない。「全部出たｗ」＋相手明記で一般層に届く。</div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #06</span>
+            <div class="ttl">へろーさん...??? #クッパ</div>
+            <div class="meta"><span class="v">29,454回</span> 40s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">クッパ界最強へろーさんに、日本9位クッパはどこまで通用しますか？【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→22s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>「へろーさん...???」は前提知識が無いと読めない。権威ワードで埋める。</div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #07</span>
+            <div class="ttl">ゴブリンマリオに200%ハンデで勝利しました！！！</div>
+            <div class="meta"><span class="v">278,122回</span> 40s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">27万再生されたゴブリンマリオ戦の続編・今度は300%ハンデで【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→17s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>既にバズった素材は自己引用型で再利用。再生数を前面に出すと再バズが起きやすい。</div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #08</span>
+            <div class="ttl">令和クッパの新即死コンボ！？ #クッパ</div>
+            <div class="meta"><span class="v">181,701回</span> 31s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">18万再生された令和クッパ新即死を、更に進化させました【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→15s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>自己引用＋進化のナラティブ。視聴者は「前回の続き」を見たくなる。</div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #09</span>
+            <div class="ttl">最強のクッパ使い、チノスマの主催者に敗北 #クッパ</div>
+            <div class="meta"><span class="v">312,199回</span> 41s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">チノスマ決勝、最強クッパ使いが日本1位に見せた粘り技【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→18s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>「敗北」は逆算ワード。「粘り技」に言い換えて前向きに。肩書きも具体化。</div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-grid">
+          <div class="ba-side before">
+            <span class="tag">BEFORE #10</span>
+            <div class="ttl">TOP8を懸けた戦いでまさかのワンターンキル？！</div>
+            <div class="meta"><span class="v">63,352回</span> 21s</div>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-side after">
+            <span class="tag">AFTER</span>
+            <div class="ttl">チノスマTOP8戦、日本9位クッパのワンターンキルを見て下さい【スマブラSP】#shorts</div>
+            <div class="meta"><span class="v">→15s</span> 推奨尺</div>
+          </div>
+        </div>
+        <div class="ba-reason"><strong>WHY:</strong>「？！」疑問＋感嘆の混在を解消。大会名＋肩書き明記で検索ワード網を広げる。</div>
+      </div>
+
+    </div>
+
+    <div class="callout callout-info">
+      <strong>📝 全ての変換に共通する3つのルール：</strong>
+      ① <strong>「！」を「？」「できますか」に置換</strong>（Shuton型フック化）<br>
+      ② <strong>相手プロ名 or 日本9位肩書を入れる</strong>（検索HIT・権威性）<br>
+      ③ <strong>末尾は【スマブラSP】#shorts で固定</strong>（アルゴリズム分類強化）
+    </div>
+  </div>
+</section>
+
+<!-- ============ §C タイトル公式 ============ -->
+<section>
+  <div class="container">
+    <div class="sec-num">§C · TITLE FORMULA</div>
+    <h2>タイトルの穴埋めテンプレ3種</h2>
+    <p class="sec-desc">
+      黄色の部分に今日の動画の情報を入れるだけ。
+      3種類あるので、動画の内容に合わせて選びます。
+    </p>
+
+    <div class="tmpl-card">
+      <div class="tmpl-head">
+        <span class="tmpl-num">①</span>
+        <div>
+          <h3>Shuton型・疑問フック</h3>
+          <div class="tmpl-use">対プロ戦・ハンデマッチ・新技試し ｜ 中央尺 55秒以内</div>
+        </div>
+      </div>
+      <div class="formula">
+        <span class="slot">プロ名 or キャラ</span>の<span class="slot">技 or 状況</span>、<span class="slot">自キャラ</span>で<span class="slot">動詞＋できますか</span>？【スマブラSP】#shorts
+      </div>
+      <div class="examples">
+        <h4>そのまま使える例 5つ</h4>
+        <div class="ex">最強カズヤの即死コンボ、クッパで耐えられますか？【スマブラSP】#shorts</div>
+        <div class="ex">ザクレイのロボット、日本9位クッパで撃墜できますか？【スマブラSP】#shorts</div>
+        <div class="ex">あcolaのホムヒカ相手に、クッパで3ストック取れますか？【スマブラSP】#shorts</div>
+        <div class="ex">ミーヤーのカズヤ、クッパで止められますか？【スマブラSP】#shorts</div>
+        <div class="ex">Shutonさんのピクオリ、クッパで粘り勝ちできますか？【スマブラSP】#shorts</div>
+      </div>
+    </div>
+
+    <div class="tmpl-card">
+      <div class="tmpl-head">
+        <span class="tmpl-num">②</span>
+        <div>
+          <h3>アカキクス型・自己実績引用</h3>
+          <div class="tmpl-use">過去バズ動画の再利用・シリーズ化 ｜ 中央尺 14秒前後</div>
+        </div>
+      </div>
+      <div class="formula">
+        <span class="slot">数字</span>万再生された<span class="slot">技 or コンボ</span>を、<span class="slot">新しい相手 or 条件</span>で再現【スマブラSP】#shorts
+      </div>
+      <div class="examples">
+        <h4>そのまま使える例 5つ</h4>
+        <div class="ex">30万再生されたチノスマ優勝者撃墜コンボを最強スティーブ相手に【スマブラSP】#shorts</div>
+        <div class="ex">27万再生されたゴブリンマリオ200%ハンデ編の続編【スマブラSP】#shorts</div>
+        <div class="ex">18万再生された令和クッパの新即死コンボを更に進化させた【スマブラSP】#shorts</div>
+        <div class="ex">13万再生されたカズヤ戦のリベンジ、3ストック完勝【スマブラSP】#shorts</div>
+        <div class="ex">6万再生されたワンターンキルを別キャラ相手に再現【スマブラSP】#shorts</div>
+      </div>
+    </div>
+
+    <div class="tmpl-card">
+      <div class="tmpl-head">
+        <span class="tmpl-num">③</span>
+        <div>
+          <h3>プロトバナム型・対戦者形容</h3>
+          <div class="tmpl-use">負け試合・珍プレー・配信切り抜き ｜ 中央尺 19秒前後</div>
+        </div>
+      </div>
+      <div class="formula">
+        <span class="slot">キャラ名</span>の<span class="slot">強い or 弱い</span>とこが全部出た<span class="slot">相手キャラ or 人名</span>戦ｗ【スマブラSP】
+      </div>
+      <div class="examples">
+        <h4>そのまま使える例 5つ</h4>
+        <div class="ex">クッパの強いとこ全部出たあcola戦ｗ【スマブラSP】</div>
+        <div class="ex">クッパの弱いとこが全部出たザクレイ戦ｗ【スマブラSP】</div>
+        <div class="ex">カズヤ相手にクッパの限界見たｗ【スマブラSP】</div>
+        <div class="ex">スティーブ戦でクッパが完全に機能停止したｗ【スマブラSP】</div>
+        <div class="ex">へろークッパ戦、クッパミラーの闇が見えたｗ【スマブラSP】</div>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <strong>💡 どのテンプレを選ぶか迷ったら：</strong>
+      <strong>①（疑問フック）を基本3本に1本</strong>入れる → 新規視聴者の手を止める<br>
+      <strong>②（自己引用）は過去バズ直後</strong>に投入 → シリーズ化で連続バズ<br>
+      <strong>③（形容）は配信切り抜き</strong>に → 編集が楽で量産可能
+    </div>
+  </div>
+</section>
+
+<!-- ============ §D 状況別マトリクス ============ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">§D · SITUATION MAP</div>
+    <h2>撮った動画 → どのテンプレ？</h2>
+    <p class="sec-desc">
+      試合の状況から、使うべきテンプレが瞬時に分かるマップ。
+      撮影後10秒で「これは①番」と判断できます。
+    </p>
+
+    <div class="sitmat">
+      <div class="sit">
+        <span class="emoji">🏆</span>
+        <div class="case">プロに勝った</div>
+        <div class="use">USE</div>
+        <div class="use-tag">①疑問フック</div>
+        <div class="example">「〇〇のキャラ、クッパで撃墜できますか？」</div>
+      </div>
+      <div class="sit">
+        <span class="emoji">😵</span>
+        <div class="case">プロに負けた</div>
+        <div class="use">USE</div>
+        <div class="use-tag" style="background:#E67E22">③形容ｗ</div>
+        <div class="example">「クッパの弱いとこ全部出た〇〇戦ｗ」</div>
+      </div>
+      <div class="sit">
+        <span class="emoji">⚡</span>
+        <div class="case">神コンボ決まった</div>
+        <div class="use">USE</div>
+        <div class="use-tag" style="background:var(--info)">②自己引用</div>
+        <div class="example">「〇万再生された〇〇コンボを〇〇で」</div>
+      </div>
+      <div class="sit">
+        <span class="emoji">🔄</span>
+        <div class="case">大逆転した</div>
+        <div class="use">USE</div>
+        <div class="use-tag">①疑問フック</div>
+        <div class="example">「〇〇状況から、クッパで勝てますか？」</div>
+      </div>
+      <div class="sit">
+        <span class="emoji">🎯</span>
+        <div class="case">大会で勝った</div>
+        <div class="use">USE</div>
+        <div class="use-tag" style="background:var(--info)">②自己引用</div>
+        <div class="example">「チノスマ〇位が見せたクッパ神撃墜」</div>
+      </div>
+      <div class="sit">
+        <span class="emoji">💢</span>
+        <div class="case">VIPで煽られた</div>
+        <div class="use">USE</div>
+        <div class="use-tag" style="background:#E67E22">③形容ｗ</div>
+        <div class="example">「VIPマッチ最凶煽りに無双されたｗ」</div>
+      </div>
+      <div class="sit">
+        <span class="emoji">🆕</span>
+        <div class="case">新技を試した</div>
+        <div class="use">USE</div>
+        <div class="use-tag">①疑問フック</div>
+        <div class="example">「〇〇の新ルート、撃墜できますか？」</div>
+      </div>
+      <div class="sit">
+        <span class="emoji">📹</span>
+        <div class="case">配信中の神シーン</div>
+        <div class="use">USE</div>
+        <div class="use-tag" style="background:#E67E22">③形容ｗ</div>
+        <div class="example">「クッパの〇〇が全部出た配信ｗ」</div>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>📌 迷ったら①疑問フックに統一。</strong>
+      Shuton型の疑問フックは、<strong>視聴者が&quot;答えを見たくて最後まで見る&quot;</strong> 構造なので、
+      視聴維持率（=アルゴリズム評価）が最も安定して高く出ます。
+    </div>
+  </div>
+</section>
+
+<!-- ============ §E 尺カット図解 ============ -->
+<section>
+  <div class="container">
+    <div class="sec-num">§E · CUT GUIDE</div>
+    <h2>40秒の動画を16秒に縮める手順</h2>
+    <p class="sec-desc">
+      Rearletさんの直近動画は中央値40秒。これを<strong>14〜20秒</strong>に詰めるテクニック。
+      どこを切って、どこを残すかを時間軸で可視化します。
+    </p>
+
+    <div class="cut-viz">
+      <div class="viz-row">
+        <h4><span class="dur">BEFORE</span> 40秒版（現状 4/14「魂の逆転劇」相当）</h4>
+        <div class="viz-label">
+          <span>0s</span><span>10s</span><span>20s</span><span>30s</span><span>40s</span>
+        </div>
+        <div class="timeline">
+          <div class="seg cut" style="grid-column: span 5">試合開幕演出</div>
+          <div class="seg cut" style="grid-column: span 8">通常攻防(平坦)</div>
+          <div class="seg maybe" style="grid-column: span 4">中盤撃墜</div>
+          <div class="seg cut" style="grid-column: span 6">待機・仕切り直し</div>
+          <div class="seg keep" style="grid-column: span 10">逆転撃墜</div>
+          <div class="seg cut" style="grid-column: span 7">余韻・勝利演出</div>
+        </div>
+      </div>
+
+      <div class="viz-row">
+        <h4><span class="dur">AFTER</span> 16秒版（理想型）</h4>
+        <div class="viz-label">
+          <span>0s</span><span>4s</span><span>8s</span><span>12s</span><span>16s</span>
+        </div>
+        <div class="timeline" style="grid-template-columns: repeat(16, 1fr);">
+          <div class="seg keep" style="grid-column: span 2">冒頭フック①</div>
+          <div class="seg keep" style="grid-column: span 3">状況説明テロップ</div>
+          <div class="seg keep" style="grid-column: span 3">撃墜準備2秒</div>
+          <div class="seg keep" style="grid-column: span 4">逆転撃墜の瞬間</div>
+          <div class="seg keep" style="grid-column: span 2">勝利テロップ</div>
+          <div class="seg keep" style="grid-column: span 2">登録訴求</div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span><span class="chip keep"></span>絶対残す</span>
+        <span><span class="chip maybe"></span>必要なら残す</span>
+        <span><span class="chip cut"></span>完全にカット</span>
+      </div>
+    </div>
+
+    <div class="dodont" style="margin-top: var(--space-32);">
+      <div class="dd-col do">
+        <h3><span class="ic">✓</span>残すべき4要素</h3>
+        <ul>
+          <li><b>冒頭1-2秒：</b>「〇〇に挑戦！」等のテロップ or 開始直前の構え</li>
+          <li><b>撃墜の直前3秒：</b>決めに行くコマンド入力〜撃墜成立</li>
+          <li><b>結果テロップ2秒：</b>「日本9位クッパ vs 〇〇」等で権威性</li>
+          <li><b>最後1秒：</b>「登録お願いします」の定型テロップ</li>
+        </ul>
+      </div>
+      <div class="dd-col dont">
+        <h3><span class="ic">✕</span>全部カットする4要素</h3>
+        <ul>
+          <li><b>試合開幕演出：</b>ステージ選択〜READYは完全不要</li>
+          <li><b>平坦な中盤攻防：</b>相殺や牽制の応酬は一切見せない</li>
+          <li><b>待機・仕切り直し：</b>1ストック取った後の様子見は全カット</li>
+          <li><b>勝利後の余韻：</b>ジャンプや煽り等は3秒以上なら短縮</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-success">
+      <strong>🎬 編集ソフトでの作業手順（CapCut/Premiere/Final Cut どれでも）：</strong>
+      ① 元動画を読み込む<br>
+      ② 撃墜の瞬間から「後ろ3秒」を先にマーク<br>
+      ③ 「前10秒」を遡って、テロップ入れる範囲を決める<br>
+      ④ それ以外を全部削除<br>
+      ⑤ タイトルテロップ（冒頭1秒）＆登録促しテロップ（末尾1秒）を追加<br>
+      ⑥ 書き出し（1080x1920 / 30fps / MP4）で完了
+    </div>
+  </div>
+</section>
+
+<!-- ============ §F 1日のワークフロー ============ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <div class="sec-num">§F · DAILY WORKFLOW</div>
+    <h2>1日のワークフロー（2時間で完結）</h2>
+    <p class="sec-desc">
+      朝・昼・夕・夜の4ブロックで合計約2時間。これを週4-5日やると、5万人まで到達します。
+    </p>
+
+    <div class="workflow">
+      <div class="wf">
+        <div class="time">09:00</div>
+        <div class="label">MORNING · 分析</div>
+        <h4>前日投稿の振り返り</h4>
+        <ul>
+          <li>Studio開く</li>
+          <li>視聴維持率をチェック</li>
+          <li>CTR（インプレ→再生）確認</li>
+          <li>コメントへの早期返信</li>
+        </ul>
+        <div class="duration">約15分</div>
+      </div>
+
+      <div class="wf wf2">
+        <div class="time">13:00</div>
+        <div class="label">AFTERNOON · 撮影</div>
+        <h4>試合・対戦素材の収録</h4>
+        <ul>
+          <li>スマメイト or VIPで2-3戦</li>
+          <li>1戦の中で「光る瞬間」を1〜2箇所チェック</li>
+          <li>大会出場日は配信素材から切り抜き</li>
+          <li>素材は全試合保存（後日再利用）</li>
+        </ul>
+        <div class="duration">約60分（試合分）</div>
+      </div>
+
+      <div class="wf wf3">
+        <div class="time">19:00</div>
+        <div class="label">EVENING · 編集</div>
+        <h4>16秒版への圧縮＆タイトル</h4>
+        <ul>
+          <li>§Eの手順で14-20秒にカット</li>
+          <li>冒頭・末尾テロップ追加</li>
+          <li>§Cのテンプレでタイトル決定</li>
+          <li>サムネ：顔 or キャラのビックリ顔</li>
+        </ul>
+        <div class="duration">約30分</div>
+      </div>
+
+      <div class="wf wf4">
+        <div class="time">21:00</div>
+        <div class="label">NIGHT · 投稿</div>
+        <h4>公開＆初動対応</h4>
+        <ul>
+          <li>21:00ジャストで公開</li>
+          <li>固定コメントで次回予告</li>
+          <li>Xでシェア（同時投稿）</li>
+          <li>30分後にStudioで初動確認</li>
+        </ul>
+        <div class="duration">約15分</div>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>📅 1週間のパターン：</strong>
+      月〜金の5日間でこのワークフローを回せば、週5本投稿達成。
+      土日は「過去素材の再編集」で+1〜2本投下（計週6〜7本）も可能。
+      <strong>最低ライン週4本、理想は週5-6本。</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §G Do / Don't ============ -->
+<section>
+  <div class="container">
+    <div class="sec-num">§G · DO / DON'T</div>
+    <h2>やること・やらないこと 総まとめ</h2>
+    <p class="sec-desc">
+      迷った時に立ち返る基準リスト。スクショして投稿前のチェック表にどうぞ。
+    </p>
+
+    <div class="dodont">
+      <div class="dd-col do">
+        <h3><span class="ic">⭕</span> DO（毎回やる）</h3>
+        <ul>
+          <li><b>尺14-20秒に圧縮する</b>（撃墜＋結果＋余韻1秒）</li>
+          <li><b>タイトル末尾は【スマブラSP】#shorts で固定</b>（検索・分類強化）</li>
+          <li><b>疑問符「？」か「できますか」で終わる</b>（視聴維持UP）</li>
+          <li><b>相手のプロ名・キャラ名を明記</b>（検索HIT + 権威性）</li>
+          <li><b>自己実績（日本9位・チノスマ優勝）を入れる</b></li>
+          <li><b>冒頭1秒に状況テロップ</b>（「VS 最強カズヤ」等）</li>
+          <li><b>末尾1秒に登録訴求テロップ</b>（定型で固定）</li>
+          <li><b>投稿時刻は21:00ジャストで固定</b></li>
+          <li><b>週4本以上投稿する</b>（休む日＝アルゴリズム評価DOWN）</li>
+          <li><b>Xでも同時シェア</b>（初動インプレッション倍増）</li>
+          <li><b>固定コメントで次回予告</b>（リピーター誘導）</li>
+          <li><b>30分後に初動をStudio確認</b>（悪ければ翌日差し替え）</li>
+        </ul>
+      </div>
+      <div class="dd-col dont">
+        <h3><span class="ic">❌</span> DON'T（絶対やらない）</h3>
+        <ul>
+          <li><b>感嘆符「！！」を多用しない</b>（Rearlet現状80%→15%以下へ）</li>
+          <li><b>30秒超のShortsを出さない</b>（例外はコラボのみ）</li>
+          <li><b>「クッパおもスンギ」等の抽象タイトル禁止</b>（検索HIT不可）</li>
+          <li><b>「？！！」の混在禁止</b>（1つの文末記号に統一）</li>
+          <li><b>試合開幕のREADYを残さない</b>（最初の3秒で離脱）</li>
+          <li><b>平坦な中盤の攻防を残さない</b>（撃墜以外は全カット）</li>
+          <li><b>ハッシュタグを6個以上並べない</b>（情報量過多）</li>
+          <li><b>説明欄を空にしない</b>（1行目に大会実績を書く）</li>
+          <li><b>BGM無し・テロップ無しで投稿しない</b></li>
+          <li><b>サムネを動画のスクショ任せにしない</b>（顔orキャラの特写）</li>
+          <li><b>投稿直後に放置しない</b>（初動コメントに必ず反応）</li>
+          <li><b>週3本以下に落とさない</b>（アルゴリズム評価が急落）</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ 02 3TYPE TRIAGE ============ -->
-<section id="triage" style="background: var(--gray-100);">
+<!-- ============ §H 今週チェックリスト ============ -->
+<section style="background: var(--gray-100);">
   <div class="container">
-    <div class="sec-num">02 · TRIAGE</div>
-    <h2>エンタ×ガチ系の3つの型</h2>
+    <div class="sec-num">§H · WEEK 1 CHECKLIST</div>
+    <h2>今週（4/22〜4/28）のチェックリスト</h2>
     <p class="sec-desc">
-      「J!さん路線」の実体をデータで分解すると、3つの完全に異なる成功モデルが存在していました。
-      どれを選ぶかで、やるべきこと・必要なリソースが180度違います。
+      このレポートを印刷 or スクショして、□にチェックを入れていくだけ。
+      全部埋まると、Phase 1 の初週が完了しています。
+    </p>
+
+    <div class="checklist">
+      <h3>✅ Rearlet Phase 1 · Week 1</h3>
+
+      <div class="check-group">
+        <h4>📹 動画関連（4本以上投稿）</h4>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>4/23（水）直近動画を16秒版に再編集して投稿</b>
+            <div class="how">§Eの手順 ｜ タイトルは§C②「〇万再生された〇〇を再現」型</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>4/25（金）新規撮影＋編集＋投稿</b>
+            <div class="how">VIP/スマメイトの勝ち試合 ｜ タイトルは§C①疑問フック型</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>4/27（日）プロトバナム型で1本</b>
+            <div class="how">配信切り抜きOK ｜ タイトル§C③形容ｗ型</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>4/28（月）過去バズ自己引用型で1本</b>
+            <div class="how">3/20の312K動画を起点に、別相手で再現コンボ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <h4>⚙️ チャンネル設定（1回だけやる）</h4>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>チャンネル概要を書き換え</b>
+            <div class="how">例：「日本9位クッパ使いRearlet／最強クッパを目指す試合集」｜ 1行目に実績を書く</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>トップ固定動画を変更</b>
+            <div class="how">3/20「最強クッパ使いチノスマ主催者に敗北」312Kを先頭にピン留め</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>全動画の説明欄に定型テンプレ導入</b>
+            <div class="how">1行目：「日本9位クッパ使いRearletです」｜ 2-3行目：大会実績 ｜ 最終行：関連動画</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>バナー画像を「日本9位・Rearletクッパ」で更新</b>
+            <div class="how">権威性の即視化 ｜ Canvaで30分で作れる</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <h4>📊 分析・振り返り（毎日5分）</h4>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>毎朝9時Studioを開く</b>
+            <div class="how">昨日の動画の視聴維持率・CTR・登録者転換を確認</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>4/28（月）週次振り返り</b>
+            <div class="how">4本の再生数・維持率を比較 ｜ 最も反応良い「型」を把握 ｜ Week2の4本の型比率を調整</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-group">
+        <h4>🎯 外部露出（任意・余裕があれば）</h4>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>Xで全Shortsを同時シェア</b>
+            <div class="how">初動インプレッションが1.5-2倍に ｜ 140字で動画の1行要約を添える</div>
+          </div>
+        </div>
+        <div class="check-item">
+          <div class="box"></div>
+          <div>
+            <b>へろー・ルナマド等クッパ使い仲間にDM</b>
+            <div class="how">「5月にコラボ企画出したい」打診 ｜ Phase2で活きる</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-success">
+      <strong>🏁 Week 1 ゴール：</strong>
+      上記チェックリスト全項目埋める ｜ Shorts 4本投稿達成 ｜ 平均再生 30,000回以上 ｜ 登録者 +200人
+    </div>
+  </div>
+</section>
+
+<div class="reference-notice">
+  <div class="container">
+    <h3>📚 ここから下は「詳細データ・参考資料」です</h3>
+    <p>
+      行動に必要なことは<strong>§A〜§H</strong>で全て書きました。<br>
+      「なぜそうするのか」「他チャンネルとどう違うのか」を知りたい時に以下を参照してください。
+    </p>
+  </div>
+</div>
+
+<!-- ============ 参考①：3型比較 ============ -->
+<section>
+  <div class="container">
+    <div class="sec-num">REFERENCE 01 · TRIAGE</div>
+    <h2>エンタ×ガチ系の3つの型（詳細）</h2>
+    <p class="sec-desc">
+      「J!さん路線」の実体をデータで分解すると、3つの完全に異なる成功モデルに分かれました。
     </p>
 
     <div class="triage-grid">
@@ -1662,7 +2440,7 @@
         <h3>アカキクス型</h3>
         <div class="subtitle">GACHI SHORT · 短尺ガチ特化</div>
         <div class="big-metric">14s</div>
-        <div class="metric-label">中央尺 · 登録21,300人</div>
+        <div class="metric-label">中央尺 · 登録21,300人 · med 20万</div>
         <ul>
           <li>尺13-20秒に徹底圧縮</li>
           <li>【スマブラSP】#shorts 定型必須</li>
@@ -1670,7 +2448,7 @@
           <li>数字（再生数・秒数）提示</li>
           <li>週1.5本の中頻度</li>
         </ul>
-        <div class="verdict">💡 現状Rearletのmed/follに最も合う</div>
+        <div class="verdict">💡 Rearletのmed/follに最も合う</div>
       </div>
 
       <div class="triage-card shuton">
@@ -1678,22 +2456,22 @@
         <h3>Shuton型</h3>
         <div class="subtitle">PRO ENTER · プロ実力×エンタ</div>
         <div class="big-metric">55s</div>
-        <div class="metric-label">中央尺 · 登録95,800人</div>
+        <div class="metric-label">中央尺 · 登録95,800人 · med 18万</div>
         <ul>
-          <li>疑問形タイトル「〜できますか？」</li>
+          <li>疑問形「〜できますか？」</li>
           <li>視聴者参加型「視聴者が魅せた〜」</li>
           <li>プロ名を混ぜる（相手プレイヤー）</li>
           <li>1本100万再生の当たり大きい</li>
           <li>週0.75本の希少価値型</li>
         </ul>
-        <div class="verdict">🎯 Rearletの実力を最大活かせる本命</div>
+        <div class="verdict">🎯 Rearletの本命</div>
       </div>
 
       <div class="triage-card buri">
         <h3>ブリカワ型</h3>
         <div class="subtitle">DRAMA ENTER · ドラマ×長尺</div>
         <div class="big-metric">109s</div>
-        <div class="metric-label">中央尺 · 登録686,000人</div>
+        <div class="metric-label">中央尺 · 登録686,000人 · med 48万</div>
         <ul>
           <li>尺50-135秒の長尺</li>
           <li>「ヤバいな…」「最低だな…」型</li>
@@ -1701,27 +2479,20 @@
           <li>1本270万再生の上限が桁違い</li>
           <li>週4.88本の高頻度投稿</li>
         </ul>
-        <div class="verdict">⚠️ 個人プレイヤーでは物理的に無理</div>
+        <div class="verdict">⚠️ 個人では物理的に無理</div>
       </div>
-    </div>
-
-    <div class="callout callout-success">
-      <strong>🎯 結論：Rearletさんは「Shuton型 × アカキクス型」のハイブリッド。</strong><br>
-      日本9位の実力（= Shuton型の中核）があり、med/foll 17.27（= 効率武器）がある。
-      この2つを活かしつつ、ブリカワ型の「高頻度投稿（週4-5本）」だけを借用する、
-      というのが406本のデータから導き出された最適解でした。
     </div>
   </div>
 </section>
 
-<!-- ============ 03 11ch実データ ============ -->
-<section id="bench">
+<!-- ============ 参考②：11ch実データ ============ -->
+<section style="background: var(--gray-100);">
   <div class="container">
-    <div class="sec-num">03 · FULL DATA</div>
+    <div class="sec-num">REFERENCE 02 · FULL DATA</div>
     <h2>日本スマブラSP 11チャンネル 完全データ</h2>
     <p class="sec-desc">
       2026-04-22 取得・計406本のShorts実データ。
-      登録者・中央再生数・最高再生・med/foll・中央尺・週間投稿数までを一覧化。
+      med/foll（登録者1人あたり中央再生数）で Rearlet は全11chで1位。
     </p>
 
     <div class="mega-table-wrap">
@@ -1854,25 +2625,14 @@
         </tbody>
       </table>
     </div>
-
-    <div class="callout callout-info">
-      <strong>📊 読み取れる3つの事実：</strong><br>
-      ① med/follトップ3は Rearlet(17.27) / アカキクス(9.64) / KEN(4.41) → <strong>ガチ寄りが効率で勝つ</strong><br>
-      ② 最高再生トップ3は ブリカワ(274万) / アカキクス(133万) / Shuton(110万) → <strong>エンタ要素が上限を伸ばす</strong><br>
-      ③ 週投稿数トップ3は ブリカワ(4.88) / 智念(4.79) / Rearlet(2.65) → <strong>高頻度はバズの必要条件</strong>
-    </div>
   </div>
 </section>
 
-<!-- ============ 04 Top20バイラル ============ -->
-<section id="viral" style="background: var(--gray-100);">
+<!-- ============ 参考③：Top20バイラル ============ -->
+<section>
   <div class="container">
-    <div class="sec-num">04 · VIRAL TOP 20</div>
+    <div class="sec-num">REFERENCE 03 · VIRAL TOP 20</div>
     <h2>日本スマブラSP系 Shorts 上位20本</h2>
-    <p class="sec-desc">
-      406本中、直近1-2年のバイラル上位。このラインナップから「勝ちパターン」が抽出されます。
-    </p>
-
     <div class="viral-list-v3">
       <div class="viral-row">
         <div class="rank">01</div>
@@ -2059,85 +2819,11 @@
   </div>
 </section>
 
-<!-- ============ 05 勝ちパターン ============ -->
-<section id="pattern">
+<!-- ============ 参考④：投稿頻度 ============ -->
+<section style="background: var(--gray-100);">
   <div class="container">
-    <div class="sec-num">05 · WINNING PATTERNS</div>
-    <h2>バイラル6つの勝ちパターン</h2>
-    <p class="sec-desc">
-      上記Top20から抽出した、日本スマブラSPで実証済みのタイトル構造。
-      各型にRearletさん用の変換案も添えています。
-    </p>
-
-    <div class="pattern-grid" style="margin-top: var(--space-32);">
-      <div class="pattern-card-v3 shuton-t">
-        <span class="type-badge">TYPE S-1</span>
-        <h3>疑問形「〜できますか？」</h3>
-        <div class="metric">Shuton型 / <strong>110万再生</strong>の実績 / 尺55s前後</div>
-        <div class="ex">例：ルキナのマベコンに最大反撃を取れますか？おかずゼルダ戦【スマブラSP】#shorts</div>
-        <div class="ex rearlet-ex">Rearlet版：最強カズヤの即死コンボ、クッパで耐えられますか？【スマブラSP】#shorts</div>
-      </div>
-
-      <div class="pattern-card-v3 shuton-t">
-        <span class="type-badge">TYPE S-2</span>
-        <h3>視聴者参加「視聴者が魅せた〜」</h3>
-        <div class="metric">Shuton型 / 78万再生 / エンタ×ガチの中核</div>
-        <div class="ex">例：視聴者が魅せてくれた煽りテクニックが難易度高すぎた【スマブラSP】</div>
-        <div class="ex rearlet-ex">Rearlet版：視聴者が送ってくれたクッパ最強コンボを全部試した結果【スマブラSP】</div>
-      </div>
-
-      <div class="pattern-card-v3 akakikus-t">
-        <span class="type-badge">TYPE A-1</span>
-        <h3>自己実績引用「〇万再生された〜を再び」</h3>
-        <div class="metric">アカキクス型 / <strong>133万再生</strong>の実績 / 尺12-14s</div>
-        <div class="ex">例：120万再生されたソラの即死コンボを再び【スマブラSP】#shorts</div>
-        <div class="ex rearlet-ex">Rearlet版：30万再生されたクッパの即死コンボを最強スティーブ相手に再現【スマブラSP】#shorts</div>
-      </div>
-
-      <div class="pattern-card-v3 akakikus-t">
-        <span class="type-badge">TYPE A-2</span>
-        <h3>大会×場面×神撃墜</h3>
-        <div class="metric">アカキクス型 / 67万再生 / 自称名ブランディング</div>
-        <div class="ex">例：大型大会の決勝で開始10秒で神撃墜を決めるアカキクス勇者【スマブラSP】#shorts</div>
-        <div class="ex rearlet-ex">Rearlet版：チノスマ決勝で開幕10秒で逆転撃墜を決めた日本9位クッパ【スマブラSP】#shorts</div>
-      </div>
-
-      <div class="pattern-card-v3 proto-t">
-        <span class="type-badge">TYPE P</span>
-        <h3>対戦相手×形容詞×ｗ</h3>
-        <div class="metric">プロトバナム型 / <strong>89万再生</strong> / 尺19s</div>
-        <div class="ex">例：マルスの弱いとこが全部出たキンクル戦ｗ【スマブラSP】</div>
-        <div class="ex rearlet-ex">Rearlet版：クッパの弱いとこが全部出たザクレイ戦ｗ【スマブラSP】</div>
-      </div>
-
-      <div class="pattern-card-v3">
-        <span class="type-badge">TYPE K</span>
-        <h3>共感ぼやき一言</h3>
-        <div class="metric">KEN型 / 51万再生 / 映像＝シンプル試合</div>
-        <div class="ex">例：それはそれとして、気持ちはわかる／厳しい世界だ／未来が明る過ぎる</div>
-        <div class="ex rearlet-ex">Rearlet版：クッパ使いにしか分からない瞬間／それでもクッパで勝ちたい</div>
-      </div>
-    </div>
-
-    <div class="callout callout-warning">
-      <strong>🔑 共通の文法：</strong>
-      <code>【キャラor場面】＋【疑問or形容詞or数字】＋【結果】＋【スマブラSP】#shorts</code><br>
-      <strong>Rearletさんの現状タイトル問題：</strong> 感嘆符「！」が31本中25本(80%)で多すぎ、疑問形が55%、数字と相手プロ名がほぼ無い。
-      この3点を変えるだけで、勝ちパターン型に寄ります。
-    </div>
-  </div>
-</section>
-
-<!-- ============ 06 投稿頻度 ============ -->
-<section id="freq" style="background: var(--gray-100);">
-  <div class="container">
-    <div class="sec-num">06 · POSTING FREQUENCY</div>
+    <div class="sec-num">REFERENCE 04 · POSTING FREQUENCY</div>
     <h2>投稿頻度ランキング</h2>
-    <p class="sec-desc">
-      投稿頻度＝アルゴリズムからの継続露出量。ブリカワが週4.88本で急成長しているのは、
-      「高頻度投稿で学習データを送り続ける」戦略の結果です。
-    </p>
-
     <div class="freq-chart">
       <div class="freq-row">
         <div class="ch">ブリとカワウソ</div>
@@ -2191,271 +2877,14 @@
       </div>
 
     </div>
-
-    <div class="callout callout-info">
-      <strong>Rearletさんは現在週2.65本。</strong>
-      ブリカワ（4.88）・智念せいら（4.79）には及ばず、KEN（2.57）・アカキクス（1.5）と似た頻度。
-      登録者0→5万フェーズでは <strong>週4-5本を目標</strong>にすることで、アルゴリズム露出×バイラル確率が倍以上になります。
-    </div>
   </div>
 </section>
 
-<!-- ============ 07 Rearletギャップ ============ -->
-<section id="gap">
+<!-- ============ 参考⑤：半年ロードマップ ============ -->
+<section>
   <div class="container">
-    <div class="sec-num">07 · GAP ANALYSIS</div>
-    <h2>Rearlet現状 vs Shuton+アカキクス模範</h2>
-    <p class="sec-desc">
-      「今変えるべき項目」を定量で並べました。全て編集・運用で対応可能なものだけです。
-    </p>
-
-    <div style="background:var(--white);border-radius:var(--radius-lg);padding:0 var(--space-24);box-shadow:var(--shadow);border:1px solid var(--gray-200);margin:var(--space-32) 0;">
-      <div class="gap-row">
-        <div class="label">項目</div>
-        <div>現状（Rearlet 1,140人）</div>
-        <div>Shuton×アカキクス基準</div>
-      </div>
-      <div class="gap-row">
-        <div class="label">尺 中央値</div>
-        <div class="now">40秒</div>
-        <div class="target">14-25秒 (-15〜25秒)</div>
-      </div>
-      <div class="gap-row">
-        <div class="label">週投稿数</div>
-        <div class="now">2.65本</div>
-        <div class="target">4-5本 (+1.5〜2本)</div>
-      </div>
-      <div class="gap-row">
-        <div class="label">感嘆符「！」使用</div>
-        <div class="now">80%（25/31）</div>
-        <div class="target">Shuton 7.5%, KEN 12%（-60pt）</div>
-      </div>
-      <div class="gap-row">
-        <div class="label">【スマブラSP】末尾</div>
-        <div class="now">0本（形式バラバラ）</div>
-        <div class="target">アカキクス100%, Shuton95%で統一</div>
-      </div>
-      <div class="gap-row">
-        <div class="label">#shorts末尾</div>
-        <div class="now">58%（18/31）</div>
-        <div class="target">100%で固定</div>
-      </div>
-      <div class="gap-row">
-        <div class="label">相手プロ名明記</div>
-        <div class="now">ルナマド等一部のみ</div>
-        <div class="target">ザクレイ/あcola/ミーヤー等大物ベース</div>
-      </div>
-      <div class="gap-row">
-        <div class="label">数字提示</div>
-        <div class="now">1本のみ（200%ハンデ）</div>
-        <div class="target">再生数・秒数・ランキング順位を毎回</div>
-      </div>
-      <div class="gap-row">
-        <div class="label">疑問形タイトル</div>
-        <div class="now">55%（17本）</div>
-        <div class="target">Shuton型「できますか？」中心</div>
-      </div>
-      <div class="gap-row">
-        <div class="label">チャンネル概要</div>
-        <div class="now">詳細未確認</div>
-        <div class="target">「日本9位クッパ・最強を目指す試合集」</div>
-      </div>
-    </div>
-
-    <div class="callout callout-warning">
-      <strong>🎯 最優先で変える3項目：</strong>
-      <ol style="margin-top:var(--space-8);padding-left:var(--space-24);color:var(--gray-800);">
-        <li><strong>尺40秒→16秒</strong>（編集で切るだけ、撮り直し不要）</li>
-        <li><strong>感嘆符「！」を疑問符「？」に置換</strong>（Shuton型のフック化）</li>
-        <li><strong>タイトル末尾を【スマブラSP】#shorts で固定</strong>（アルゴリズム分類強化）</li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 08 30本タイトル案 ============ -->
-<section id="titles" style="background: var(--gray-100);">
-  <div class="container">
-    <div class="sec-num">08 · 30 TITLE PROPOSALS</div>
-    <h2>次の30本 タイトル案</h2>
-    <p class="sec-desc">
-      Shuton型（S）/ アカキクス型（A）/ プロトバナム型（P）で分類。
-      既存動画の再編集でも新規撮影でもそのまま使えます。
-    </p>
-
-    <div class="title30-grid">
-      <div class="title30-item t-b">
-        <span class="ix">#01</span> 最強カズヤの即死コンボ、クッパで耐えられますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#02</span> ザクレイのロボット、クッパで撃墜できますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#03</span> あcolaのホムヒカに、日本9位クッパは通用しますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#04</span> VIPマッチの最強テリー、3ストック奪えますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#05</span> ミーヤーのカズヤ、クッパで止められますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#06</span> Shutonさんのピクオリに、クッパで勝負できますか？【スマブラSP】#shorts <span class="type-tag">S-1</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#07</span> 視聴者が送ってくれたクッパ最強コンボを全部試した【スマブラSP】#shorts <span class="type-tag">S-2</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#08</span> 視聴者が魅せたクッパ即死ルート、再現に1時間かかった【スマブラSP】#shorts <span class="type-tag">S-2</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#09</span> 視聴者リクエストで200%ハンデ開始した結果【スマブラSP】#shorts <span class="type-tag">S-2</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#10</span> 視聴者のおすすめVIP対戦相手、全員に挑んだ結果【スマブラSP】#shorts <span class="type-tag">S-2</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#11</span> 30万再生されたクッパの即死コンボを最強スティーブ相手に再現【スマブラSP】#shorts <span class="type-tag">A-1</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#12</span> 27万再生されたゴブリンマリオ戦の続編・300%ハンデ編【スマブラSP】#shorts <span class="type-tag">A-1</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#13</span> 18万再生された令和クッパの新即死コンボを更に進化させた【スマブラSP】#shorts <span class="type-tag">A-1</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#14</span> 50万再生された撃墜シーンが、まだ超えられない理由【スマブラSP】#shorts <span class="type-tag">A-1</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#15</span> チノスマ決勝で開幕10秒で逆転撃墜した日本9位クッパ【スマブラSP】#shorts <span class="type-tag">A-2</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#16</span> Sumabato9位の試合で見せたクッパの神復帰阻止【スマブラSP】#shorts <span class="type-tag">A-2</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#17</span> Koryu Festivalのベスト8で決めたクッパ即死コンボ【スマブラSP】#shorts <span class="type-tag">A-2</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#18</span> 大型大会の敗者復活戦で見せたクッパの粘り勝ち【スマブラSP】#shorts <span class="type-tag">A-2</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#19</span> 2026年最強クッパ使いRearletの撃墜集・4月版【スマブラSP】#shorts <span class="type-tag">A-2</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#20</span> スマメイトのトップ層をクッパで倒したベストシーン集【スマブラSP】#shorts <span class="type-tag">A-2</span>
-      </div>
-      <div class="title30-item t-c">
-        <span class="ix">#21</span> クッパの弱いとこが全部出たザクレイ戦ｗ【スマブラSP】 <span class="type-tag">P</span>
-      </div>
-      <div class="title30-item t-c">
-        <span class="ix">#22</span> クッパの強いとこ全部出たあcola戦ｗ【スマブラSP】 <span class="type-tag">P</span>
-      </div>
-      <div class="title30-item t-c">
-        <span class="ix">#23</span> カズヤ相手にクッパの限界を見たｗ【スマブラSP】 <span class="type-tag">P</span>
-      </div>
-      <div class="title30-item t-c">
-        <span class="ix">#24</span> スティーブ戦でクッパが完全に機能停止したｗ【スマブラSP】 <span class="type-tag">P</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#25</span> クッパ使いにしか分からない瞬間【スマブラSP】 <span class="type-tag">K</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#26</span> それでもクッパで勝ちたいんです【スマブラSP】 <span class="type-tag">K</span>
-      </div>
-      <div class="title30-item t-a">
-        <span class="ix">#27</span> クッパ選ぶと画面越しに応援されがち【スマブラSP】 <span class="type-tag">K</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#28</span> 200%ハンデでも勝てる日本9位クッパの新フォーマット【スマブラSP】#shorts <span class="type-tag">Sp</span>
-      </div>
-      <div class="title30-item t-c">
-        <span class="ix">#29</span> 開幕1秒でスワイプ止める、クッパ撃墜集の新作【スマブラSP】#shorts <span class="type-tag">Sp</span>
-      </div>
-      <div class="title30-item t-b">
-        <span class="ix">#30</span> 日本9位クッパがVIPマッチを縦断した結果【スマブラSP】#shorts <span class="type-tag">Sp</span>
-      </div>
-
-    </div>
-
-    <div class="callout callout-info">
-      <strong>使い方：</strong>
-      Phase 1の4週間で、S型12本 / A型12本 / P型6本 を目処にローテーション。
-      反応が良かった型を週3、次点を週2に調整していけばOKです。
-    </div>
-  </div>
-</section>
-
-<!-- ============ 09 4週間カレンダー ============ -->
-<section id="calendar">
-  <div class="container">
-    <div class="sec-num">09 · 4-WEEK CALENDAR</div>
-    <h2>4週間 投稿カレンダー（週4-5本）</h2>
-    <p class="sec-desc">
-      各週、S型（Shuton）・A型（アカキクス）・P型（プロトバナム）をバランスよく投下。
-      Week1で型の相性を見て、Week2以降で微調整。
-    </p>
-
-    <h3 style="margin: var(--space-32) 0 var(--space-16);font-size:var(--font-lg);">Week 1 (4/22-4/28)</h3>
-    <div class="calendar">
-      <div class="cal-day"><div class="dow">TUE</div></div>
-      <div class="cal-day post"><div class="dow">WED 4/23</div><div class="task">既存312K動画を13秒版に再編集投稿</div><span class="type">A-1</span></div>
-      <div class="cal-day"><div class="dow">THU</div></div>
-      <div class="cal-day post"><div class="dow">FRI 4/25</div><div class="task">「最強カズヤに耐えられますか？」</div><span class="type b">S-1</span></div>
-      <div class="cal-day"><div class="dow">SAT</div></div>
-      <div class="cal-day post"><div class="dow">SUN 4/27</div><div class="task">「クッパの弱いとこ全部出たザクレイ戦ｗ」</div><span class="type c">P</span></div>
-      <div class="cal-day post"><div class="dow">MON 4/28</div><div class="task">「日本9位クッパ・チノスマ決勝の逆転撃墜」</div><span class="type">A-2</span></div>
-    </div>
-
-    <h3 style="margin: var(--space-32) 0 var(--space-16);font-size:var(--font-lg);">Week 2 (4/29-5/5)</h3>
-    <div class="calendar">
-      <div class="cal-day post"><div class="dow">TUE 4/29</div><div class="task">「視聴者コンボ全部試した」</div><span class="type b">S-2</span></div>
-      <div class="cal-day"><div class="dow">WED</div></div>
-      <div class="cal-day post"><div class="dow">THU 5/1</div><div class="task">「278K再生されたコンボをスネーク相手に」</div><span class="type">A-1</span></div>
-      <div class="cal-day"><div class="dow">FRI</div></div>
-      <div class="cal-day post"><div class="dow">SAT 5/3</div><div class="task">「あcolaにクッパは通用しますか？」</div><span class="type b">S-1</span></div>
-      <div class="cal-day"><div class="dow">SUN</div></div>
-      <div class="cal-day post"><div class="dow">MON 5/5</div><div class="task">「クッパ使いにしか分からない瞬間」</div><span class="type c">K</span></div>
-    </div>
-
-    <h3 style="margin: var(--space-32) 0 var(--space-16);font-size:var(--font-lg);">Week 3 (5/6-5/12)</h3>
-    <div class="calendar">
-      <div class="cal-day post"><div class="dow">TUE 5/6</div><div class="task">「181K再生コンボをスティーブに」</div><span class="type">A-1</span></div>
-      <div class="cal-day"><div class="dow">WED</div></div>
-      <div class="cal-day post"><div class="dow">THU 5/8</div><div class="task">「200%ハンデ・最強マリオ編」</div><span class="type">A-2</span></div>
-      <div class="cal-day"><div class="dow">FRI</div></div>
-      <div class="cal-day post"><div class="dow">SAT 5/10</div><div class="task">「ミーヤーのカズヤに勝てますか？」</div><span class="type b">S-1</span></div>
-      <div class="cal-day post"><div class="dow">SUN 5/11</div><div class="task">「クッパの上B最強ルート発見した」</div><span class="type c">K</span></div>
-      <div class="cal-day"><div class="dow">MON</div></div>
-    </div>
-
-    <h3 style="margin: var(--space-32) 0 var(--space-16);font-size:var(--font-lg);">Week 4 (5/13-5/19)</h3>
-    <div class="calendar">
-      <div class="cal-day post"><div class="dow">TUE 5/13</div><div class="task">「ゴブマリ戦・続編200%ハンデ」</div><span class="type">A-2</span></div>
-      <div class="cal-day"><div class="dow">WED</div></div>
-      <div class="cal-day post"><div class="dow">THU 5/15</div><div class="task">「視聴者の嫌がらせ技、全部潰した」</div><span class="type b">S-2</span></div>
-      <div class="cal-day"><div class="dow">FRI</div></div>
-      <div class="cal-day post"><div class="dow">SAT 5/17</div><div class="task">「日本9位クッパの神撃墜集・4月版」</div><span class="type">A-2</span></div>
-      <div class="cal-day"><div class="dow">SUN</div></div>
-      <div class="cal-day post"><div class="dow">MON 5/19</div><div class="task">「クッパの弱点・カズヤ戦ｗ」</div><span class="type c">P</span></div>
-    </div>
-
-    <div class="callout callout-success" style="margin-top:var(--space-32)">
-      <strong>📆 4週間合計：20本投稿（週5本ペース）</strong><br>
-      A型（アカキクス）8本 / S型（Shuton）6本 / P型（プロトバナム）3本 / K型（KEN共感）3本。
-      全てタイトル末尾は<code>【スマブラSP】#shorts</code>、尺14-25秒、投稿時刻 21:00-22:00。
-    </div>
-  </div>
-</section>
-
-<!-- ============ 10 半年ロードマップ ============ -->
-<section id="roadmap" style="background: var(--gray-100);">
-  <div class="container">
-    <div class="sec-num">10 · 6-MONTH ROADMAP</div>
+    <div class="sec-num">REFERENCE 05 · 6-MONTH ROADMAP</div>
     <h2>半年で5万人 ロードマップ</h2>
-    <p class="sec-desc">
-      Phase 1→3 で段階的に型を切り替え。Rearletさんの現状武器（med/foll 17.27）を活かしつつ、
-      エンタ要素を徐々に増やして上限を引き上げる設計です。
-    </p>
 
     <div class="phase-card p1">
       <div class="phase-head">
@@ -2464,12 +2893,6 @@
         <div class="phase-target">→ 8,000人</div>
       </div>
       <p style="color:var(--gray-700);">尺14-20秒に全面移行、週4-5本投稿、タイトル末尾定型化。med/foll 17.27を最大化する形。</p>
-      <div class="kpi-row">
-        <div class="kpi-pill"><span class="k">月目標</span><span class="v">+6,860</span></div>
-        <div class="kpi-pill"><span class="k">週投稿</span><span class="v">4-5本</span></div>
-        <div class="kpi-pill"><span class="k">尺目標</span><span class="v">14-20s</span></div>
-        <div class="kpi-pill"><span class="k">バイラル</span><span class="v">月1本100K+</span></div>
-      </div>
       <ul class="action-list">
         <li>過去バイラル3本（312K/278K/181K）を13秒版に再編集→シリーズ化で再投稿</li>
         <li>タイトル末尾【スマブラSP】#shorts 完全統一、「！」を「？」に置換</li>
@@ -2485,12 +2908,6 @@
         <div class="phase-target">→ 25,000人</div>
       </div>
       <p style="color:var(--gray-700);">疑問形・視聴者参加型Shortsを週2本組み込み、月1本は1分超の長尺（1試合解説）も投入。</p>
-      <div class="kpi-row">
-        <div class="kpi-pill"><span class="k">月目標</span><span class="v">+8,500</span></div>
-        <div class="kpi-pill"><span class="k">週投稿</span><span class="v">4-5本</span></div>
-        <div class="kpi-pill"><span class="k">S型比率</span><span class="v">週2本</span></div>
-        <div class="kpi-pill"><span class="k">バイラル</span><span class="v">月2本100K+</span></div>
-      </div>
       <ul class="action-list">
         <li>視聴者参加企画「クッパで試すコンボ送って」をXで募集→Shorts化</li>
         <li>疑問形タイトル「〇〇にクッパで勝てますか？」を週2本投下</li>
@@ -2506,12 +2923,6 @@
         <div class="phase-target">→ 50,000人</div>
       </div>
       <p style="color:var(--gray-700);">2.5万登録者の実績でコラボ依頼が通りやすくなる。有名プレイヤーとの対戦Shortsで一気にスケール。</p>
-      <div class="kpi-row">
-        <div class="kpi-pill"><span class="k">月目標</span><span class="v">+12,500</span></div>
-        <div class="kpi-pill"><span class="k">週投稿</span><span class="v">5本</span></div>
-        <div class="kpi-pill"><span class="k">コラボ</span><span class="v">月1-2</span></div>
-        <div class="kpi-pill"><span class="k">バイラル</span><span class="v">月3-4本100K+</span></div>
-      </div>
       <ul class="action-list">
         <li>あcola・ザクレイ・ミーヤー級との対戦動画を「対◯◯シリーズ」化</li>
         <li>へろー（クッパ使い同士）とのコラボShorts or 長尺1on1</li>
@@ -2522,26 +2933,17 @@
   </div>
 </section>
 
-<!-- ============ 11 収益マイル ============ -->
-<section id="revenue">
+<!-- ============ 参考⑥：収益化 ============ -->
+<section style="background: var(--gray-100);">
   <div class="container">
-    <div class="sec-num">11 · REVENUE MILESTONES</div>
-    <h2>収益化マイルストーン</h2>
-    <p class="sec-desc">
-      Shorts中心チャンネルでの月間収益の目安。スマブラSP系は日本向けRPMが比較的低めですが、
-      案件・スポンサーで大きく跳ねます。
-    </p>
+    <div class="sec-num">REFERENCE 06 · REVENUE</div>
+    <h2>登録者別の月収目安</h2>
 
     <div class="revenue-chart">
       <div class="rev-row">
         <div class="milestone">1,140</div>
         <div class="bar-container"><div class="bar-fill" style="width:2%;">現状</div></div>
         <div class="revenue">¥0〜</div>
-      </div>
-      <div class="rev-row">
-        <div class="milestone">5,000</div>
-        <div class="bar-container"><div class="bar-fill" style="width:10%;">Phase1前半</div></div>
-        <div class="revenue">¥5,000〜</div>
       </div>
       <div class="rev-row">
         <div class="milestone">10,000</div>
@@ -2566,67 +2968,11 @@
     </div>
 
     <div class="callout callout-info">
-      <strong>💰 収益の内訳目安：</strong><br>
-      ① Shortsファンド（〜1万登録）： 1万再生あたり$0.02-0.05の低額RPM<br>
-      ② 長尺動画広告（1万登録〜）： 1万再生あたり¥200-500（日本向け）<br>
-      ③ メンバーシップ・投げ銭（5千登録〜）： 月1-5万円<br>
-      ④ スポンサー案件（3万登録〜）： 1案件10-30万円（スマブラSP × ゲーミングデバイス系）<br>
-      ⑤ プロチーム所属打診（5万登録〜）： 月額固定の契約料
-    </div>
-  </div>
-</section>
-
-<!-- ============ 12 今週やる事 ============ -->
-<section id="action" style="background: var(--gray-100);">
-  <div class="container">
-    <div class="sec-num">12 · THIS WEEK</div>
-    <h2>今週やる3タスク</h2>
-    <p class="sec-desc">
-      このレポートを読んで、今日〜1週間で着手すべき最優先アクション。
-    </p>
-
-    <div class="phase-card p1" style="border-left-color:var(--primary);">
-      <div class="phase-head">
-        <span class="phase-num" style="background:var(--primary)">TASK 01 · 今日</span>
-        <h3>次の1本をShuton型で投稿</h3>
-      </div>
-      <p style="color:var(--gray-700);">直近の試合映像から、撃墜・逆転の瞬間だけを14-20秒に圧縮。
-      タイトルはS-1型「〇〇にクッパで耐えられますか？」で。</p>
-      <ul class="action-list">
-        <li>30本タイトル案（第8章）から1つを選んで即編集・投稿</li>
-        <li>尺14-20秒・タイトル末尾【スマブラSP】#shorts固定</li>
-        <li>投稿時刻21:00-22:00</li>
-        <li>固定コメントに「次回：〇〇（予告）」を書く</li>
-      </ul>
-    </div>
-
-    <div class="phase-card p2" style="border-left-color:#E67E22;">
-      <div class="phase-head">
-        <span class="phase-num" style="background:#E67E22">TASK 02 · 3日以内</span>
-        <h3>チャンネル導線の全面リニューアル</h3>
-      </div>
-      <ul class="action-list">
-        <li>チャンネル概要「日本9位クッパ使いRearlet／最強クッパを目指す試合集」に書き換え</li>
-        <li>トップ動画（312K・278K・181K）を固定ピン留め</li>
-        <li>動画末尾1秒に「登録お願いします」大テロップ追加（以降全動画で）</li>
-        <li>概要欄テンプレ固定：大会実績（Sumabato9位、Koryu9位）を記載</li>
-        <li>プロフィール画像・バナーを「日本9位」「Rearletクッパ」で統一</li>
-      </ul>
-    </div>
-
-    <div class="phase-card p3" style="border-left-color:var(--success);">
-      <div class="phase-head">
-        <span class="phase-num" style="background:var(--success)">TASK 03 · 1週間以内</span>
-        <h3>過去バイラル3本の13秒版再投稿</h3>
-      </div>
-      <p style="color:var(--gray-700);">3/20 312K / 3/28 278K / 3/24 181K を13秒にカット、自己引用型タイトル
-      「30万再生されたクッパコンボを〇〇で再現」で連続投稿。</p>
-      <ul class="action-list">
-        <li>Week 1のカレンダー通り4月23日・25日・27日・28日に投稿</li>
-        <li>投稿間隔は2日おきで露出期間を確保</li>
-        <li>1週間後のStudioで、再投稿版の再生数と登録転換を確認</li>
-        <li>反応の良かった型を次週に倍増投入</li>
-      </ul>
+      <strong>💰 収益の内訳：</strong>
+      ① Shorts広告（1万登録〜）¥200-500/1万再生<br>
+      ② メンバーシップ（5千登録〜）月1-5万円<br>
+      ③ スポンサー案件（3万登録〜）1案件10-30万円<br>
+      ④ プロチーム打診（5万登録〜）月額固定
     </div>
   </div>
 </section>
@@ -2635,15 +2981,11 @@
 <section>
   <div class="container">
     <div class="conclusion">
-      <h2>エンタ × ガチ × 日本9位の実力</h2>
+      <h2>まず、今日の1本から。</h2>
       <p>
-        ブリカワの上限（270万再生）・Shutonの到達点（110万再生）・アカキクスの効率（med 20万再生）。
-        この3つを組み合わせて狙えるポジションに、
-        Rearletさんは既に <strong style="color:#FFD580">med/foll 17.27</strong> という武器で立っています。
-      </p>
-      <p>
-        あとは、尺を14-25秒に圧縮し、【スマブラSP】#shorts定型に統一し、
-        週4-5本ペースでShuton型疑問形タイトルを投下する ── これだけです。
+        全部やる必要はありません。<br>
+        まず <strong style="color:#FFD580">§A の STEP 1</strong>（直近動画を16秒版に切る）だけやれば、
+        残りは自然に繋がります。
       </p>
       <p class="cta-text">
         半年後、50,000人の向こう側で会いましょう。
@@ -2654,9 +2996,8 @@
 
 <footer class="site-footer">
   <p>
-    <strong>Rearlet Shorts 完全戦略レポート v3</strong> · 2026-04-22<br>
-    日本スマブラSP系 <strong>11チャンネル・計406本</strong>のShorts実データを <code>yt-dlp</code> で直接取得し分析。<br>
-    Rearlet / アカキクス / KEN / Shuton / プロトバナム / ブリとカワウソ / ザクレイ / Raito / マエスマ / 智念せいら / takera<br>
+    <strong>Rearlet Shorts 行動レポート v4</strong> · 2026-04-22<br>
+    日本スマブラSP系 <strong>11チャンネル・計406本</strong>・Rearletさん実タイトル31本を <code>yt-dlp</code> で取得し分析。<br>
     Web情報は参照せず、YouTube配信中のリアルタイム値のみを根拠としています。
   </p>
 </footer>
